@@ -1,0 +1,26 @@
+name: Build
+on:
+  workflow_dispatch:
+  pull_request:
+  push:
+    branches: [main]
+jobs:
+  build-package:
+    name: Build Package
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4.1.1
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4.0.1
+        with:
+          node-version: 20
+
+      - name: Install Dependencies
+        uses: threeal/yarn-install-action@v1.0.0
+
+      - name: Build Package
+        run: |
+          corepack yarn build
+          git diff --exit-code HEAD

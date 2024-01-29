@@ -1,0 +1,9 @@
+.*
+!.eslint*
+!.git*
+!.yarnrc.yml
+
+coverage/
+node_modules/
+
+src/*.mjs
