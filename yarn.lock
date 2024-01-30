@@ -1272,25 +1272,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"action-starter@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "action-starter@workspace:."
-  dependencies:
-    "@actions/core": "npm:^1.10.1"
-    "@types/node": "npm:^20.11.10"
-    "@typescript-eslint/eslint-plugin": "npm:^6.19.1"
-    "@typescript-eslint/parser": "npm:^6.19.1"
-    "@vercel/ncc": "npm:^0.38.1"
-    eslint: "npm:^8.56.0"
-    eslint-config-prettier: "npm:^9.1.0"
-    eslint-plugin-json-files: "npm:^4.1.0"
-    eslint-plugin-tsdoc: "npm:^0.2.17"
-    jest: "npm:^29.7.0"
-    prettier: "npm:^3.2.4"
-    typescript: "npm:^5.3.3"
-  languageName: unknown
-  linkType: soft
-
 "agent-base@npm:6, agent-base@npm:^6.0.2":
   version: 6.0.2
   resolution: "agent-base@npm:6.0.2"
@@ -3975,6 +3956,25 @@ __metadata:
   checksum: 26c02b8d06f03206fc2ab8d16f19960f2ff9e81a658f831ecb656d8f17d9edc799e8364b1f4a7873e89d9702dff96204be0fa26fe4181f6843f040f819dac4be
   languageName: node
   linkType: hard
+
+"pipx-install-action@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "pipx-install-action@workspace:."
+  dependencies:
+    "@actions/core": "npm:^1.10.1"
+    "@types/node": "npm:^20.11.10"
+    "@typescript-eslint/eslint-plugin": "npm:^6.19.1"
+    "@typescript-eslint/parser": "npm:^6.19.1"
+    "@vercel/ncc": "npm:^0.38.1"
+    eslint: "npm:^8.56.0"
+    eslint-config-prettier: "npm:^9.1.0"
+    eslint-plugin-json-files: "npm:^4.1.0"
+    eslint-plugin-tsdoc: "npm:^0.2.17"
+    jest: "npm:^29.7.0"
+    prettier: "npm:^3.2.4"
+    typescript: "npm:^5.3.3"
+  languageName: unknown
+  linkType: soft
 
 "pirates@npm:^4.0.4":
   version: 4.0.6
