@@ -18,6 +18,14 @@ The Pipx Install Action provides the following key features:
 To begin using the Pipx Install Action, refer to the [action.yaml](./action.yaml) file for detailed configuration options.
 If you are new to GitHub Actions, you can explore the [GitHub Actions guide](https://docs.github.com/en/actions/learn-github-actions/understanding-github-actions) for a comprehensive overview.
 
+### Inputs
+
+Here are the available input parameters for the Pipx Install Action:
+
+| Name      | Type                | Description                                 |
+| --------- | ------------------- | ------------------------------------------- |
+| `package` | `string` (required) | Name of the Python package to be installed. |
+
 ## License
 
 This project is licensed under the terms of the [MIT License](./LICENSE).
