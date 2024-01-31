@@ -59,17 +59,16 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4.1.1
         with:
-          path: mkdir-action
+          path: pipx-install-action
           sparse-checkout: |
             action.yaml
             dist
           sparse-checkout-cone-mode: false
 
-      - name: Create Directory
-        uses: ./mkdir-action
+      - name: Install Package
+        uses: ./pipx-install-action
         with:
-          path: parent/child
+          package: ruff
 
-      - name: Check Directory
-        shell: bash
-        run: test -d parent/child
+      - name: Check Package
+        run: ruff --version
