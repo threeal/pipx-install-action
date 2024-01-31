@@ -26,6 +26,30 @@ Here are the available input parameters for the Pipx Install Action:
 | --------- | ------------------- | ------------------------------------------- |
 | `package` | `string` (required) | Name of the Python package to be installed. |
 
+### Examples
+
+Here is a basic example of how to use the Pipx Install Action to install [Ruff](https://docs.astral.sh/ruff/) in a GitHub Actions workflow:
+
+```yaml
+name: Python CI
+on:
+  push:
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4.1.1
+
+      - name: Install Ruff
+        uses: threeal/pipx-install-action@main
+        with:
+          package: ruff
+
+      # Add more steps as needed for your workflow
+```
+
 ## License
 
 This project is licensed under the terms of the [MIT License](./LICENSE).
