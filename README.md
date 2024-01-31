@@ -6,3 +6,9 @@
 [![test status](https://img.shields.io/github/actions/workflow/status/threeal/pipx-install-action/test.yaml?branch=main&label=test&style=flat-square)](https://github.com/threeal/pipx-install-action/actions/workflows/test.yaml)
 
 The Pipx Install Action is a [GitHub Action](https://github.com/features/actions) designed to install [Python](https://www.python.org/) packages using [pipx](https://pipx.pypa.io/stable/) with cache support.
+
+## License
+
+This project is licensed under the terms of the [MIT License](./LICENSE).
+
+Copyright © 2024 [Alfi Maulana](https://github.com/threeal/)
