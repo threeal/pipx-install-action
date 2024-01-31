@@ -5,8 +5,8 @@ branding:
   icon: chevrons-right
   color: black
 inputs:
-  package:
-    description: Python package to be installed
+  packages:
+    description: Python packages to be installed
     required: true
 runs:
   using: node20

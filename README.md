@@ -22,9 +22,9 @@ If you are new to GitHub Actions, you can explore the [GitHub Actions guide](htt
 
 Here are the available input parameters for the Pipx Install Action:
 
-| Name      | Type                | Description                                 |
-| --------- | ------------------- | ------------------------------------------- |
-| `package` | `string` (required) | Name of the Python package to be installed. |
+| Name       | Type                       | Description                                   |
+| ---------- | -------------------------- | --------------------------------------------- |
+| `packages` | Multiple string (required) | Names of the Python packages to be installed. |
 
 ### Examples
 
@@ -45,7 +45,7 @@ jobs:
       - name: Install Ruff
         uses: threeal/pipx-install-action@main
         with:
-          package: ruff
+          packages: ruff
 
       # Add more steps as needed for your workflow
 ```

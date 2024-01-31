@@ -68,7 +68,7 @@ jobs:
       - name: Install Package
         uses: ./pipx-install-action
         with:
-          package: ruff
+          packages: ruff
 
       - name: Check Package
         run: ruff --version
