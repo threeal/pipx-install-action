@@ -7,6 +7,12 @@
 
 The Pipx Install Action is a [GitHub Action](https://github.com/features/actions) designed to install [Python](https://www.python.org/) packages using [pipx](https://pipx.pypa.io/stable/) with cache support.
 
+## Key Features
+
+The Pipx Install Action provides the following key features:
+
+- Install Python packages using pipx.
+
 ## License
 
 This project is licensed under the terms of the [MIT License](./LICENSE).
