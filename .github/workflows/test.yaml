@@ -65,10 +65,10 @@ jobs:
             dist
           sparse-checkout-cone-mode: false
 
-      - name: Install Package
+      - name: Install Packages
         uses: ./pipx-install-action
         with:
-          package: ruff
+          packages: black ruff
 
-      - name: Check Package
-        run: ruff --version
+      - name: Check Packages
+        run: black --version && ruff --version

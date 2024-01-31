@@ -27243,16 +27243,18 @@ var core = __nccwpck_require__(4278);
 var exec = __nccwpck_require__(8434);
 ;// CONCATENATED MODULE: ./src/pipx.mjs
 
-async function pipxInstall(pkg) {
-    await (0,exec.exec)("pipx", ["install", pkg]);
+async function pipxInstall(...pkgs) {
+    await Promise.all(pkgs.map((pkg) => (0,exec.exec)("pipx", ["install", pkg])));
 }
 
 ;// CONCATENATED MODULE: ./src/index.mjs
 
 
 async function main() {
-    const pkg = core.getInput("package", { required: true });
-    await pipxInstall(pkg);
+    const pkgs = core.getInput("packages", { required: true })
+        .split(/(\s+)/)
+        .filter((pkg) => pkg.trim().length > 0);
+    await pipxInstall(...pkgs);
 }
 main().catch((err) => core.setFailed(err));
 

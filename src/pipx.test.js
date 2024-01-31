@@ -3,11 +3,14 @@ import { pipxInstall } from "./pipx.mjs";
 
 describe("install Python packages", () => {
   beforeAll(async () => {
-    await exec("pipx", ["uninstall", "ruff"], { ignoreReturnCode: true });
+    await Promise.all([
+      exec("pipx", ["install", "black"]),
+      exec("pipx", ["install", "ruff"]),
+    ]);
   });
 
-  it("should successfully install a package", async () => {
-    const prom = pipxInstall("ruff");
+  it("should successfully install packages", async () => {
+    const prom = pipxInstall("black", "ruff");
     await expect(prom).resolves.toBeUndefined();
   });
 
