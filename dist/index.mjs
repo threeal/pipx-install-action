@@ -27243,16 +27243,26 @@ var core = __nccwpck_require__(4278);
 var exec = __nccwpck_require__(8434);
 ;// CONCATENATED MODULE: ./src/pipx/install.mjs
 
+async function installPackage(pkg) {
+    try {
+        await (0,exec.exec)("pipx", ["install", pkg]);
+    }
+    catch (err) {
+        throw new Error(`Failed to install ${pkg}: ${err.message}`);
+    }
+}
 
-async function pipxInstall(...pkgs) {
+;// CONCATENATED MODULE: ./src/pipx/index.mjs
+
+/* harmony default export */ const pipx = ({ installPackage: installPackage });
+
+;// CONCATENATED MODULE: ./src/action.mjs
+
+
+async function pipxInstallAction(...pkgs) {
     for (const pkg of pkgs) {
         await core.group(`Installing \u001b[34m${pkg}\u001b[39m...`, async () => {
-            try {
-                await (0,exec.exec)("pipx", ["install", pkg]);
-            }
-            catch (err) {
-                throw new Error(`Failed to install ${pkg}: ${err.message}`);
-            }
+            await pipx.installPackage(pkg);
         });
     }
 }
@@ -27264,7 +27274,7 @@ async function main() {
     const pkgs = core.getInput("packages", { required: true })
         .split(/(\s+)/)
         .filter((pkg) => pkg.trim().length > 0);
-    await pipxInstall(...pkgs);
+    await pipxInstallAction(...pkgs);
 }
 main().catch((err) => core.setFailed(err));
 

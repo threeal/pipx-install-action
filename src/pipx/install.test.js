@@ -9,13 +9,12 @@ jest.unstable_mockModule("@actions/exec", () => ({
     expect(args[0]).toBe("install");
 
     switch (args[1]) {
-      case "black":
       case "ruff":
         installedPkgs.push(args[1]);
         break;
 
       default:
-        throw new Error(`unknown package ${args[1]}`);
+        throw new Error("unknown package");
     }
   },
 }));
@@ -25,20 +24,19 @@ describe("install Python packages", () => {
     installedPkgs = [];
   });
 
-  it("should successfully install packages", async () => {
-    const { pipxInstall } = await import("./install.mjs");
+  it("should successfully install a package", async () => {
+    const { installPackage } = await import("./install.mjs");
 
-    const prom = pipxInstall("black", "ruff");
+    const prom = installPackage("ruff");
     await expect(prom).resolves.toBeUndefined();
 
-    expect(installedPkgs).toContain("black");
     expect(installedPkgs).toContain("ruff");
   });
 
   it("should fail to install an invalid package", async () => {
-    const { pipxInstall } = await import("./install.mjs");
+    const { installPackage } = await import("./install.mjs");
 
-    const prom = pipxInstall("invalid-pkg");
+    const prom = installPackage("invalid-pkg");
     await expect(prom).rejects.toThrow("Failed to install invalid-pkg");
   });
 });

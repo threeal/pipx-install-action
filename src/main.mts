@@ -1,5 +1,5 @@
 import core from "@actions/core";
-import { pipxInstall } from "./pipx/install.mjs";
+import { pipxInstallAction } from "./action.mjs";
 
 async function main() {
   const pkgs = core
@@ -7,7 +7,7 @@ async function main() {
     .split(/(\s+)/)
     .filter((pkg) => pkg.trim().length > 0);
 
-  await pipxInstall(...pkgs);
+  await pipxInstallAction(...pkgs);
 }
 
 main().catch((err) => core.setFailed(err));
