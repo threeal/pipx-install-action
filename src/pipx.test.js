@@ -39,6 +39,6 @@ describe("install Python packages", () => {
     const { pipxInstall } = await import("./pipx.mjs");
 
     const prom = pipxInstall("invalid-pkg");
-    await expect(prom).rejects.toThrow();
+    await expect(prom).rejects.toThrow("Failed to install invalid-pkg");
   });
 });
