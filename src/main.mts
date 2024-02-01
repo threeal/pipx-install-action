@@ -1,5 +1,5 @@
 import core from "@actions/core";
-import { pipxInstall } from "./pipx.mjs";
+import { pipxInstall } from "./pipx/install.mjs";
 
 async function main() {
   const pkgs = core

@@ -27241,7 +27241,7 @@ var __webpack_exports__ = {};
 var core = __nccwpck_require__(4278);
 // EXTERNAL MODULE: ./.yarn/cache/@actions-exec-npm-1.1.1-90973d2f96-4a09f6bdbe.zip/node_modules/@actions/exec/lib/exec.js
 var exec = __nccwpck_require__(8434);
-;// CONCATENATED MODULE: ./src/pipx.mjs
+;// CONCATENATED MODULE: ./src/pipx/install.mjs
 
 
 async function pipxInstall(...pkgs) {
