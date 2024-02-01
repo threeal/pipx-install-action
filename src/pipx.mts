@@ -3,7 +3,7 @@ import { exec } from "@actions/exec";
 
 export async function pipxInstall(...pkgs: string[]): Promise<void> {
   for (const pkg of pkgs) {
-    await core.group(`Installing ${pkg}...`, async () => {
+    await core.group(`Installing \u001b[34m${pkg}\u001b[39m...`, async () => {
       try {
         await exec("pipx", ["install", pkg]);
       } catch (err) {

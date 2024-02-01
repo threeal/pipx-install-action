@@ -27246,7 +27246,7 @@ var exec = __nccwpck_require__(8434);
 
 async function pipxInstall(...pkgs) {
     for (const pkg of pkgs) {
-        await core.group(`Installing ${pkg}...`, async () => {
+        await core.group(`Installing \u001b[34m${pkg}\u001b[39m...`, async () => {
             try {
                 await (0,exec.exec)("pipx", ["install", pkg]);
             }
