@@ -27243,9 +27243,17 @@ var core = __nccwpck_require__(4278);
 var exec = __nccwpck_require__(8434);
 ;// CONCATENATED MODULE: ./src/pipx.mjs
 
+
 async function pipxInstall(...pkgs) {
     for (const pkg of pkgs) {
-        await (0,exec.exec)("pipx", ["install", pkg]);
+        await core.group(`Installing \u001b[34m${pkg}\u001b[39m...`, async () => {
+            try {
+                await (0,exec.exec)("pipx", ["install", pkg]);
+            }
+            catch (err) {
+                throw new Error(`Failed to install ${pkg}: ${err.message}`);
+            }
+        });
     }
 }
 
