@@ -27247,13 +27247,16 @@ var exec = __nccwpck_require__(8434);
 async function pipxInstall(...pkgs) {
     for (const pkg of pkgs) {
         await core.group(`Installing \u001b[34m${pkg}\u001b[39m...`, async () => {
-            try {
-                await (0,exec.exec)("pipx", ["install", pkg]);
-            }
-            catch (err) {
-                throw new Error(`Failed to install ${pkg}: ${err.message}`);
-            }
+            await installPackage(pkg);
         });
+    }
+}
+async function installPackage(pkg) {
+    try {
+        await (0,exec.exec)("pipx", ["install", pkg]);
+    }
+    catch (err) {
+        throw new Error(`Failed to install ${pkg}: ${err.message}`);
     }
 }
 
