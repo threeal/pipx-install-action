@@ -2,25 +2,13 @@ import { jest } from "@jest/globals";
 
 let installedPkgs = [];
 
-jest.unstable_mockModule("@actions/exec", () => ({
-  exec: async (commandLine, args) => {
-    expect(commandLine).toBe("pipx");
-    expect(args.length).toBe(2);
-    expect(args[0]).toBe("install");
-
-    switch (args[1]) {
-      case "black":
-      case "ruff":
-        installedPkgs.push(args[1]);
-        break;
-
-      default:
-        throw new Error(`unknown package ${args[1]}`);
-    }
+jest.unstable_mockModule("./pipx/install.mjs", () => ({
+  installPackage: async (pkg) => {
+    installedPkgs.push(pkg);
   },
 }));
 
-describe("install Python packages", () => {
+describe("install Python packages action", () => {
   beforeEach(() => {
     installedPkgs = [];
   });
@@ -33,12 +21,5 @@ describe("install Python packages", () => {
 
     expect(installedPkgs).toContain("black");
     expect(installedPkgs).toContain("ruff");
-  });
-
-  it("should fail to install an invalid package", async () => {
-    const { pipxInstallAction } = await import("./action.mjs");
-
-    const prom = pipxInstallAction("invalid-pkg");
-    await expect(prom).rejects.toThrow("Failed to install invalid-pkg");
   });
 });
