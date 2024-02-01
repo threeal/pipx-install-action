@@ -19,8 +19,10 @@
   "author": "Alfi Maulana <alfi.maulana.f@gmail.com>",
   "type": "module",
   "main": "src/index.mjs",
+  "types": "src/index.d.mts",
   "bin": "src/main.mjs",
   "files": [
+    "src/**/*.d.mts",
     "src/**/*.mjs"
   ],
   "scripts": {
