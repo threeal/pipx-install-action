@@ -27252,13 +27252,17 @@ async function installPackage(pkg) {
     }
 }
 
+;// CONCATENATED MODULE: ./src/pipx/index.mjs
+
+/* harmony default export */ const pipx = ({ installPackage: installPackage });
+
 ;// CONCATENATED MODULE: ./src/action.mjs
 
 
 async function pipxInstallAction(...pkgs) {
     for (const pkg of pkgs) {
         await core.group(`Installing \u001b[34m${pkg}\u001b[39m...`, async () => {
-            await installPackage(pkg);
+            await pipx.installPackage(pkg);
         });
     }
 }
