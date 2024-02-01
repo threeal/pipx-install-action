@@ -27247,7 +27247,7 @@ async function pipxInstall(...pkgs) {
     await Promise.all(pkgs.map((pkg) => (0,exec.exec)("pipx", ["install", pkg])));
 }
 
-;// CONCATENATED MODULE: ./src/index.mjs
+;// CONCATENATED MODULE: ./src/main.mjs
 
 
 async function main() {
