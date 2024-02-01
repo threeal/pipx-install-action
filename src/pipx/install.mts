@@ -1,13 +1,4 @@
-import core from "@actions/core";
 import { exec } from "@actions/exec";
-
-export async function pipxInstall(...pkgs: string[]): Promise<void> {
-  for (const pkg of pkgs) {
-    await core.group(`Installing \u001b[34m${pkg}\u001b[39m...`, async () => {
-      await installPackage(pkg);
-    });
-  }
-}
 
 export async function installPackage(pkg: string): Promise<void> {
   try {
