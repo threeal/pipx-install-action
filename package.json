@@ -18,6 +18,7 @@
   "license": "MIT",
   "author": "Alfi Maulana <alfi.maulana.f@gmail.com>",
   "type": "module",
+  "main": "src/index.mjs",
   "bin": "src/main.mjs",
   "files": [
     "src/**/*.mjs"
