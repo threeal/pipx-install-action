@@ -27255,7 +27255,7 @@ async function installPackage(pkg) {
 ;// CONCATENATED MODULE: ./src/action.mjs
 
 
-async function pipxInstall(...pkgs) {
+async function pipxInstallAction(...pkgs) {
     for (const pkg of pkgs) {
         await core.group(`Installing \u001b[34m${pkg}\u001b[39m...`, async () => {
             await installPackage(pkg);
@@ -27270,7 +27270,7 @@ async function main() {
     const pkgs = core.getInput("packages", { required: true })
         .split(/(\s+)/)
         .filter((pkg) => pkg.trim().length > 0);
-    await pipxInstall(...pkgs);
+    await pipxInstallAction(...pkgs);
 }
 main().catch((err) => core.setFailed(err));
 

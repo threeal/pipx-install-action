@@ -1,1 +1,1 @@
-export { pipxInstall } from "./action.mjs";
+export { pipxInstallAction } from "./action.mjs";

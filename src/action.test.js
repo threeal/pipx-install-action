@@ -26,9 +26,9 @@ describe("install Python packages", () => {
   });
 
   it("should successfully install packages", async () => {
-    const { pipxInstall } = await import("./action.mjs");
+    const { pipxInstallAction } = await import("./action.mjs");
 
-    const prom = pipxInstall("black", "ruff");
+    const prom = pipxInstallAction("black", "ruff");
     await expect(prom).resolves.toBeUndefined();
 
     expect(installedPkgs).toContain("black");
@@ -36,9 +36,9 @@ describe("install Python packages", () => {
   });
 
   it("should fail to install an invalid package", async () => {
-    const { pipxInstall } = await import("./action.mjs");
+    const { pipxInstallAction } = await import("./action.mjs");
 
-    const prom = pipxInstall("invalid-pkg");
+    const prom = pipxInstallAction("invalid-pkg");
     await expect(prom).rejects.toThrow("Failed to install invalid-pkg");
   });
 });
