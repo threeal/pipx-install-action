@@ -1,7 +1,27 @@
 {
   "name": "pipx-install-action",
-  "private": true,
+  "version": "0.1.0",
+  "description": "Install Python packages using pipx with cache support on GitHub Actions",
+  "keywords": [
+    "action",
+    "python",
+    "install",
+    "cache",
+    "pipx"
+  ],
+  "homepage": "https://github.com/threeal/pipx-install-action#readme",
+  "bugs": {
+    "url": "https://github.com/threeal/pipx-install-action/issues",
+    "email": "alfi.maulana.f@gmail.com"
+  },
+  "repository": "github:threeal/pipx-install-action",
+  "license": "MIT",
+  "author": "Alfi Maulana <alfi.maulana.f@gmail.com>",
   "type": "module",
+  "bin": "src/main.mjs",
+  "files": [
+    "src/**/*.mjs"
+  ],
   "scripts": {
     "build": "tsc && ncc build src/main.mjs",
     "format": "prettier --write . !dist",

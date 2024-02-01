@@ -3990,6 +3990,8 @@ __metadata:
     jest: "npm:^29.7.0"
     prettier: "npm:^3.2.4"
     typescript: "npm:^5.3.3"
+  bin:
+    pipx-install-action: src/main.mjs
   languageName: unknown
   linkType: soft
 
