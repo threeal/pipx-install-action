@@ -27243,9 +27243,12 @@ var core = __nccwpck_require__(4278);
 var exec = __nccwpck_require__(8434);
 ;// CONCATENATED MODULE: ./src/pipx.mjs
 
+
 async function pipxInstall(...pkgs) {
     for (const pkg of pkgs) {
-        await (0,exec.exec)("pipx", ["install", pkg]);
+        await core.group(`Installing ${pkg}...`, async () => {
+            await (0,exec.exec)("pipx", ["install", pkg]);
+        });
     }
 }
 
