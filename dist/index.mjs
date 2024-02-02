@@ -27241,6 +27241,18 @@ var __webpack_exports__ = {};
 var core = __nccwpck_require__(4278);
 // EXTERNAL MODULE: ./.yarn/cache/@actions-exec-npm-1.1.1-90973d2f96-4a09f6bdbe.zip/node_modules/@actions/exec/lib/exec.js
 var exec = __nccwpck_require__(8434);
+;// CONCATENATED MODULE: ./src/pipx/environment.mjs
+
+async function getEnvironment(env) {
+    try {
+        const res = await (0,exec.getExecOutput)("pipx", ["environment", "--value", env]);
+        return res.stdout;
+    }
+    catch (err) {
+        throw new Error(`Failed to get ${env}: ${err.message}`);
+    }
+}
+
 ;// CONCATENATED MODULE: ./src/pipx/install.mjs
 
 async function installPackage(pkg) {
@@ -27254,7 +27266,8 @@ async function installPackage(pkg) {
 
 ;// CONCATENATED MODULE: ./src/pipx/index.mjs
 
-/* harmony default export */ const pipx = ({ installPackage: installPackage });
+
+/* harmony default export */ const pipx = ({ getEnvironment: getEnvironment, installPackage: installPackage });
 
 ;// CONCATENATED MODULE: ./src/action.mjs
 

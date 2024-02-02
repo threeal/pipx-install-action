@@ -1,3 +1,4 @@
+import { getEnvironment } from "./environment.mjs";
 import { installPackage } from "./install.mjs";
 
-export default { installPackage };
+export default { getEnvironment, installPackage };
