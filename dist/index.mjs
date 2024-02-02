@@ -81473,6 +81473,17 @@ async function savePackageCache(pkg) {
         throw new Error(`Failed to save ${pkg} cache: ${err.message}`);
     }
 }
+async function restorePackageCache(pkg) {
+    try {
+        const binDir = await getEnvironment("PIPX_BIN_DIR");
+        const localVenvs = await getEnvironment("PIPX_LOCAL_VENVS");
+        const key = await (0,cache.restoreCache)([external_path_.join(binDir, `${pkg}*`), external_path_.join(localVenvs, pkg)], `pipx-${process.platform}-${pkg}`);
+        return key !== undefined;
+    }
+    catch (err) {
+        throw new Error(`Failed to restore ${pkg} cache: ${err.message}`);
+    }
+}
 
 ;// CONCATENATED MODULE: ./src/pipx/install.mjs
 
@@ -81489,7 +81500,12 @@ async function installPackage(pkg) {
 
 
 
-/* harmony default export */ const pipx = ({ getEnvironment: getEnvironment, installPackage: installPackage, savePackageCache: savePackageCache });
+/* harmony default export */ const pipx = ({
+    getEnvironment: getEnvironment,
+    installPackage: installPackage,
+    restorePackageCache: restorePackageCache,
+    savePackageCache: savePackageCache,
+});
 
 ;// CONCATENATED MODULE: ./src/action.mjs
 
