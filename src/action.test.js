@@ -6,7 +6,22 @@ let savedPkgsCaches = [];
 jest.unstable_mockModule("./pipx/index.mjs", () => ({
   default: {
     installPackage: async (pkg) => {
-      installedPkgs.push(pkg);
+      switch (pkg) {
+        case "black":
+        case "ruff":
+          installedPkgs.push(pkg);
+          break;
+
+        default:
+          throw new Error("unknown package");
+      }
+    },
+    restorePackageCache: async (pkg) => {
+      if (savedPkgsCaches.includes(pkg)) {
+        installedPkgs.push(pkg);
+        return true;
+      }
+      return false;
     },
     savePackageCache: async (pkg) => {
       savedPkgsCaches.push(pkg);
@@ -17,10 +32,10 @@ jest.unstable_mockModule("./pipx/index.mjs", () => ({
 describe("install Python packages action", () => {
   beforeEach(() => {
     installedPkgs = [];
-    savedPkgsCaches = [];
+    savedPkgsCaches = ["flake8"];
   });
 
-  it("should successfully install packages", async () => {
+  it("should successfully install and save packages", async () => {
     const { pipxInstallAction } = await import("./action.mjs");
 
     const prom = pipxInstallAction("black", "ruff");
@@ -31,5 +46,14 @@ describe("install Python packages action", () => {
 
     expect(installedPkgs).toContain("ruff");
     expect(savedPkgsCaches).toContain("ruff");
+  });
+
+  it("should successfully restore a package", async () => {
+    const { pipxInstallAction } = await import("./action.mjs");
+
+    const prom = pipxInstallAction("flake8");
+    await expect(prom).resolves.toBeUndefined();
+
+    expect(installedPkgs).toContain("flake8");
   });
 });

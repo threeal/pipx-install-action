@@ -81512,12 +81512,17 @@ async function installPackage(pkg) {
 
 async function pipxInstallAction(...pkgs) {
     for (const pkg of pkgs) {
-        await core.group(`Installing \u001b[34m${pkg}\u001b[39m...`, async () => {
-            await pipx.installPackage(pkg);
+        const cacheFound = await core.group(`Restoring \u001b[34m${pkg}\u001b[39m cache...`, async () => {
+            return pipx.restorePackageCache(pkg);
         });
-        await core.group(`Saving \u001b[34m${pkg}\u001b[39m cache...`, async () => {
-            await pipx.savePackageCache(pkg);
-        });
+        if (!cacheFound) {
+            await core.group(`Installing \u001b[34m${pkg}\u001b[39m...`, async () => {
+                await pipx.installPackage(pkg);
+            });
+            await core.group(`Saving \u001b[34m${pkg}\u001b[39m cache...`, async () => {
+                await pipx.savePackageCache(pkg);
+            });
+        }
     }
 }
 
