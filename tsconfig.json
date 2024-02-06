@@ -5,7 +5,7 @@
     "module": "node16",
     "declaration": true,
     "target": "es2022",
-    "skipLibCheck": true,
+    "skipLibCheck": true
   },
-  "include": ["src"],
+  "include": ["src"]
 }
