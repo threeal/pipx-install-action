@@ -81524,6 +81524,8 @@ async function installPackage(pkg) {
 
 
 async function pipxInstallAction(...pkgs) {
+    core.info("Ensuring pipx path...");
+    pipx.ensurePath();
     for (const pkg of pkgs) {
         const cacheFound = await core.group(`Restoring \u001b[34m${pkg}\u001b[39m cache...`, async () => {
             return pipx.restorePackageCache(pkg);
