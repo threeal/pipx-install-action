@@ -81445,7 +81445,14 @@ var core = __nccwpck_require__(4278);
 var cache = __nccwpck_require__(294);
 // EXTERNAL MODULE: ./.yarn/cache/@actions-exec-npm-1.1.1-90973d2f96-4a09f6bdbe.zip/node_modules/@actions/exec/lib/exec.js
 var exec = __nccwpck_require__(8434);
+// EXTERNAL MODULE: external "os"
+var external_os_ = __nccwpck_require__(2037);
+// EXTERNAL MODULE: external "path"
+var external_path_ = __nccwpck_require__(1017);
 ;// CONCATENATED MODULE: ./src/pipx/environment.mjs
+
+
+
 
 async function getEnvironment(env) {
     try {
@@ -81456,9 +81463,14 @@ async function getEnvironment(env) {
         throw new Error(`Failed to get ${env}: ${err.message}`);
     }
 }
+function ensurePath() {
+    const homeDir = external_path_.join(external_os_.homedir(), ".local/pipx");
+    const binDir = external_path_.join(external_os_.homedir(), ".local/bin");
+    core.exportVariable("PIPX_HOME", homeDir);
+    core.exportVariable("PIPX_BIN_DIR", binDir);
+    core.addPath(binDir);
+}
 
-// EXTERNAL MODULE: external "path"
-var external_path_ = __nccwpck_require__(1017);
 ;// CONCATENATED MODULE: ./src/pipx/cache.mjs
 
 
@@ -81501,6 +81513,7 @@ async function installPackage(pkg) {
 
 
 /* harmony default export */ const pipx = ({
+    ensurePath: ensurePath,
     getEnvironment: getEnvironment,
     installPackage: installPackage,
     restorePackageCache: restorePackageCache,
