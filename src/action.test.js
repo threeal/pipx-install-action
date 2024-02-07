@@ -5,6 +5,7 @@ let savedPkgsCaches = [];
 
 jest.unstable_mockModule("./pipx/index.mjs", () => ({
   default: {
+    ensurePath: () => {},
     installPackage: async (pkg) => {
       switch (pkg) {
         case "black":
