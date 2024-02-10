@@ -15,11 +15,13 @@ jest.unstable_mockModule("@actions/core", () => ({
 }));
 
 jest.unstable_mockModule("@actions/exec", () => ({
-  getExecOutput: async (commandLine, args) => {
+  getExecOutput: async (commandLine, args, options) => {
     expect(commandLine).toBe("pipx");
     expect(args.length).toBe(3);
     expect(args[0]).toBe("environment");
     expect(args[1]).toBe("--value");
+    expect(options).toBeDefined();
+    expect(options.silent).toBe(true);
 
     switch (args[2]) {
       case "PIPX_LOCAL_VENVS":
