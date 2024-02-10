@@ -2,6 +2,9 @@ import core from "@actions/core";
 import pipx from "./pipx/index.mjs";
 
 export async function pipxInstallAction(...pkgs: string[]): Promise<void> {
+  core.info("Ensuring pipx path...");
+  pipx.ensurePath();
+
   for (const pkg of pkgs) {
     const cacheFound = await core.group(
       `Restoring \u001b[34m${pkg}\u001b[39m cache...`,
