@@ -81456,7 +81456,9 @@ var external_path_ = __nccwpck_require__(1017);
 
 async function getEnvironment(env) {
     try {
-        const res = await (0,exec.getExecOutput)("pipx", ["environment", "--value", env]);
+        const res = await (0,exec.getExecOutput)("pipx", ["environment", "--value", env], {
+            silent: true,
+        });
         return res.stdout;
     }
     catch (err) {

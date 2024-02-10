@@ -5,7 +5,9 @@ import path from "path";
 
 export async function getEnvironment(env: string): Promise<string> {
   try {
-    const res = await getExecOutput("pipx", ["environment", "--value", env]);
+    const res = await getExecOutput("pipx", ["environment", "--value", env], {
+      silent: true,
+    });
     return res.stdout;
   } catch (err) {
     throw new Error(`Failed to get ${env}: ${(err as Error).message}`);
