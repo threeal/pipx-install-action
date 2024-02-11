@@ -27,7 +27,7 @@
   ],
   "scripts": {
     "build": "tsc && ncc build src/main.mjs",
-    "format": "prettier --write . !dist",
+    "format": "prettier --write --cache . !dist",
     "lint": "eslint --ignore-path .gitignore .",
     "prepack": "tsc",
     "test": "tsc && jest"
