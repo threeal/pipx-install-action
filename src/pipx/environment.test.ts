@@ -1,21 +1,25 @@
 import { jest } from "@jest/globals";
 
-let paths = [];
-let variables = {};
+let paths: string[] = [];
+let variables: { [key: string]: string } = {};
 
 jest.unstable_mockModule("@actions/core", () => ({
   default: {
-    addPath: (inputPath) => {
+    addPath: (inputPath: string) => {
       paths.push(inputPath);
     },
-    exportVariable: (name, val) => {
+    exportVariable: (name: string, val: string) => {
       variables[name] = val;
     },
   },
 }));
 
 jest.unstable_mockModule("@actions/exec", () => ({
-  getExecOutput: async (commandLine, args, options) => {
+  getExecOutput: async (
+    commandLine: string,
+    args: string[],
+    options: { silent: boolean },
+  ) => {
     expect(commandLine).toBe("pipx");
     expect(args.length).toBe(3);
     expect(args[0]).toBe("environment");
