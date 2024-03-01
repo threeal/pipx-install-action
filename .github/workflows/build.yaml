@@ -21,7 +21,7 @@ jobs:
         uses: threeal/setup-yarn-action@v2.0.0
 
       - name: Build Package
-        run: corepack yarn pack
+        run: yarn pack
 
       - name: Upload Package as Artifact
         uses: actions/upload-artifact@v4.3.1
@@ -45,5 +45,5 @@ jobs:
 
       - name: Build Action
         run: |
-          corepack yarn build
+          yarn build
           git diff --exit-code HEAD
