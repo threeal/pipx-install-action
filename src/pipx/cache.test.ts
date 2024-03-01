@@ -1,10 +1,10 @@
 import { jest } from "@jest/globals";
 
-let files = [];
-let cache = {};
+let files: string[] = [];
+let cache: { [key: string]: string[] } = {};
 
 jest.unstable_mockModule("./environment.mjs", () => ({
-  getEnvironment: async (env) => {
+  getEnvironment: async (env: string) => {
     switch (env) {
       case "PIPX_BIN_DIR":
         return "/path/to/bin";
@@ -15,7 +15,7 @@ jest.unstable_mockModule("./environment.mjs", () => ({
 }));
 
 jest.unstable_mockModule("@actions/cache", () => ({
-  restoreCache: async (paths, key) => {
+  restoreCache: async (paths: string[], key: string) => {
     if (key in cache) {
       for (const path of paths) {
         if (cache[key].includes(path)) {
@@ -28,7 +28,7 @@ jest.unstable_mockModule("@actions/cache", () => ({
     }
     return undefined;
   },
-  saveCache: async (paths, key) => {
+  saveCache: async (paths: string[], key: string) => {
     cache[key] = [];
     for (const path of paths) {
       if (files.includes(path)) {

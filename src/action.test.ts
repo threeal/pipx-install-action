@@ -1,12 +1,12 @@
 import { jest } from "@jest/globals";
 
-let installedPkgs = [];
-let savedPkgsCaches = [];
+let installedPkgs: string[] = [];
+let savedPkgsCaches: string[] = [];
 
 jest.unstable_mockModule("./pipx/index.mjs", () => ({
   default: {
     ensurePath: () => {},
-    installPackage: async (pkg) => {
+    installPackage: async (pkg: string) => {
       switch (pkg) {
         case "black":
         case "ruff":
@@ -17,14 +17,14 @@ jest.unstable_mockModule("./pipx/index.mjs", () => ({
           throw new Error("unknown package");
       }
     },
-    restorePackageCache: async (pkg) => {
+    restorePackageCache: async (pkg: string) => {
       if (savedPkgsCaches.includes(pkg)) {
         installedPkgs.push(pkg);
         return true;
       }
       return false;
     },
-    savePackageCache: async (pkg) => {
+    savePackageCache: async (pkg: string) => {
       savedPkgsCaches.push(pkg);
     },
   },

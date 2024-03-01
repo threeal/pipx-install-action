@@ -1,9 +1,9 @@
 import { jest } from "@jest/globals";
 
-let installedPkgs = [];
+let installedPkgs: string[] = [];
 
 jest.unstable_mockModule("@actions/exec", () => ({
-  exec: async (commandLine, args) => {
+  exec: async (commandLine: string, args: string[]) => {
     expect(commandLine).toBe("pipx");
     expect(args.length).toBe(2);
     expect(args[0]).toBe("install");
