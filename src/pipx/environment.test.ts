@@ -45,14 +45,14 @@ jest.unstable_mockModule("os", () => ({
 
 describe("get pipx environments", () => {
   it("should successfully get an environment", async () => {
-    const { getEnvironment } = await import("./environment.mjs");
+    const { getEnvironment } = await import("./environment.js");
 
     const prom = getEnvironment("PIPX_LOCAL_VENVS");
     await expect(prom).resolves.toBe("/path/to/venvs");
   });
 
   it("should fail to get an invalid environment", async () => {
-    const { getEnvironment } = await import("./environment.mjs");
+    const { getEnvironment } = await import("./environment.js");
 
     const prom = getEnvironment("INVALID_ENV");
     await expect(prom).rejects.toThrow("Failed to get INVALID_ENV");
@@ -69,7 +69,7 @@ describe("ensure pipx path", () => {
   });
 
   it("should successfully ensure path", async () => {
-    const { ensurePath } = await import("./environment.mjs");
+    const { ensurePath } = await import("./environment.js");
 
     expect(() => ensurePath()).not.toThrow();
 

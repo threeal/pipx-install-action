@@ -3,7 +3,7 @@ import { jest } from "@jest/globals";
 let files: string[] = [];
 let cache: { [key: string]: string[] } = {};
 
-jest.unstable_mockModule("./environment.mjs", () => ({
+jest.unstable_mockModule("./environment.js", () => ({
   getEnvironment: async (env: string) => {
     switch (env) {
       case "PIPX_BIN_DIR":
@@ -47,7 +47,7 @@ describe("save Python package caches", () => {
   });
 
   it("should successfully save a package cache", async () => {
-    const { savePackageCache } = await import("./cache.mjs");
+    const { savePackageCache } = await import("./cache.js");
 
     const prom = savePackageCache("ruff");
     await expect(prom).resolves.toBeUndefined();
@@ -59,7 +59,7 @@ describe("save Python package caches", () => {
   });
 
   it("should fail to save a package cache", async () => {
-    const { savePackageCache } = await import("./cache.mjs");
+    const { savePackageCache } = await import("./cache.js");
 
     const prom = savePackageCache("invalid-pkg");
     await expect(prom).rejects.toThrow("Failed to save invalid-pkg cache");
@@ -79,7 +79,7 @@ describe("restore Python package caches", () => {
   });
 
   it("should successfully restore a saved package cache", async () => {
-    const { restorePackageCache } = await import("./cache.mjs");
+    const { restorePackageCache } = await import("./cache.js");
 
     const prom = restorePackageCache("ruff");
     await expect(prom).resolves.toBe(true);
@@ -88,7 +88,7 @@ describe("restore Python package caches", () => {
   });
 
   it("should successfully restore an unsaved package cache", async () => {
-    const { restorePackageCache } = await import("./cache.mjs");
+    const { restorePackageCache } = await import("./cache.js");
 
     const prom = restorePackageCache("black");
     await expect(prom).resolves.toBe(false);
@@ -97,7 +97,7 @@ describe("restore Python package caches", () => {
   });
 
   it("should fail to restore a package cache", async () => {
-    const { restorePackageCache } = await import("./cache.mjs");
+    const { restorePackageCache } = await import("./cache.js");
 
     const prom = restorePackageCache("invalid-pkg");
     await expect(prom).rejects.toThrow("Failed to restore invalid-pkg cache");

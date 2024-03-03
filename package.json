@@ -18,14 +18,14 @@
   "license": "MIT",
   "author": "Alfi Maulana <alfi.maulana.f@gmail.com>",
   "type": "module",
-  "main": "dist/lib/index.mjs",
-  "types": "dist/lib/index.d.mts",
-  "bin": "dist/lib/main.mjs",
+  "main": "dist/lib/index.js",
+  "types": "dist/lib/index.d.ts",
+  "bin": "dist/lib/main.js",
   "files": [
     "dist/lib"
   ],
   "scripts": {
-    "build": "tsc && ncc build dist/lib/main.mjs --out dist/action",
+    "build": "tsc && ncc build dist/lib/main.js --out dist/action",
     "format": "prettier --write --cache . !dist",
     "lint": "eslint --ignore-path .gitignore .",
     "prepack": "tsc",
