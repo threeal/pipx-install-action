@@ -26,7 +26,7 @@
     "src/**/*.mjs"
   ],
   "scripts": {
-    "build": "tsc && ncc build src/main.mjs",
+    "build": "tsc && ncc build src/main.mjs --out dist/action",
     "format": "prettier --write --cache . !dist",
     "lint": "eslint --ignore-path .gitignore .",
     "prepack": "tsc",
