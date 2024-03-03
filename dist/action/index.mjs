@@ -81449,7 +81449,7 @@ var exec = __nccwpck_require__(4926);
 var external_os_ = __nccwpck_require__(2037);
 // EXTERNAL MODULE: external "path"
 var external_path_ = __nccwpck_require__(1017);
-;// CONCATENATED MODULE: ./src/pipx/environment.mjs
+;// CONCATENATED MODULE: ./dist/lib/pipx/environment.mjs
 
 
 
@@ -81473,7 +81473,7 @@ function ensurePath() {
     core.addPath(binDir);
 }
 
-;// CONCATENATED MODULE: ./src/pipx/cache.mjs
+;// CONCATENATED MODULE: ./dist/lib/pipx/cache.mjs
 
 
 
@@ -81499,7 +81499,7 @@ async function restorePackageCache(pkg) {
     }
 }
 
-;// CONCATENATED MODULE: ./src/pipx/install.mjs
+;// CONCATENATED MODULE: ./dist/lib/pipx/install.mjs
 
 async function installPackage(pkg) {
     try {
@@ -81510,7 +81510,7 @@ async function installPackage(pkg) {
     }
 }
 
-;// CONCATENATED MODULE: ./src/pipx/index.mjs
+;// CONCATENATED MODULE: ./dist/lib/pipx/index.mjs
 
 
 
@@ -81522,7 +81522,7 @@ async function installPackage(pkg) {
     savePackageCache: savePackageCache,
 });
 
-;// CONCATENATED MODULE: ./src/action.mjs
+;// CONCATENATED MODULE: ./dist/lib/action.mjs
 
 
 async function pipxInstallAction(...pkgs) {
@@ -81543,7 +81543,7 @@ async function pipxInstallAction(...pkgs) {
     }
 }
 
-;// CONCATENATED MODULE: ./src/main.mjs
+;// CONCATENATED MODULE: ./dist/lib/main.mjs
 
 
 async function main() {
