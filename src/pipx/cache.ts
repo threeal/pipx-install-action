@@ -1,5 +1,5 @@
 import { restoreCache, saveCache } from "@actions/cache";
-import { getEnvironment } from "./environment.mjs";
+import { getEnvironment } from "./environment.js";
 import path from "path";
 
 export async function savePackageCache(pkg: string): Promise<void> {

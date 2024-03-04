@@ -1,5 +1,5 @@
 import core from "@actions/core";
-import pipx from "./pipx/index.mjs";
+import pipx from "./pipx/index.js";
 
 export async function pipxInstallAction(...pkgs: string[]): Promise<void> {
   core.info("Ensuring pipx path...");

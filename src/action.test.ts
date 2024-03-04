@@ -3,7 +3,7 @@ import { jest } from "@jest/globals";
 let installedPkgs: string[] = [];
 let savedPkgsCaches: string[] = [];
 
-jest.unstable_mockModule("./pipx/index.mjs", () => ({
+jest.unstable_mockModule("./pipx/index.js", () => ({
   default: {
     ensurePath: () => {},
     installPackage: async (pkg: string) => {
@@ -37,7 +37,7 @@ describe("install Python packages action", () => {
   });
 
   it("should successfully install and save packages", async () => {
-    const { pipxInstallAction } = await import("./action.mjs");
+    const { pipxInstallAction } = await import("./action.js");
 
     const prom = pipxInstallAction("black", "ruff");
     await expect(prom).resolves.toBeUndefined();
@@ -50,7 +50,7 @@ describe("install Python packages action", () => {
   });
 
   it("should successfully restore a package", async () => {
-    const { pipxInstallAction } = await import("./action.mjs");
+    const { pipxInstallAction } = await import("./action.js");
 
     const prom = pipxInstallAction("flake8");
     await expect(prom).resolves.toBeUndefined();
