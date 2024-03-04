@@ -49,8 +49,6 @@ jobs:
 
       - name: Test Package
         run: yarn test
-        env:
-          NODE_OPTIONS: --experimental-vm-modules
 
   test-action:
     name: Test Action
