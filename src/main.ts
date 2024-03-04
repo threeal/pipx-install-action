@@ -1,4 +1,4 @@
-import core from "@actions/core";
+import * as core from "@actions/core";
 import { pipxInstallAction } from "./action.js";
 
 async function main() {

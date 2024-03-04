@@ -1,4 +1,4 @@
-import core from "@actions/core";
+import * as core from "@actions/core";
 import pipx from "./pipx/index.js";
 
 export async function pipxInstallAction(...pkgs: string[]): Promise<void> {
