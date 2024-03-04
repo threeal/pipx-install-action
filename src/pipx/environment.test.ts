@@ -4,13 +4,11 @@ let paths: string[] = [];
 let variables: { [key: string]: string } = {};
 
 jest.unstable_mockModule("@actions/core", () => ({
-  default: {
-    addPath: (inputPath: string) => {
-      paths.push(inputPath);
-    },
-    exportVariable: (name: string, val: string) => {
-      variables[name] = val;
-    },
+  addPath: (inputPath: string) => {
+    paths.push(inputPath);
+  },
+  exportVariable: (name: string, val: string) => {
+    variables[name] = val;
   },
 }));
 

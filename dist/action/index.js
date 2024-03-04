@@ -81470,7 +81470,6 @@ var __webpack_exports__ = {};
 
 // EXTERNAL MODULE: ../../../.yarn/berry/cache/@actions-core-npm-1.10.1-3cb1000b4d-10c0.zip/node_modules/@actions/core/lib/core.js
 var core = __nccwpck_require__(2340);
-var core_default = /*#__PURE__*/__nccwpck_require__.n(core);
 // EXTERNAL MODULE: ../../../.yarn/berry/cache/@actions-cache-npm-3.2.4-c57b047f14-10c0.zip/node_modules/@actions/cache/lib/cache.js
 var cache = __nccwpck_require__(3193);
 // EXTERNAL MODULE: ../../../.yarn/berry/cache/@actions-exec-npm-1.1.1-90973d2f96-10c0.zip/node_modules/@actions/exec/lib/exec.js
@@ -81500,9 +81499,9 @@ async function getEnvironment(env) {
 function ensurePath() {
     const homeDir = external_path_default().join(external_os_default().homedir(), ".local/pipx");
     const binDir = external_path_default().join(external_os_default().homedir(), ".local/bin");
-    core_default().exportVariable("PIPX_HOME", homeDir);
-    core_default().exportVariable("PIPX_BIN_DIR", binDir);
-    core_default().addPath(binDir);
+    core.exportVariable("PIPX_HOME", homeDir);
+    core.exportVariable("PIPX_BIN_DIR", binDir);
+    core.addPath(binDir);
 }
 
 ;// CONCATENATED MODULE: ./src/pipx/cache.ts
@@ -81558,17 +81557,17 @@ async function installPackage(pkg) {
 
 
 async function pipxInstallAction(...pkgs) {
-    core_default().info("Ensuring pipx path...");
+    core.info("Ensuring pipx path...");
     pipx.ensurePath();
     for (const pkg of pkgs) {
-        const cacheFound = await core_default().group(`Restoring \u001b[34m${pkg}\u001b[39m cache...`, async () => {
+        const cacheFound = await core.group(`Restoring \u001b[34m${pkg}\u001b[39m cache...`, async () => {
             return pipx.restorePackageCache(pkg);
         });
         if (!cacheFound) {
-            await core_default().group(`Installing \u001b[34m${pkg}\u001b[39m...`, async () => {
+            await core.group(`Installing \u001b[34m${pkg}\u001b[39m...`, async () => {
                 await pipx.installPackage(pkg);
             });
-            await core_default().group(`Saving \u001b[34m${pkg}\u001b[39m cache...`, async () => {
+            await core.group(`Saving \u001b[34m${pkg}\u001b[39m cache...`, async () => {
                 await pipx.savePackageCache(pkg);
             });
         }
@@ -81579,12 +81578,12 @@ async function pipxInstallAction(...pkgs) {
 
 
 async function main() {
-    const pkgs = core_default().getInput("packages", { required: true })
+    const pkgs = core.getInput("packages", { required: true })
         .split(/(\s+)/)
         .filter((pkg) => pkg.trim().length > 0);
     await pipxInstallAction(...pkgs);
 }
-main().catch((err) => core_default().setFailed(err));
+main().catch((err) => core.setFailed(err));
 
 })();
 
