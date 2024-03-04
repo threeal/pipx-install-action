@@ -81430,6 +81430,35 @@ module.exports = JSON.parse('[[[0,44],"disallowed_STD3_valid"],[[45,46],"valid"]
 /******/ }
 /******/ 
 /************************************************************************/
+/******/ /* webpack/runtime/compat get default export */
+/******/ (() => {
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__nccwpck_require__.n = (module) => {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			() => (module['default']) :
+/******/ 			() => (module);
+/******/ 		__nccwpck_require__.d(getter, { a: getter });
+/******/ 		return getter;
+/******/ 	};
+/******/ })();
+/******/ 
+/******/ /* webpack/runtime/define property getters */
+/******/ (() => {
+/******/ 	// define getter functions for harmony exports
+/******/ 	__nccwpck_require__.d = (exports, definition) => {
+/******/ 		for(var key in definition) {
+/******/ 			if(__nccwpck_require__.o(definition, key) && !__nccwpck_require__.o(exports, key)) {
+/******/ 				Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 			}
+/******/ 		}
+/******/ 	};
+/******/ })();
+/******/ 
+/******/ /* webpack/runtime/hasOwnProperty shorthand */
+/******/ (() => {
+/******/ 	__nccwpck_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
+/******/ })();
+/******/ 
 /******/ /* webpack/runtime/compat */
 /******/ 
 /******/ if (typeof __nccwpck_require__ !== 'undefined') __nccwpck_require__.ab = new URL('.', import.meta.url).pathname.slice(import.meta.url.match(/^file:\/\/\/\w:/) ? 1 : 0, -1) + "/";
@@ -81441,15 +81470,18 @@ var __webpack_exports__ = {};
 
 // EXTERNAL MODULE: ../../../.yarn/berry/cache/@actions-core-npm-1.10.1-3cb1000b4d-10c0.zip/node_modules/@actions/core/lib/core.js
 var core = __nccwpck_require__(2340);
+var core_default = /*#__PURE__*/__nccwpck_require__.n(core);
 // EXTERNAL MODULE: ../../../.yarn/berry/cache/@actions-cache-npm-3.2.4-c57b047f14-10c0.zip/node_modules/@actions/cache/lib/cache.js
 var cache = __nccwpck_require__(3193);
 // EXTERNAL MODULE: ../../../.yarn/berry/cache/@actions-exec-npm-1.1.1-90973d2f96-10c0.zip/node_modules/@actions/exec/lib/exec.js
 var exec = __nccwpck_require__(4926);
 // EXTERNAL MODULE: external "os"
 var external_os_ = __nccwpck_require__(2037);
+var external_os_default = /*#__PURE__*/__nccwpck_require__.n(external_os_);
 // EXTERNAL MODULE: external "path"
 var external_path_ = __nccwpck_require__(1017);
-;// CONCATENATED MODULE: ./dist/lib/pipx/environment.js
+var external_path_default = /*#__PURE__*/__nccwpck_require__.n(external_path_);
+;// CONCATENATED MODULE: ./src/pipx/environment.ts
 
 
 
@@ -81466,14 +81498,14 @@ async function getEnvironment(env) {
     }
 }
 function ensurePath() {
-    const homeDir = external_path_.join(external_os_.homedir(), ".local/pipx");
-    const binDir = external_path_.join(external_os_.homedir(), ".local/bin");
-    core.exportVariable("PIPX_HOME", homeDir);
-    core.exportVariable("PIPX_BIN_DIR", binDir);
-    core.addPath(binDir);
+    const homeDir = external_path_default().join(external_os_default().homedir(), ".local/pipx");
+    const binDir = external_path_default().join(external_os_default().homedir(), ".local/bin");
+    core_default().exportVariable("PIPX_HOME", homeDir);
+    core_default().exportVariable("PIPX_BIN_DIR", binDir);
+    core_default().addPath(binDir);
 }
 
-;// CONCATENATED MODULE: ./dist/lib/pipx/cache.js
+;// CONCATENATED MODULE: ./src/pipx/cache.ts
 
 
 
@@ -81481,7 +81513,7 @@ async function savePackageCache(pkg) {
     try {
         const binDir = await getEnvironment("PIPX_BIN_DIR");
         const localVenvs = await getEnvironment("PIPX_LOCAL_VENVS");
-        await (0,cache.saveCache)([external_path_.join(binDir, `${pkg}*`), external_path_.join(localVenvs, pkg)], `pipx-${process.platform}-${pkg}`);
+        await (0,cache.saveCache)([external_path_default().join(binDir, `${pkg}*`), external_path_default().join(localVenvs, pkg)], `pipx-${process.platform}-${pkg}`);
     }
     catch (err) {
         throw new Error(`Failed to save ${pkg} cache: ${err.message}`);
@@ -81491,7 +81523,7 @@ async function restorePackageCache(pkg) {
     try {
         const binDir = await getEnvironment("PIPX_BIN_DIR");
         const localVenvs = await getEnvironment("PIPX_LOCAL_VENVS");
-        const key = await (0,cache.restoreCache)([external_path_.join(binDir, `${pkg}*`), external_path_.join(localVenvs, pkg)], `pipx-${process.platform}-${pkg}`);
+        const key = await (0,cache.restoreCache)([external_path_default().join(binDir, `${pkg}*`), external_path_default().join(localVenvs, pkg)], `pipx-${process.platform}-${pkg}`);
         return key !== undefined;
     }
     catch (err) {
@@ -81499,7 +81531,7 @@ async function restorePackageCache(pkg) {
     }
 }
 
-;// CONCATENATED MODULE: ./dist/lib/pipx/install.js
+;// CONCATENATED MODULE: ./src/pipx/install.ts
 
 async function installPackage(pkg) {
     try {
@@ -81510,7 +81542,7 @@ async function installPackage(pkg) {
     }
 }
 
-;// CONCATENATED MODULE: ./dist/lib/pipx/index.js
+;// CONCATENATED MODULE: ./src/pipx/index.ts
 
 
 
@@ -81522,37 +81554,37 @@ async function installPackage(pkg) {
     savePackageCache: savePackageCache,
 });
 
-;// CONCATENATED MODULE: ./dist/lib/action.js
+;// CONCATENATED MODULE: ./src/action.ts
 
 
 async function pipxInstallAction(...pkgs) {
-    core.info("Ensuring pipx path...");
+    core_default().info("Ensuring pipx path...");
     pipx.ensurePath();
     for (const pkg of pkgs) {
-        const cacheFound = await core.group(`Restoring \u001b[34m${pkg}\u001b[39m cache...`, async () => {
+        const cacheFound = await core_default().group(`Restoring \u001b[34m${pkg}\u001b[39m cache...`, async () => {
             return pipx.restorePackageCache(pkg);
         });
         if (!cacheFound) {
-            await core.group(`Installing \u001b[34m${pkg}\u001b[39m...`, async () => {
+            await core_default().group(`Installing \u001b[34m${pkg}\u001b[39m...`, async () => {
                 await pipx.installPackage(pkg);
             });
-            await core.group(`Saving \u001b[34m${pkg}\u001b[39m cache...`, async () => {
+            await core_default().group(`Saving \u001b[34m${pkg}\u001b[39m cache...`, async () => {
                 await pipx.savePackageCache(pkg);
             });
         }
     }
 }
 
-;// CONCATENATED MODULE: ./dist/lib/main.js
+;// CONCATENATED MODULE: ./src/main.ts
 
 
 async function main() {
-    const pkgs = core.getInput("packages", { required: true })
+    const pkgs = core_default().getInput("packages", { required: true })
         .split(/(\s+)/)
         .filter((pkg) => pkg.trim().length > 0);
     await pipxInstallAction(...pkgs);
 }
-main().catch((err) => core.setFailed(err));
+main().catch((err) => core_default().setFailed(err));
 
 })();
 
