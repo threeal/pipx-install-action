@@ -2,9 +2,9 @@
 !.env.yarn
 !.eslint*
 !.git*
+!.prettierignore
 
 coverage/
-dist/lib/
 node_modules/
 
 package.tgz

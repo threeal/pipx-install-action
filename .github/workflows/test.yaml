@@ -5,8 +5,8 @@ on:
   push:
     branches: [main]
 jobs:
-  check-package:
-    name: Check Package
+  check-workspaces:
+    name: Check Workspaces
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -24,14 +24,14 @@ jobs:
 
       - name: Check Format
         run: |
-          yarn format
+          yarn workspaces foreach --all --topological run format
           git diff --exit-code HEAD
 
       - name: Check Lint
-        run: yarn lint
+        run: yarn workspaces foreach --all --topological run lint
 
-  test-package:
-    name: Test Package
+  test-workspaces:
+    name: Test Workspaces
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -47,8 +47,8 @@ jobs:
         with:
           version: stable
 
-      - name: Test Package
-        run: yarn test
+      - name: Test Workspaces
+        run: yarn workspaces foreach --all --topological run test
 
   test-action:
     name: Test Action
