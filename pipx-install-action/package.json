@@ -26,7 +26,8 @@
   ],
   "scripts": {
     "build": "tsc",
-    "prepack": "tsc"
+    "prepack": "tsc",
+    "test": "jest"
   },
   "dependencies": {
     "@actions/cache": "^3.2.4",
@@ -35,7 +36,10 @@
   },
   "devDependencies": {
     "@jest/globals": "^29.7.0",
+    "@types/jest": "^29.5.12",
     "@types/node": "^20.11.24",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.1.2",
     "typescript": "^5.3.3"
   }
 }
