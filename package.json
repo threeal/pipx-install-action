@@ -27,7 +27,7 @@
   "scripts": {
     "build": "ncc build src/main.ts --out dist/action",
     "format": "prettier --write --cache . !dist",
-    "lint": "eslint --ignore-path .gitignore .",
+    "lint": "eslint src",
     "prepack": "tsc --declaration",
     "test": "jest"
   },
