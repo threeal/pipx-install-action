@@ -4077,26 +4077,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pipx-install-action@workspace:.":
+"pipx-install-action@workspace:^, pipx-install-action@workspace:pipx-install-action":
   version: 0.0.0-use.local
-  resolution: "pipx-install-action@workspace:."
+  resolution: "pipx-install-action@workspace:pipx-install-action"
   dependencies:
     "@actions/cache": "npm:^3.2.4"
     "@actions/core": "npm:^1.10.1"
     "@actions/exec": "npm:^1.1.1"
     "@jest/globals": "npm:^29.7.0"
-    "@types/jest": "npm:^29.5.12"
     "@types/node": "npm:^20.11.24"
-    "@typescript-eslint/eslint-plugin": "npm:^7.1.0"
-    "@typescript-eslint/parser": "npm:^7.1.0"
-    "@vercel/ncc": "npm:^0.38.1"
-    eslint: "npm:^8.57.0"
-    jest: "npm:^29.7.0"
-    prettier: "npm:^3.2.5"
-    ts-jest: "npm:^29.1.2"
     typescript: "npm:^5.3.3"
   bin:
-    pipx-install-action: dist/lib/main.js
+    pipx-install-action: dist/main.js
   languageName: unknown
   linkType: soft
 
@@ -4296,6 +4288,25 @@ __metadata:
   checksum: 10c0/9cb7757acb489bd83757ba1a274ab545eafd75598a9d817e0c3f8b164238dd90eba50d6b848bd4dcc5f3040912e882dc7ba71653e35af660d77b25c381d402e8
   languageName: node
   linkType: hard
+
+"root-workspace-0b6124@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "root-workspace-0b6124@workspace:."
+  dependencies:
+    "@actions/core": "npm:^1.10.1"
+    "@types/jest": "npm:^29.5.12"
+    "@types/node": "npm:^20.11.24"
+    "@typescript-eslint/eslint-plugin": "npm:^7.1.0"
+    "@typescript-eslint/parser": "npm:^7.1.0"
+    "@vercel/ncc": "npm:^0.38.1"
+    eslint: "npm:^8.57.0"
+    jest: "npm:^29.7.0"
+    pipx-install-action: "workspace:^"
+    prettier: "npm:^3.2.5"
+    ts-jest: "npm:^29.1.2"
+    typescript: "npm:^5.3.3"
+  languageName: unknown
+  linkType: soft
 
 "run-parallel@npm:^1.1.9":
   version: 1.2.0
