@@ -2,6 +2,7 @@
 !.env.yarn
 !.eslint*
 !.git*
+!.prettierignore
 
 coverage/
 node_modules/

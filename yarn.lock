@@ -4091,6 +4091,7 @@ __metadata:
     "@typescript-eslint/parser": "npm:^7.1.0"
     eslint: "npm:^8.57.0"
     jest: "npm:^29.7.0"
+    prettier: "npm:^3.2.5"
     ts-jest: "npm:^29.1.2"
     typescript: "npm:^5.3.3"
   bin:
