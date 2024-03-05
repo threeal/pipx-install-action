@@ -2,10 +2,6 @@
   "root": true,
   "ignorePatterns": ["dist"],
   "extends": ["eslint:recommended"],
-  "parserOptions": {
-    "ecmaVersion": 2022,
-    "sourceType": "module"
-  },
   "env": {
     "node": true
   },
