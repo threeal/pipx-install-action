@@ -5,8 +5,8 @@ on:
   push:
     branches: [main]
 jobs:
-  build-package:
-    name: Build Package
+  package-library:
+    name: Package Library
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -22,16 +22,17 @@ jobs:
         with:
           version: stable
 
-      - name: Build Package
-        run: yarn pack
+      - name: Package Workspace
+        run: yarn workspace pipx-install-action pack
 
-      - name: Upload Package as Artifact
+      - name: Upload Artifact
         uses: actions/upload-artifact@v4.3.1
         with:
-          path: package.tgz
+          name: pipx-install-action
+          path: pipx-install-action/package.tgz
 
-  build-action:
-    name: Build Action
+  build-workspaces:
+    name: Build Workspaces
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -47,7 +48,7 @@ jobs:
         with:
           version: stable
 
-      - name: Build Action
+      - name: Build Workspaces
         run: |
-          yarn build
+          yarn workspaces foreach --all --topological run build
           git diff --exit-code HEAD
