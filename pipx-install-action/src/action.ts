@@ -1,4 +1,5 @@
 import * as core from "@actions/core";
+import { getErrorMessage } from "catched-error-message";
 import pipx from "./pipx/index.js";
 
 export async function pipxInstallAction(...pkgs: string[]): Promise<void> {
@@ -6,7 +7,7 @@ export async function pipxInstallAction(...pkgs: string[]): Promise<void> {
   try {
     pipx.ensurePath();
   } catch (err) {
-    core.setFailed(`Failed to ensure pipx path: ${err}`);
+    core.setFailed(`Failed to ensure pipx path: ${getErrorMessage(err)}`);
     return;
   }
 
@@ -17,7 +18,7 @@ export async function pipxInstallAction(...pkgs: string[]): Promise<void> {
       cacheFound = await pipx.restorePackageCache(pkg);
     } catch (err) {
       core.endGroup();
-      core.setFailed(`Failed to restore ${pkg} cache: ${err}`);
+      core.setFailed(`Failed to restore ${pkg} cache: ${getErrorMessage(err)}`);
       return;
     }
     core.endGroup();
@@ -30,7 +31,7 @@ export async function pipxInstallAction(...pkgs: string[]): Promise<void> {
         await pipx.installPackage(pkg);
       } catch (err) {
         core.endGroup();
-        core.setFailed(`Failed to install ${pkg}: ${err}`);
+        core.setFailed(`Failed to install ${pkg}: ${getErrorMessage(err)}`);
         return;
       }
       core.endGroup();
@@ -40,7 +41,7 @@ export async function pipxInstallAction(...pkgs: string[]): Promise<void> {
         await pipx.savePackageCache(pkg);
       } catch (err) {
         core.endGroup();
-        core.setFailed(`Failed to save ${pkg} cache: ${err}`);
+        core.setFailed(`Failed to save ${pkg} cache: ${getErrorMessage(err)}`);
         return;
       }
       core.endGroup();

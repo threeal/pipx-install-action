@@ -81441,6 +81441,10 @@ var __webpack_exports__ = {};
 
 // EXTERNAL MODULE: ../../../.yarn/berry/cache/@actions-core-npm-1.10.1-3cb1000b4d-10c0.zip/node_modules/@actions/core/lib/core.js
 var core = __nccwpck_require__(2340);
+;// CONCATENATED MODULE: ../../../.yarn/berry/cache/catched-error-message-npm-0.0.1-9126a73d25-10c0.zip/node_modules/catched-error-message/dist/index.esm.js
+function r(r){return function(r){if("object"==typeof(e=r)&&null!==e&&"message"in e&&"string"==typeof e.message)return r;var e;try{return new Error(JSON.stringify(r))}catch(e){return new Error(String(r))}}(r).message}
+//# sourceMappingURL=index.esm.js.map
+
 // EXTERNAL MODULE: ../../../.yarn/berry/cache/@actions-cache-npm-3.2.4-c57b047f14-10c0.zip/node_modules/@actions/cache/lib/cache.js
 var cache = __nccwpck_require__(3193);
 // EXTERNAL MODULE: ../../../.yarn/berry/cache/@actions-exec-npm-1.1.1-90973d2f96-10c0.zip/node_modules/@actions/exec/lib/exec.js
@@ -81454,6 +81458,7 @@ var external_path_ = __nccwpck_require__(1017);
 
 
 
+
 async function getEnvironment(env) {
     try {
         const res = await (0,exec.getExecOutput)("pipx", ["environment", "--value", env], {
@@ -81462,7 +81467,7 @@ async function getEnvironment(env) {
         return res.stdout;
     }
     catch (err) {
-        throw new Error(`Failed to get ${env}: ${err.message}`);
+        throw new Error(`Failed to get ${env}: ${r(err)}`);
     }
 }
 function ensurePath() {
@@ -81477,6 +81482,7 @@ function ensurePath() {
 
 
 
+
 async function savePackageCache(pkg) {
     try {
         const binDir = await getEnvironment("PIPX_BIN_DIR");
@@ -81484,7 +81490,7 @@ async function savePackageCache(pkg) {
         await (0,cache.saveCache)([external_path_.join(binDir, `${pkg}*`), external_path_.join(localVenvs, pkg)], `pipx-${process.platform}-${pkg}`);
     }
     catch (err) {
-        throw new Error(`Failed to save ${pkg} cache: ${err.message}`);
+        throw new Error(`Failed to save ${pkg} cache: ${r(err)}`);
     }
 }
 async function restorePackageCache(pkg) {
@@ -81495,18 +81501,19 @@ async function restorePackageCache(pkg) {
         return key !== undefined;
     }
     catch (err) {
-        throw new Error(`Failed to restore ${pkg} cache: ${err.message}`);
+        throw new Error(`Failed to restore ${pkg} cache: ${r(err)}`);
     }
 }
 
 ;// CONCATENATED MODULE: ./pipx-install-action/dist/pipx/install.js
+
 
 async function installPackage(pkg) {
     try {
         await (0,exec.exec)("pipx", ["install", pkg]);
     }
     catch (err) {
-        throw new Error(`Failed to install ${pkg}: ${err.message}`);
+        throw new Error(`Failed to install ${pkg}: ${r(err)}`);
     }
 }
 
@@ -81525,13 +81532,14 @@ async function installPackage(pkg) {
 ;// CONCATENATED MODULE: ./pipx-install-action/dist/action.js
 
 
+
 async function pipxInstallAction(...pkgs) {
     core.info("Ensuring pipx path...");
     try {
         pipx.ensurePath();
     }
     catch (err) {
-        core.setFailed(`Failed to ensure pipx path: ${err}`);
+        core.setFailed(`Failed to ensure pipx path: ${r(err)}`);
         return;
     }
     for (const pkg of pkgs) {
@@ -81542,7 +81550,7 @@ async function pipxInstallAction(...pkgs) {
         }
         catch (err) {
             core.endGroup();
-            core.setFailed(`Failed to restore ${pkg} cache: ${err}`);
+            core.setFailed(`Failed to restore ${pkg} cache: ${r(err)}`);
             return;
         }
         core.endGroup();
@@ -81553,7 +81561,7 @@ async function pipxInstallAction(...pkgs) {
             }
             catch (err) {
                 core.endGroup();
-                core.setFailed(`Failed to install ${pkg}: ${err}`);
+                core.setFailed(`Failed to install ${pkg}: ${r(err)}`);
                 return;
             }
             core.endGroup();
@@ -81563,7 +81571,7 @@ async function pipxInstallAction(...pkgs) {
             }
             catch (err) {
                 core.endGroup();
-                core.setFailed(`Failed to save ${pkg} cache: ${err}`);
+                core.setFailed(`Failed to save ${pkg} cache: ${r(err)}`);
                 return;
             }
             core.endGroup();
