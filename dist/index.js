@@ -81527,18 +81527,46 @@ async function installPackage(pkg) {
 
 async function pipxInstallAction(...pkgs) {
     core.info("Ensuring pipx path...");
-    pipx.ensurePath();
+    try {
+        pipx.ensurePath();
+    }
+    catch (err) {
+        core.setFailed(`Failed to ensure pipx path: ${err}`);
+        return;
+    }
     for (const pkg of pkgs) {
-        const cacheFound = await core.group(`Restoring \u001b[34m${pkg}\u001b[39m cache...`, async () => {
-            return pipx.restorePackageCache(pkg);
-        });
+        let cacheFound;
+        core.startGroup(`Restoring \u001b[34m${pkg}\u001b[39m cache...`);
+        try {
+            cacheFound = await pipx.restorePackageCache(pkg);
+        }
+        catch (err) {
+            core.endGroup();
+            core.setFailed(`Failed to restore ${pkg} cache: ${err}`);
+            return;
+        }
+        core.endGroup();
         if (!cacheFound) {
-            await core.group(`Installing \u001b[34m${pkg}\u001b[39m...`, async () => {
+            core.startGroup(`Cache not found, installing \u001b[34m${pkg}\u001b[39m...`);
+            try {
                 await pipx.installPackage(pkg);
-            });
-            await core.group(`Saving \u001b[34m${pkg}\u001b[39m cache...`, async () => {
+            }
+            catch (err) {
+                core.endGroup();
+                core.setFailed(`Failed to install ${pkg}: ${err}`);
+                return;
+            }
+            core.endGroup();
+            core.startGroup(`Saving \u001b[34m${pkg}\u001b[39m cache...`);
+            try {
                 await pipx.savePackageCache(pkg);
-            });
+            }
+            catch (err) {
+                core.endGroup();
+                core.setFailed(`Failed to save ${pkg} cache: ${err}`);
+                return;
+            }
+            core.endGroup();
         }
     }
 }
