@@ -1,4 +1,5 @@
 import { restoreCache, saveCache } from "@actions/cache";
+import { getErrorMessage } from "catched-error-message";
 import { getEnvironment } from "./environment.js";
 import path from "path";
 
@@ -12,7 +13,7 @@ export async function savePackageCache(pkg: string): Promise<void> {
       `pipx-${process.platform}-${pkg}`,
     );
   } catch (err) {
-    throw new Error(`Failed to save ${pkg} cache: ${(err as Error).message}`);
+    throw new Error(`Failed to save ${pkg} cache: ${getErrorMessage(err)}`);
   }
 }
 
@@ -28,8 +29,6 @@ export async function restorePackageCache(pkg: string): Promise<boolean> {
 
     return key !== undefined;
   } catch (err) {
-    throw new Error(
-      `Failed to restore ${pkg} cache: ${(err as Error).message}`,
-    );
+    throw new Error(`Failed to restore ${pkg} cache: ${getErrorMessage(err)}`);
   }
 }

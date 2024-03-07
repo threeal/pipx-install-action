@@ -1,5 +1,6 @@
 import * as core from "@actions/core";
 import { getExecOutput } from "@actions/exec";
+import { getErrorMessage } from "catched-error-message";
 import os from "os";
 import path from "path";
 
@@ -10,7 +11,7 @@ export async function getEnvironment(env: string): Promise<string> {
     });
     return res.stdout;
   } catch (err) {
-    throw new Error(`Failed to get ${env}: ${(err as Error).message}`);
+    throw new Error(`Failed to get ${env}: ${getErrorMessage(err)}`);
   }
 }
 

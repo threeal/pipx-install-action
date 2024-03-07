@@ -88,7 +88,7 @@ describe("install Python packages action", () => {
     expect(failed).toBe(true);
     expect(logs.slice(-2)).toStrictEqual([
       "Ensuring pipx path...",
-      "Failed to ensure pipx path: Error: something happened",
+      "Failed to ensure pipx path: something happened",
     ]);
   });
 
@@ -106,7 +106,7 @@ describe("install Python packages action", () => {
     expect(logs.slice(-3)).toStrictEqual([
       "::group::Restoring \u001b[34many-pkg\u001b[39m cache...",
       "::endgroup::",
-      "Failed to restore any-pkg cache: Error: something happened",
+      "Failed to restore any-pkg cache: something happened",
     ]);
   });
 
@@ -124,7 +124,7 @@ describe("install Python packages action", () => {
     expect(logs.slice(-3)).toStrictEqual([
       "::group::Cache not found, installing \u001b[34many-pkg\u001b[39m...",
       "::endgroup::",
-      "Failed to install any-pkg: Error: something happened",
+      "Failed to install any-pkg: something happened",
     ]);
   });
 
@@ -142,7 +142,7 @@ describe("install Python packages action", () => {
     expect(logs.slice(-3)).toStrictEqual([
       "::group::Saving \u001b[34many-pkg\u001b[39m cache...",
       "::endgroup::",
-      "Failed to save any-pkg cache: Error: something happened",
+      "Failed to save any-pkg cache: something happened",
     ]);
   });
 });
