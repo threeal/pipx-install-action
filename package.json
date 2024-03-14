@@ -2,7 +2,7 @@
   "name": "root",
   "type": "module",
   "workspaces": [
-    "pipx-install-action"
+    "lib/*"
   ],
   "scripts": {
     "build": "ncc build src/index.ts",
