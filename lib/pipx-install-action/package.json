@@ -1,6 +1,6 @@
 {
   "name": "pipx-install-action",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Install Python packages using pipx with cache support on GitHub Actions",
   "keywords": [
     "action",
