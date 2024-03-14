@@ -23,7 +23,7 @@ After installation, this action will automatically save the installed packages t
 
 ## Example Usages
 
-Here is a basic example of how to use the Pipx Install Action to install [Ruff](https://docs.astral.sh/ruff/) in a GitHub Actions workflow:
+This example demonstrates how to use the Pipx Install Action to install [Ruff](https://pypi.org/project/ruff/) in a GitHub Actions workflow:
 
 ```yaml
 name: Python CI
@@ -38,11 +38,11 @@ jobs:
         uses: actions/checkout@v4.1.2
 
       - name: Install Ruff
-        uses: threeal/pipx-install-action@main
+        uses: threeal/pipx-install-action@v1.0.0
         with:
           packages: ruff
 
-      # Add more steps as needed for your workflow
+      # Add more steps as needed for the workflow
 ```
 
 ## License

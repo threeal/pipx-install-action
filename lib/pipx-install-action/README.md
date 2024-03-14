@@ -10,9 +10,9 @@ Use this library to execute the Pipx Install Action in JavaScript, particularly 
 - Installs Python packages using pipx.
 - Caches Python package installations to be used in subsequent workflow runs.
 
-## Examples
+## Example Usages
 
-This example demonstrates how to use the `pipxInstallAction` function to install the [Ruff](https://pypi.org/project/ruff/) package in a JavaScript action.
+This example demonstrates how to use the `pipxInstallAction` function to install [Ruff](https://pypi.org/project/ruff/) in a JavaScript action:
 
 ```js
 import { pipxInstallAction } from "pipx-install-action";
