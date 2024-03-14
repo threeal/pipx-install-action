@@ -1,4 +1,5 @@
 {
+  "name": "root",
   "type": "module",
   "workspaces": [
     "pipx-install-action"
