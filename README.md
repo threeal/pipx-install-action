@@ -17,11 +17,9 @@ After installation, this action will automatically save the installed packages t
 
 ## Available Inputs
 
-Here are the available input parameters for the Pipx Install Action:
-
-| Name       | Type                       | Description                                   |
-| ---------- | -------------------------- | --------------------------------------------- |
-| `packages` | Multiple string (required) | Names of the Python packages to be installed. |
+| Name       | Type                        | Description                                   |
+| ---------- | --------------------------- | --------------------------------------------- |
+| `packages` | Multiple strings (required) | Names of the Python packages to be installed. |
 
 ## Example Usages
 
