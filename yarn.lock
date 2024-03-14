@@ -4102,8 +4102,6 @@ __metadata:
     prettier: "npm:^3.2.5"
     ts-jest: "npm:^29.1.2"
     typescript: "npm:^5.4.2"
-  bin:
-    pipx-install-action: dist/main.js
   languageName: unknown
   linkType: soft
 
