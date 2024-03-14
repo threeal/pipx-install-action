@@ -9,12 +9,16 @@
     "cache",
     "pipx"
   ],
-  "homepage": "https://github.com/threeal/pipx-install-action#readme",
+  "homepage": "https://github.com/threeal/pipx-install-action/tree/main/lib/pipx-install-action#readme",
   "bugs": {
     "url": "https://github.com/threeal/pipx-install-action/issues",
     "email": "alfi.maulana.f@gmail.com"
   },
-  "repository": "github:threeal/pipx-install-action",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/threeal/pipx-install-action.git",
+    "directory": "lib/pipx-install-action"
+  },
   "license": "MIT",
   "author": "Alfi Maulana <alfi.maulana.f@gmail.com>",
   "type": "module",
