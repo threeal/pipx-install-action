@@ -12,9 +12,8 @@ After installation, this action will automatically save the installed packages t
 
 ## Key Features
 
-The Pipx Install Action provides the following key features:
-
-- Install Python packages using pipx.
+- Installs Python packages using pipx.
+- Caches Python package installations to be used in subsequent workflow runs.
 
 ## Available Inputs
 
