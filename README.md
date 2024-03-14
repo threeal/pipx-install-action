@@ -5,30 +5,25 @@
 [![build status](https://img.shields.io/github/actions/workflow/status/threeal/pipx-install-action/build.yaml?branch=main&label=build&style=flat-square)](https://github.com/threeal/pipx-install-action/actions/workflows/build.yaml)
 [![test status](https://img.shields.io/github/actions/workflow/status/threeal/pipx-install-action/test.yaml?branch=main&label=test&style=flat-square)](https://github.com/threeal/pipx-install-action/actions/workflows/test.yaml)
 
-The Pipx Install Action is a [GitHub Action](https://github.com/features/actions) designed to install [Python](https://www.python.org/) packages using [pipx](https://pipx.pypa.io/stable/) with cache support.
+Install [Python](https://www.python.org/) packages using [pipx](https://pipx.pypa.io/stable/) with [cache support](https://docs.github.com/en/actions/using-workflows/caching-dependencies-to-speed-up-workflows) on [GitHub Actions](https://github.com/features/actions).
+
+Use this action to install Python packages using pipx, especially for tools written in Python that should be installed in isolated environments.
+After installation, this action will automatically save the installed packages to a cache to speed up installations for subsequent workflow runs.
 
 ## Key Features
 
-The Pipx Install Action provides the following key features:
+- Installs Python packages using pipx.
+- Caches Python package installations to be used in subsequent workflow runs.
 
-- Install Python packages using pipx.
+## Available Inputs
 
-## Usage
+| Name       | Type                        | Description                                   |
+| ---------- | --------------------------- | --------------------------------------------- |
+| `packages` | Multiple strings (required) | Names of the Python packages to be installed. |
 
-To begin using the Pipx Install Action, refer to the [action.yaml](./action.yaml) file for detailed configuration options.
-If you are new to GitHub Actions, you can explore the [GitHub Actions guide](https://docs.github.com/en/actions/learn-github-actions/understanding-github-actions) for a comprehensive overview.
+## Example Usages
 
-### Inputs
-
-Here are the available input parameters for the Pipx Install Action:
-
-| Name       | Type                       | Description                                   |
-| ---------- | -------------------------- | --------------------------------------------- |
-| `packages` | Multiple string (required) | Names of the Python packages to be installed. |
-
-### Examples
-
-Here is a basic example of how to use the Pipx Install Action to install [Ruff](https://docs.astral.sh/ruff/) in a GitHub Actions workflow:
+This example demonstrates how to use the Pipx Install Action to install [Ruff](https://pypi.org/project/ruff/) in a GitHub Actions workflow:
 
 ```yaml
 name: Python CI
@@ -43,11 +38,11 @@ jobs:
         uses: actions/checkout@v4.1.2
 
       - name: Install Ruff
-        uses: threeal/pipx-install-action@main
+        uses: threeal/pipx-install-action@v1.0.0
         with:
           packages: ruff
 
-      # Add more steps as needed for your workflow
+      # Add more steps as needed for the workflow
 ```
 
 ## License
