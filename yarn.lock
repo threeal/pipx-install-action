@@ -4084,9 +4084,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pipx-install-action@workspace:^, pipx-install-action@workspace:pipx-install-action":
+"pipx-install-action@workspace:^, pipx-install-action@workspace:lib/pipx-install-action":
   version: 0.0.0-use.local
-  resolution: "pipx-install-action@workspace:pipx-install-action"
+  resolution: "pipx-install-action@workspace:lib/pipx-install-action"
   dependencies:
     "@actions/cache": "npm:^3.2.4"
     "@actions/core": "npm:^1.10.1"
