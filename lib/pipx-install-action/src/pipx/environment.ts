@@ -4,6 +4,9 @@ import { getErrorMessage } from "catched-error-message";
 import os from "os";
 import path from "path";
 
+export const homeDir = path.join(os.homedir(), ".local/pipx");
+export const binDir = path.join(os.homedir(), ".local/bin");
+
 export async function getEnvironment(env: string): Promise<string> {
   try {
     const res = await getExecOutput("pipx", ["environment", "--value", env], {
@@ -16,9 +19,6 @@ export async function getEnvironment(env: string): Promise<string> {
 }
 
 export function ensurePath() {
-  const homeDir = path.join(os.homedir(), ".local/pipx");
-  const binDir = path.join(os.homedir(), ".local/bin");
-
   core.exportVariable("PIPX_HOME", homeDir);
   core.exportVariable("PIPX_BIN_DIR", binDir);
 

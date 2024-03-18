@@ -1,6 +1,4 @@
 import { jest } from "@jest/globals";
-import path from "node:path";
-import os from "node:os";
 import "jest-extended";
 
 jest.unstable_mockModule("@actions/core", () => ({
@@ -54,7 +52,7 @@ describe("get pipx environments", () => {
 describe("ensure pipx path", () => {
   it("should ensure path", async () => {
     const { addPath, exportVariable } = await import("@actions/core");
-    const { ensurePath } = await import("./environment.js");
+    const { binDir, ensurePath, homeDir } = await import("./environment.js");
 
     jest.mocked(addPath).mockReset();
     jest.mocked(exportVariable).mockReset();
@@ -62,19 +60,9 @@ describe("ensure pipx path", () => {
     expect(() => ensurePath()).not.toThrow();
 
     expect(exportVariable).toHaveBeenCalledTimes(2);
-    expect(exportVariable).toHaveBeenNthCalledWith(
-      1,
-      "PIPX_HOME",
-      path.join(os.homedir(), ".local/pipx"),
-    );
-    expect(exportVariable).toHaveBeenNthCalledWith(
-      2,
-      "PIPX_BIN_DIR",
-      path.join(os.homedir(), ".local/bin"),
-    );
+    expect(exportVariable).toHaveBeenNthCalledWith(1, "PIPX_HOME", homeDir);
+    expect(exportVariable).toHaveBeenNthCalledWith(2, "PIPX_BIN_DIR", binDir);
 
-    expect(addPath).toHaveBeenCalledExactlyOnceWith(
-      path.join(os.homedir(), ".local/bin"),
-    );
+    expect(addPath).toHaveBeenCalledExactlyOnceWith(binDir);
   });
 });

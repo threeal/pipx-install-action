@@ -81459,6 +81459,8 @@ var external_path_ = __nccwpck_require__(1017);
 
 
 
+const homeDir = external_path_.join(external_os_.homedir(), ".local/pipx");
+const binDir = external_path_.join(external_os_.homedir(), ".local/bin");
 async function getEnvironment(env) {
     try {
         const res = await (0,exec.getExecOutput)("pipx", ["environment", "--value", env], {
@@ -81471,8 +81473,6 @@ async function getEnvironment(env) {
     }
 }
 function ensurePath() {
-    const homeDir = external_path_.join(external_os_.homedir(), ".local/pipx");
-    const binDir = external_path_.join(external_os_.homedir(), ".local/bin");
     core.exportVariable("PIPX_HOME", homeDir);
     core.exportVariable("PIPX_BIN_DIR", binDir);
     core.addPath(binDir);
