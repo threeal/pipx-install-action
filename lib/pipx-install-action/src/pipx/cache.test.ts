@@ -1,105 +1,111 @@
 import { jest } from "@jest/globals";
-
-let files: string[] = [];
-let cache: { [key: string]: string[] } = {};
+import "jest-extended";
 
 jest.unstable_mockModule("./environment.js", () => ({
-  getEnvironment: async (env: string) => {
+  getEnvironment: jest.fn(),
+}));
+
+jest.unstable_mockModule("@actions/cache", () => ({
+  restoreCache: jest.fn(),
+  saveCache: jest.fn(),
+}));
+
+beforeEach(async () => {
+  const { getEnvironment } = await import("./environment.js");
+
+  jest.mocked(getEnvironment).mockImplementation(async (env) => {
     switch (env) {
       case "PIPX_BIN_DIR":
         return "/path/to/bin";
       case "PIPX_LOCAL_VENVS":
         return "/path/to/venvs";
     }
-  },
-}));
-
-jest.unstable_mockModule("@actions/cache", () => ({
-  restoreCache: async (paths: string[], key: string) => {
-    if (key in cache) {
-      for (const path of paths) {
-        if (cache[key].includes(path)) {
-          if (!files.includes(path)) files.push(path);
-        } else {
-          throw new Error(`${path} not found`);
-        }
-      }
-      return key;
-    }
-    return undefined;
-  },
-  saveCache: async (paths: string[], key: string) => {
-    cache[key] = [];
-    for (const path of paths) {
-      if (files.includes(path)) {
-        cache[key].push(path);
-      } else {
-        throw new Error(`${path} not found`);
-      }
-    }
-  },
-}));
+    return "";
+  });
+});
 
 describe("save Python package caches", () => {
-  beforeEach(() => {
-    files = ["/path/to/bin/ruff*", "/path/to/venvs/ruff"];
-    cache = {};
-  });
-
-  it("should successfully save a package cache", async () => {
+  it("should save a package cache", async () => {
+    const { saveCache } = await import("@actions/cache");
     const { savePackageCache } = await import("./cache.js");
 
-    const prom = savePackageCache("ruff");
+    jest.mocked(saveCache).mockReset();
+
+    const prom = savePackageCache("some-package");
     await expect(prom).resolves.toBeUndefined();
 
-    expect(cache[`pipx-${process.platform}-ruff`]).toStrictEqual([
-      "/path/to/bin/ruff*",
-      "/path/to/venvs/ruff",
-    ]);
+    expect(saveCache).toHaveBeenCalledExactlyOnceWith(
+      ["/path/to/bin/some-package*", "/path/to/venvs/some-package"],
+      `pipx-${process.platform}-some-package`,
+    );
   });
 
   it("should fail to save a package cache", async () => {
+    const { saveCache } = await import("@actions/cache");
     const { savePackageCache } = await import("./cache.js");
 
-    const prom = savePackageCache("invalid-pkg");
-    await expect(prom).rejects.toThrow("Failed to save invalid-pkg cache");
+    jest
+      .mocked(saveCache)
+      .mockReset()
+      .mockImplementation(() => {
+        throw new Error("something went wrong");
+      });
+
+    const prom = savePackageCache("some-package");
+    await expect(prom).rejects.toThrow(
+      "Failed to save some-package cache: something went wrong",
+    );
   });
 });
 
 describe("restore Python package caches", () => {
-  beforeEach(() => {
-    files = [];
-    cache = {
-      [`pipx-${process.platform}-ruff`]: [
-        "/path/to/bin/ruff*",
-        "/path/to/venvs/ruff",
-      ],
-      [`pipx-${process.platform}-invalid-pkg`]: [],
-    };
-  });
-
-  it("should successfully restore a saved package cache", async () => {
+  it("should restore a saved package cache", async () => {
+    const { restoreCache } = await import("@actions/cache");
     const { restorePackageCache } = await import("./cache.js");
 
-    const prom = restorePackageCache("ruff");
+    jest
+      .mocked(restoreCache)
+      .mockReset()
+      .mockResolvedValue(`pipx-${process.platform}-some-package`);
+
+    const prom = restorePackageCache("some-package");
     await expect(prom).resolves.toBe(true);
 
-    expect(files).toStrictEqual(["/path/to/bin/ruff*", "/path/to/venvs/ruff"]);
+    expect(restoreCache).toHaveBeenCalledExactlyOnceWith(
+      ["/path/to/bin/some-package*", "/path/to/venvs/some-package"],
+      `pipx-${process.platform}-some-package`,
+    );
   });
 
-  it("should successfully restore an unsaved package cache", async () => {
+  it("should restore an unsaved package cache", async () => {
+    const { restoreCache } = await import("@actions/cache");
     const { restorePackageCache } = await import("./cache.js");
 
-    const prom = restorePackageCache("black");
+    jest.mocked(restoreCache).mockReset().mockResolvedValue(undefined);
+
+    const prom = restorePackageCache("some-package");
     await expect(prom).resolves.toBe(false);
 
-    expect(files).toStrictEqual([]);
+    expect(restoreCache).toHaveBeenCalledExactlyOnceWith(
+      ["/path/to/bin/some-package*", "/path/to/venvs/some-package"],
+      `pipx-${process.platform}-some-package`,
+    );
   });
 
   it("should fail to restore a package cache", async () => {
+    const { restoreCache } = await import("@actions/cache");
     const { restorePackageCache } = await import("./cache.js");
 
-    const prom = restorePackageCache("invalid-pkg");
-    await expect(prom).rejects.toThrow("Failed to restore invalid-pkg cache");
+    jest
+      .mocked(restoreCache)
+      .mockReset()
+      .mockImplementation(() => {
+        throw new Error("something went wrong");
+      });
+
+    const prom = restorePackageCache("some-package");
+    await expect(prom).rejects.toThrow(
+      "Failed to restore some-package cache: something went wrong",
+    );
   });
 });
