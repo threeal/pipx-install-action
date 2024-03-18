@@ -3,7 +3,6 @@ import "jest-extended";
 
 jest.unstable_mockModule("@actions/core", () => ({
   addPath: jest.fn(),
-  exportVariable: jest.fn(),
 }));
 
 jest.unstable_mockModule("@actions/exec", () => ({
@@ -13,7 +12,9 @@ jest.unstable_mockModule("@actions/exec", () => ({
 describe("get pipx environments", () => {
   it("should get an environment", async () => {
     const { getExecOutput } = await import("@actions/exec");
-    const { getEnvironment } = await import("./environment.js");
+    const { binDir, getEnvironment, homeDir } = await import(
+      "./environment.js"
+    );
 
     jest.mocked(getExecOutput).mockReset().mockResolvedValue({
       exitCode: 0,
@@ -29,6 +30,10 @@ describe("get pipx environments", () => {
       ["environment", "--value", "SOME_ENVIRONMENT"],
       {
         silent: true,
+        env: {
+          PIPX_HOME: homeDir,
+          PIPX_BIN_DIR: binDir,
+        },
       },
     );
   });
@@ -51,17 +56,12 @@ describe("get pipx environments", () => {
 
 describe("ensure pipx path", () => {
   it("should ensure path", async () => {
-    const { addPath, exportVariable } = await import("@actions/core");
-    const { binDir, ensurePath, homeDir } = await import("./environment.js");
+    const { addPath } = await import("@actions/core");
+    const { binDir, ensurePath } = await import("./environment.js");
 
     jest.mocked(addPath).mockReset();
-    jest.mocked(exportVariable).mockReset();
 
     expect(() => ensurePath()).not.toThrow();
-
-    expect(exportVariable).toHaveBeenCalledTimes(2);
-    expect(exportVariable).toHaveBeenNthCalledWith(1, "PIPX_HOME", homeDir);
-    expect(exportVariable).toHaveBeenNthCalledWith(2, "PIPX_BIN_DIR", binDir);
 
     expect(addPath).toHaveBeenCalledExactlyOnceWith(binDir);
   });

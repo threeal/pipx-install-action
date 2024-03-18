@@ -81465,6 +81465,10 @@ async function getEnvironment(env) {
     try {
         const res = await (0,exec.getExecOutput)("pipx", ["environment", "--value", env], {
             silent: true,
+            env: {
+                PIPX_HOME: homeDir,
+                PIPX_BIN_DIR: binDir,
+            },
         });
         return res.stdout;
     }
@@ -81473,8 +81477,6 @@ async function getEnvironment(env) {
     }
 }
 function ensurePath() {
-    core.exportVariable("PIPX_HOME", homeDir);
-    core.exportVariable("PIPX_BIN_DIR", binDir);
     core.addPath(binDir);
 }
 
@@ -81508,9 +81510,15 @@ async function restorePackageCache(pkg) {
 ;// CONCATENATED MODULE: ./lib/pipx-install-action/dist/pipx/install.js
 
 
+
 async function installPackage(pkg) {
     try {
-        await (0,exec.exec)("pipx", ["install", pkg]);
+        await (0,exec.exec)("pipx", ["install", pkg], {
+            env: {
+                PIPX_HOME: homeDir,
+                PIPX_BIN_DIR: binDir,
+            },
+        });
     }
     catch (err) {
         throw new Error(`Failed to install ${pkg}: ${r(err)}`);

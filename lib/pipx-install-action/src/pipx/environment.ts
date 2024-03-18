@@ -11,6 +11,10 @@ export async function getEnvironment(env: string): Promise<string> {
   try {
     const res = await getExecOutput("pipx", ["environment", "--value", env], {
       silent: true,
+      env: {
+        PIPX_HOME: homeDir,
+        PIPX_BIN_DIR: binDir,
+      },
     });
     return res.stdout;
   } catch (err) {
@@ -19,8 +23,5 @@ export async function getEnvironment(env: string): Promise<string> {
 }
 
 export function ensurePath() {
-  core.exportVariable("PIPX_HOME", homeDir);
-  core.exportVariable("PIPX_BIN_DIR", binDir);
-
   core.addPath(binDir);
 }
