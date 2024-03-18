@@ -1,4 +1,5 @@
 import { jest } from "@jest/globals";
+import "jest-extended";
 
 jest.unstable_mockModule("./environment.js", () => ({
   getEnvironment: jest.fn(),
@@ -33,8 +34,7 @@ describe("save Python package caches", () => {
     const prom = savePackageCache("some-package");
     await expect(prom).resolves.toBeUndefined();
 
-    expect(saveCache).toHaveBeenCalledTimes(1);
-    expect(saveCache).toHaveBeenLastCalledWith(
+    expect(saveCache).toHaveBeenCalledExactlyOnceWith(
       ["/path/to/bin/some-package*", "/path/to/venvs/some-package"],
       `pipx-${process.platform}-some-package`,
     );
@@ -71,8 +71,7 @@ describe("restore Python package caches", () => {
     const prom = restorePackageCache("some-package");
     await expect(prom).resolves.toBe(true);
 
-    expect(restoreCache).toHaveBeenCalledTimes(1);
-    expect(restoreCache).toHaveBeenLastCalledWith(
+    expect(restoreCache).toHaveBeenCalledExactlyOnceWith(
       ["/path/to/bin/some-package*", "/path/to/venvs/some-package"],
       `pipx-${process.platform}-some-package`,
     );
@@ -87,8 +86,7 @@ describe("restore Python package caches", () => {
     const prom = restorePackageCache("some-package");
     await expect(prom).resolves.toBe(false);
 
-    expect(restoreCache).toHaveBeenCalledTimes(1);
-    expect(restoreCache).toHaveBeenLastCalledWith(
+    expect(restoreCache).toHaveBeenCalledExactlyOnceWith(
       ["/path/to/bin/some-package*", "/path/to/venvs/some-package"],
       `pipx-${process.platform}-some-package`,
     );

@@ -1,4 +1,5 @@
 import { jest } from "@jest/globals";
+import "jest-extended";
 
 jest.unstable_mockModule("@actions/exec", () => ({
   exec: jest.fn(),
@@ -14,8 +15,10 @@ describe("install Python packages", () => {
     const prom = installPackage("some-package");
     await expect(prom).resolves.toBeUndefined();
 
-    expect(exec).toHaveBeenCalledTimes(1);
-    expect(exec).toHaveBeenLastCalledWith("pipx", ["install", "some-package"]);
+    expect(exec).toHaveBeenCalledExactlyOnceWith("pipx", [
+      "install",
+      "some-package",
+    ]);
   });
 
   it("should fail to install an package", async () => {

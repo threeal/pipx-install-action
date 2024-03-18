@@ -1,6 +1,7 @@
 import { jest } from "@jest/globals";
 import path from "node:path";
 import os from "node:os";
+import "jest-extended";
 
 jest.unstable_mockModule("@actions/core", () => ({
   addPath: jest.fn(),
@@ -25,8 +26,7 @@ describe("get pipx environments", () => {
     const prom = getEnvironment("SOME_ENVIRONMENT");
     await expect(prom).resolves.toBe("some value");
 
-    expect(getExecOutput).toHaveBeenCalledTimes(1);
-    expect(getExecOutput).toHaveBeenLastCalledWith(
+    expect(getExecOutput).toHaveBeenCalledExactlyOnceWith(
       "pipx",
       ["environment", "--value", "SOME_ENVIRONMENT"],
       {
@@ -73,8 +73,7 @@ describe("ensure pipx path", () => {
       path.join(os.homedir(), ".local/bin"),
     );
 
-    expect(addPath).toHaveBeenCalledTimes(1);
-    expect(addPath).toHaveBeenLastCalledWith(
+    expect(addPath).toHaveBeenCalledExactlyOnceWith(
       path.join(os.homedir(), ".local/bin"),
     );
   });
