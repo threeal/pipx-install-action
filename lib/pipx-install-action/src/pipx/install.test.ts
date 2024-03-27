@@ -1,4 +1,5 @@
 import { jest } from "@jest/globals";
+import { binDir, homeDir } from "./environment.js";
 import "jest-extended";
 
 jest.unstable_mockModule("@actions/exec", () => ({
@@ -15,10 +16,16 @@ describe("install Python packages", () => {
     const prom = installPackage("some-package");
     await expect(prom).resolves.toBeUndefined();
 
-    expect(exec).toHaveBeenCalledExactlyOnceWith("pipx", [
-      "install",
-      "some-package",
-    ]);
+    expect(exec).toHaveBeenCalledExactlyOnceWith(
+      "pipx",
+      ["install", "some-package"],
+      {
+        env: {
+          PIPX_HOME: homeDir,
+          PIPX_BIN_DIR: binDir,
+        },
+      },
+    );
   });
 
   it("should fail to install an package", async () => {
