@@ -70,7 +70,14 @@ jobs:
       - name: Install Packages
         uses: ./pipx-install-action
         with:
-          packages: black ruff
+          packages: black ruff==0.3.0
 
       - name: Check Packages
-        run: black --version && ruff --version
+        shell: bash
+        run: |
+          black --version
+          VERSION="$(ruff --version)"
+          if [ "$VERSION" != "ruff 0.3.0" ]; then
+            echo "Expected 'ruff 0.3.0' but instead got '$VERSION'"
+            exit 1
+          fi
