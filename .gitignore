@@ -4,7 +4,6 @@
 !.git*
 !.prettierignore
 
-coverage/
 node_modules/
 
 package.tgz
