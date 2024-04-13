@@ -20,7 +20,7 @@
     "@vercel/ncc": "^0.38.1",
     "eslint": "^9.0.0",
     "prettier": "^3.2.5",
-    "typescript": "^5.4.3",
+    "typescript": "^5.4.5",
     "typescript-eslint": "^7.6.0"
   },
   "packageManager": "yarn@4.1.1"
