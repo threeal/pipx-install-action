@@ -8,7 +8,7 @@
   "scripts": {
     "build": "ncc build src/index.ts",
     "format": "prettier --write --cache .",
-    "lint": "eslint ."
+    "lint": "eslint"
   },
   "dependencies": {
     "@actions/core": "^1.10.1",
