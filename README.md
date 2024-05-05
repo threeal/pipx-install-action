@@ -30,7 +30,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4.1.2
+        uses: actions/checkout@v4.1.4
 
       - name: Install Ruff
         uses: threeal/pipx-install-action@v1.0.0
