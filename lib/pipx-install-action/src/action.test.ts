@@ -1,4 +1,4 @@
-import * as core from "@actions/core";
+import type * as core from "@actions/core";
 import { jest } from "@jest/globals";
 
 let logs: (string | Error)[];
