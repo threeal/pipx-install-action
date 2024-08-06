@@ -1,4 +1,5 @@
 import * as core from "@actions/core";
+import { getErrorMessage } from "catched-error-message";
 import { pipxInstallAction } from "pipx-install-action";
 
 try {
@@ -9,5 +10,5 @@ try {
 
   await pipxInstallAction(...pkgs);
 } catch (err) {
-  core.setFailed(err);
+  core.setFailed(getErrorMessage(err));
 }
