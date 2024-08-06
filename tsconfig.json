@@ -1,6 +1,8 @@
 {
   "include": ["src"],
   "compilerOptions": {
+    "exactOptionalPropertyTypes": true,
+    "strict": true,
     "module": "node16",
     "moduleResolution": "node16",
     "esModuleInterop": true,
