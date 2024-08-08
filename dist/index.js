@@ -80236,7 +80236,9 @@ exports.AbortError = AbortError;
 __nccwpck_require__.a(module, async (__webpack_handle_async_dependencies__, __webpack_async_result__) => { try {
 /* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_0__ = __nccwpck_require__(2340);
 /* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__nccwpck_require__.n(_actions_core__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var pipx_install_action__WEBPACK_IMPORTED_MODULE_1__ = __nccwpck_require__(3914);
+/* harmony import */ var catched_error_message__WEBPACK_IMPORTED_MODULE_2__ = __nccwpck_require__(144);
+/* harmony import */ var pipx_install_action__WEBPACK_IMPORTED_MODULE_1__ = __nccwpck_require__(6234);
+
 
 
 try {
@@ -80246,7 +80248,7 @@ try {
     await (0,pipx_install_action__WEBPACK_IMPORTED_MODULE_1__/* .pipxInstallAction */ .y)(...pkgs);
 }
 catch (err) {
-    _actions_core__WEBPACK_IMPORTED_MODULE_0__.setFailed(err);
+    _actions_core__WEBPACK_IMPORTED_MODULE_0__.setFailed((0,catched_error_message__WEBPACK_IMPORTED_MODULE_2__/* .getErrorMessage */ .e)(err));
 }
 
 __webpack_async_result__();
@@ -82078,7 +82080,19 @@ module.exports = parseParams
 
 /***/ }),
 
-/***/ 3914:
+/***/ 144:
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __nccwpck_require__) => {
+
+/* harmony export */ __nccwpck_require__.d(__webpack_exports__, {
+/* harmony export */   "e": () => (/* binding */ r)
+/* harmony export */ });
+function r(r){return function(r){if("object"==typeof(e=r)&&null!==e&&"message"in e&&"string"==typeof e.message)return r;var e;try{return new Error(JSON.stringify(r))}catch(e){return new Error(String(r))}}(r).message}
+//# sourceMappingURL=index.esm.js.map
+
+
+/***/ }),
+
+/***/ 6234:
 /***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __nccwpck_require__) => {
 
 
@@ -82089,10 +82103,8 @@ __nccwpck_require__.d(__webpack_exports__, {
 
 // EXTERNAL MODULE: ../../../.yarn/berry/cache/@actions-core-npm-1.10.1-3cb1000b4d-10c0.zip/node_modules/@actions/core/lib/core.js
 var core = __nccwpck_require__(2340);
-;// CONCATENATED MODULE: ../../../.yarn/berry/cache/catched-error-message-npm-0.0.1-9126a73d25-10c0.zip/node_modules/catched-error-message/dist/index.esm.js
-function r(r){return function(r){if("object"==typeof(e=r)&&null!==e&&"message"in e&&"string"==typeof e.message)return r;var e;try{return new Error(JSON.stringify(r))}catch(e){return new Error(String(r))}}(r).message}
-//# sourceMappingURL=index.esm.js.map
-
+// EXTERNAL MODULE: ../../../.yarn/berry/cache/catched-error-message-npm-0.0.1-9126a73d25-10c0.zip/node_modules/catched-error-message/dist/index.esm.js
+var index_esm = __nccwpck_require__(144);
 // EXTERNAL MODULE: ../../../.yarn/berry/cache/@actions-cache-npm-3.2.4-c57b047f14-10c0.zip/node_modules/@actions/cache/lib/cache.js
 var cache = __nccwpck_require__(3193);
 // EXTERNAL MODULE: ../../../.yarn/berry/cache/@actions-exec-npm-1.1.1-90973d2f96-10c0.zip/node_modules/@actions/exec/lib/exec.js
@@ -82121,7 +82133,7 @@ async function getEnvironment(env) {
         return res.stdout;
     }
     catch (err) {
-        throw new Error(`Failed to get ${env}: ${r(err)}`);
+        throw new Error(`Failed to get ${env}: ${(0,index_esm/* getErrorMessage */.e)(err)}`);
     }
 }
 function ensurePath() {
@@ -82140,7 +82152,7 @@ async function savePackageCache(pkg) {
         await (0,cache.saveCache)([external_path_.join(binDir, `${pkg}*`), external_path_.join(localVenvs, pkg)], `pipx-${process.platform}-${pkg}`);
     }
     catch (err) {
-        throw new Error(`Failed to save ${pkg} cache: ${r(err)}`);
+        throw new Error(`Failed to save ${pkg} cache: ${(0,index_esm/* getErrorMessage */.e)(err)}`);
     }
 }
 async function restorePackageCache(pkg) {
@@ -82151,7 +82163,7 @@ async function restorePackageCache(pkg) {
         return key !== undefined;
     }
     catch (err) {
-        throw new Error(`Failed to restore ${pkg} cache: ${r(err)}`);
+        throw new Error(`Failed to restore ${pkg} cache: ${(0,index_esm/* getErrorMessage */.e)(err)}`);
     }
 }
 
@@ -82169,7 +82181,7 @@ async function installPackage(pkg) {
         });
     }
     catch (err) {
-        throw new Error(`Failed to install ${pkg}: ${r(err)}`);
+        throw new Error(`Failed to install ${pkg}: ${(0,index_esm/* getErrorMessage */.e)(err)}`);
     }
 }
 
@@ -82195,7 +82207,7 @@ async function pipxInstallAction(...pkgs) {
         pipx.ensurePath();
     }
     catch (err) {
-        core.setFailed(`Failed to ensure pipx path: ${r(err)}`);
+        core.setFailed(`Failed to ensure pipx path: ${(0,index_esm/* getErrorMessage */.e)(err)}`);
         return;
     }
     for (const pkg of pkgs) {
@@ -82206,7 +82218,7 @@ async function pipxInstallAction(...pkgs) {
         }
         catch (err) {
             core.endGroup();
-            core.setFailed(`Failed to restore ${pkg} cache: ${r(err)}`);
+            core.setFailed(`Failed to restore ${pkg} cache: ${(0,index_esm/* getErrorMessage */.e)(err)}`);
             return;
         }
         core.endGroup();
@@ -82217,7 +82229,7 @@ async function pipxInstallAction(...pkgs) {
             }
             catch (err) {
                 core.endGroup();
-                core.setFailed(`Failed to install ${pkg}: ${r(err)}`);
+                core.setFailed(`Failed to install ${pkg}: ${(0,index_esm/* getErrorMessage */.e)(err)}`);
                 return;
             }
             core.endGroup();
@@ -82227,7 +82239,7 @@ async function pipxInstallAction(...pkgs) {
             }
             catch (err) {
                 core.endGroup();
-                core.setFailed(`Failed to save ${pkg} cache: ${r(err)}`);
+                core.setFailed(`Failed to save ${pkg} cache: ${(0,index_esm/* getErrorMessage */.e)(err)}`);
                 return;
             }
             core.endGroup();

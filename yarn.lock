@@ -4531,6 +4531,7 @@ __metadata:
     "@eslint/js": "npm:^9.8.0"
     "@types/node": "npm:^20.14.12"
     "@vercel/ncc": "npm:^0.38.1"
+    catched-error-message: "npm:^0.0.1"
     eslint: "npm:^9.8.0"
     pipx-install-action: "workspace:^"
     prettier: "npm:^3.3.3"
