@@ -49,6 +49,7 @@ jobs:
           version: stable
 
       - name: Build Workspaces
-        run: |
-          yarn workspaces foreach --all --topological run build
-          git diff --exit-code HEAD
+        run: yarn workspaces foreach --all --topological run build
+
+      - name: Check Diff
+        run: git diff --exit-code HEAD
