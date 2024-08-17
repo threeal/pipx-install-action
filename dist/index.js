@@ -80237,7 +80237,7 @@ __nccwpck_require__.a(module, async (__webpack_handle_async_dependencies__, __we
 /* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_0__ = __nccwpck_require__(2340);
 /* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__nccwpck_require__.n(_actions_core__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var catched_error_message__WEBPACK_IMPORTED_MODULE_2__ = __nccwpck_require__(144);
-/* harmony import */ var pipx_install_action__WEBPACK_IMPORTED_MODULE_1__ = __nccwpck_require__(6234);
+/* harmony import */ var pipx_install_action__WEBPACK_IMPORTED_MODULE_1__ = __nccwpck_require__(3237);
 
 
 
@@ -82092,7 +82092,7 @@ function r(r){return function(r){if("object"==typeof(e=r)&&null!==e&&"message"in
 
 /***/ }),
 
-/***/ 6234:
+/***/ 3237:
 /***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __nccwpck_require__) => {
 
 
@@ -82101,10 +82101,106 @@ __nccwpck_require__.d(__webpack_exports__, {
   "y": () => (/* reexport */ pipxInstallAction)
 });
 
-// EXTERNAL MODULE: ../../../.yarn/berry/cache/@actions-core-npm-1.10.1-3cb1000b4d-10c0.zip/node_modules/@actions/core/lib/core.js
-var core = __nccwpck_require__(2340);
 // EXTERNAL MODULE: ../../../.yarn/berry/cache/catched-error-message-npm-0.0.1-9126a73d25-10c0.zip/node_modules/catched-error-message/dist/index.esm.js
 var index_esm = __nccwpck_require__(144);
+;// CONCATENATED MODULE: external "node:fs"
+const external_node_fs_namespaceObject = __WEBPACK_EXTERNAL_createRequire(import.meta.url)("node:fs");
+;// CONCATENATED MODULE: external "node:os"
+const external_node_os_namespaceObject = __WEBPACK_EXTERNAL_createRequire(import.meta.url)("node:os");
+;// CONCATENATED MODULE: external "node:path"
+const external_node_path_namespaceObject = __WEBPACK_EXTERNAL_createRequire(import.meta.url)("node:path");
+;// CONCATENATED MODULE: ../../../.yarn/berry/cache/gha-utils-npm-0.2.0-572860ffdf-10c0.zip/node_modules/gha-utils/dist/index.js
+
+
+
+/**
+ * Retrieves the value of a GitHub Actions input.
+ *
+ * @param name - The name of the GitHub Actions input.
+ * @returns The value of the GitHub Actions input, or an empty string if not found.
+ */
+function getInput(name) {
+    const value = process.env[`INPUT_${name.toUpperCase()}`] || "";
+    return value.trim();
+}
+/**
+ * Sets the value of a GitHub Actions output.
+ *
+ * @param name - The name of the GitHub Actions output.
+ * @param value - The value of the GitHub Actions output
+ */
+function setOutput(name, value) {
+    fs.appendFileSync(process.env["GITHUB_OUTPUT"], `${name}=${value}${os.EOL}`);
+}
+/**
+ * Sets the value of an environment variable in GitHub Actions.
+ *
+ * @param name - The name of the environment variable.
+ * @param value - The value of the environment variable.
+ */
+function setEnv(name, value) {
+    process.env[name] = value;
+    fs.appendFileSync(process.env["GITHUB_ENV"], `${name}=${value}${os.EOL}`);
+}
+/**
+ * Adds a system path to the environment in GitHub Actions.
+ *
+ * @param sysPath - The system path to add.
+ */
+function addPath(sysPath) {
+    process.env["PATH"] = `${sysPath}${external_node_path_namespaceObject.delimiter}${process.env["PATH"]}`;
+    external_node_fs_namespaceObject.appendFileSync(process.env["GITHUB_PATH"], `${sysPath}${external_node_os_namespaceObject.EOL}`);
+}
+/**
+ * Logs an information message in GitHub Actions.
+ *
+ * @param message - The information message to log.
+ */
+function logInfo(message) {
+    process.stdout.write(`${message}${external_node_os_namespaceObject.EOL}`);
+}
+/**
+ * Logs a warning message in GitHub Actions.
+ *
+ * @param message - The warning message to log.
+ */
+function logWarning(message) {
+    process.stdout.write(`::warning::${message}${os.EOL}`);
+}
+/**
+ * Logs an error message in GitHub Actions.
+ *
+ * @param err - The error, which can be of any type.
+ */
+function logError(err) {
+    const message = err instanceof Error ? err.message : String(err);
+    process.stdout.write(`::error::${message}${external_node_os_namespaceObject.EOL}`);
+}
+/**
+ * Logs a command along with its arguments in GitHub Actions.
+ *
+ * @param command - The command to log.
+ * @param args - The arguments of the command.
+ */
+function logCommand(command, args) {
+    const message = [command, ...args].join(" ");
+    process.stdout.write(`[command]${message}${os.EOL}`);
+}
+/**
+ * Begins a log group in GitHub Actions.
+ *
+ * @param name - The name of the log group.
+ */
+function beginLogGroup(name) {
+    process.stdout.write(`::group::${name}${external_node_os_namespaceObject.EOL}`);
+}
+/**
+ * Ends the current log group in GitHub Actions.
+ */
+function endLogGroup() {
+    process.stdout.write(`::endgroup::${external_node_os_namespaceObject.EOL}`);
+}
+
 // EXTERNAL MODULE: ../../../.yarn/berry/cache/@actions-cache-npm-3.2.4-c57b047f14-10c0.zip/node_modules/@actions/cache/lib/cache.js
 var cache = __nccwpck_require__(3193);
 // EXTERNAL MODULE: ../../../.yarn/berry/cache/@actions-exec-npm-1.1.1-90973d2f96-10c0.zip/node_modules/@actions/exec/lib/exec.js
@@ -82137,7 +82233,7 @@ async function getEnvironment(env) {
     }
 }
 function ensurePath() {
-    core.addPath(binDir);
+    addPath(binDir);
 }
 
 ;// CONCATENATED MODULE: ./lib/pipx-install-action/dist/pipx/cache.js
@@ -82202,47 +82298,51 @@ async function installPackage(pkg) {
 
 
 async function pipxInstallAction(...pkgs) {
-    core.info("Ensuring pipx path...");
+    logInfo("Ensuring pipx path...");
     try {
         pipx.ensurePath();
     }
     catch (err) {
-        core.setFailed(`Failed to ensure pipx path: ${(0,index_esm/* getErrorMessage */.e)(err)}`);
+        logError(`Failed to ensure pipx path: ${(0,index_esm/* getErrorMessage */.e)(err)}`);
+        process.exitCode = 1;
         return;
     }
     for (const pkg of pkgs) {
         let cacheFound;
-        core.startGroup(`Restoring \u001b[34m${pkg}\u001b[39m cache...`);
+        beginLogGroup(`Restoring \u001b[34m${pkg}\u001b[39m cache...`);
         try {
             cacheFound = await pipx.restorePackageCache(pkg);
         }
         catch (err) {
-            core.endGroup();
-            core.setFailed(`Failed to restore ${pkg} cache: ${(0,index_esm/* getErrorMessage */.e)(err)}`);
+            endLogGroup();
+            logError(`Failed to restore ${pkg} cache: ${(0,index_esm/* getErrorMessage */.e)(err)}`);
+            process.exitCode = 1;
             return;
         }
-        core.endGroup();
+        endLogGroup();
         if (!cacheFound) {
-            core.startGroup(`Cache not found, installing \u001b[34m${pkg}\u001b[39m...`);
+            beginLogGroup(`Cache not found, installing \u001b[34m${pkg}\u001b[39m...`);
             try {
                 await pipx.installPackage(pkg);
             }
             catch (err) {
-                core.endGroup();
-                core.setFailed(`Failed to install ${pkg}: ${(0,index_esm/* getErrorMessage */.e)(err)}`);
+                endLogGroup();
+                logError(`Failed to install ${pkg}: ${(0,index_esm/* getErrorMessage */.e)(err)}`);
+                process.exitCode = 1;
                 return;
             }
-            core.endGroup();
-            core.startGroup(`Saving \u001b[34m${pkg}\u001b[39m cache...`);
+            endLogGroup();
+            beginLogGroup(`Saving \u001b[34m${pkg}\u001b[39m cache...`);
             try {
                 await pipx.savePackageCache(pkg);
             }
             catch (err) {
-                core.endGroup();
-                core.setFailed(`Failed to save ${pkg} cache: ${(0,index_esm/* getErrorMessage */.e)(err)}`);
+                endLogGroup();
+                logError(`Failed to save ${pkg} cache: ${(0,index_esm/* getErrorMessage */.e)(err)}`);
+                process.exitCode = 1;
                 return;
             }
-            core.endGroup();
+            endLogGroup();
         }
     }
 }

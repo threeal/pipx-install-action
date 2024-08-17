@@ -1,12 +1,12 @@
 import { jest } from "@jest/globals";
 import "jest-extended";
 
-jest.unstable_mockModule("@actions/core", () => ({
-  addPath: jest.fn(),
-}));
-
 jest.unstable_mockModule("@actions/exec", () => ({
   getExecOutput: jest.fn(),
+}));
+
+jest.unstable_mockModule("gha-utils", () => ({
+  addPath: jest.fn(),
 }));
 
 describe("get pipx environments", () => {
@@ -56,7 +56,7 @@ describe("get pipx environments", () => {
 
 describe("ensure pipx path", () => {
   it("should ensure path", async () => {
-    const { addPath } = await import("@actions/core");
+    const { addPath } = await import("gha-utils");
     const { binDir, ensurePath } = await import("./environment.js");
 
     jest.mocked(addPath).mockReset();
