@@ -1,50 +1,54 @@
-import * as core from "@actions/core";
 import { getErrorMessage } from "catched-error-message";
+import { beginLogGroup, endLogGroup, logError, logInfo } from "gha-utils";
 import pipx from "./pipx/index.js";
 
 export async function pipxInstallAction(...pkgs: string[]): Promise<void> {
-  core.info("Ensuring pipx path...");
+  logInfo("Ensuring pipx path...");
   try {
     pipx.ensurePath();
   } catch (err) {
-    core.setFailed(`Failed to ensure pipx path: ${getErrorMessage(err)}`);
+    logError(`Failed to ensure pipx path: ${getErrorMessage(err)}`);
+    process.exitCode = 1;
     return;
   }
 
   for (const pkg of pkgs) {
     let cacheFound: boolean;
-    core.startGroup(`Restoring \u001b[34m${pkg}\u001b[39m cache...`);
+    beginLogGroup(`Restoring \u001b[34m${pkg}\u001b[39m cache...`);
     try {
       cacheFound = await pipx.restorePackageCache(pkg);
     } catch (err) {
-      core.endGroup();
-      core.setFailed(`Failed to restore ${pkg} cache: ${getErrorMessage(err)}`);
+      endLogGroup();
+      logError(`Failed to restore ${pkg} cache: ${getErrorMessage(err)}`);
+      process.exitCode = 1;
       return;
     }
-    core.endGroup();
+    endLogGroup();
 
     if (!cacheFound) {
-      core.startGroup(
+      beginLogGroup(
         `Cache not found, installing \u001b[34m${pkg}\u001b[39m...`,
       );
       try {
         await pipx.installPackage(pkg);
       } catch (err) {
-        core.endGroup();
-        core.setFailed(`Failed to install ${pkg}: ${getErrorMessage(err)}`);
+        endLogGroup();
+        logError(`Failed to install ${pkg}: ${getErrorMessage(err)}`);
+        process.exitCode = 1;
         return;
       }
-      core.endGroup();
+      endLogGroup();
 
-      core.startGroup(`Saving \u001b[34m${pkg}\u001b[39m cache...`);
+      beginLogGroup(`Saving \u001b[34m${pkg}\u001b[39m cache...`);
       try {
         await pipx.savePackageCache(pkg);
       } catch (err) {
-        core.endGroup();
-        core.setFailed(`Failed to save ${pkg} cache: ${getErrorMessage(err)}`);
+        endLogGroup();
+        logError(`Failed to save ${pkg} cache: ${getErrorMessage(err)}`);
+        process.exitCode = 1;
         return;
       }
-      core.endGroup();
+      endLogGroup();
     }
   }
 }

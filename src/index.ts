@@ -1,14 +1,13 @@
-import * as core from "@actions/core";
-import { getErrorMessage } from "catched-error-message";
+import { getInput, logError } from "gha-utils";
 import { pipxInstallAction } from "pipx-install-action";
 
 try {
-  const pkgs = core
-    .getInput("packages", { required: true })
+  const pkgs = getInput("packages")
     .split(/(\s+)/)
     .filter((pkg) => pkg.trim().length > 0);
 
   await pipxInstallAction(...pkgs);
 } catch (err) {
-  core.setFailed(getErrorMessage(err));
+  logError(err);
+  process.exit(1);
 }

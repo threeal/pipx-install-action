@@ -1,22 +1,22 @@
-import type * as core from "@actions/core";
 import { jest } from "@jest/globals";
+import type { beginLogGroup, endLogGroup, logError, logInfo } from "gha-utils";
 
-let logs: (string | Error)[];
+let logs: unknown[];
 let failed: boolean;
 
-jest.unstable_mockModule("@actions/core", () => ({
-  endGroup: jest.fn<typeof core.endGroup>(() => {
+jest.unstable_mockModule("gha-utils", () => ({
+  beginLogGroup: jest.fn<typeof beginLogGroup>((name) => {
+    logs.push(`::group::${name}`);
+  }),
+  endLogGroup: jest.fn<typeof endLogGroup>(() => {
     logs.push("::endgroup::");
   }),
-  info: jest.fn<typeof core.info>((message) => {
-    logs.push(message);
-  }),
-  setFailed: jest.fn<typeof core.setFailed>((message) => {
+  logError: jest.fn<typeof logError>((message) => {
     failed = true;
     logs.push(message);
   }),
-  startGroup: jest.fn<typeof core.startGroup>((name) => {
-    logs.push(`::group::${name}`);
+  logInfo: jest.fn<typeof logInfo>((message) => {
+    logs.push(message);
   }),
 }));
 

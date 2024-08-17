@@ -1,6 +1,6 @@
-import * as core from "@actions/core";
 import { getExecOutput } from "@actions/exec";
 import { getErrorMessage } from "catched-error-message";
+import { addPath } from "gha-utils";
 import os from "os";
 import path from "path";
 
@@ -23,5 +23,5 @@ export async function getEnvironment(env: string): Promise<string> {
 }
 
 export function ensurePath() {
-  core.addPath(binDir);
+  addPath(binDir);
 }
