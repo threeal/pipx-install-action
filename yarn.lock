@@ -30,7 +30,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@actions/core@npm:^1.10.0, @actions/core@npm:^1.10.1, @actions/core@npm:^1.2.6":
+"@actions/core@npm:^1.10.0, @actions/core@npm:^1.2.6":
   version: 1.10.1
   resolution: "@actions/core@npm:1.10.1"
   dependencies:
@@ -4539,12 +4539,11 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "root@workspace:."
   dependencies:
-    "@actions/core": "npm:^1.10.1"
     "@eslint/js": "npm:^9.9.0"
     "@types/node": "npm:^22.1.0"
     "@vercel/ncc": "npm:^0.38.1"
-    catched-error-message: "npm:^0.0.1"
     eslint: "npm:^9.9.0"
+    gha-utils: "npm:^0.2.0"
     pipx-install-action: "workspace:^"
     prettier: "npm:^3.3.3"
     typescript: "npm:^5.5.4"
