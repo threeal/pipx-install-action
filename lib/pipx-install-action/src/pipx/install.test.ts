@@ -1,45 +1,50 @@
 import { jest } from "@jest/globals";
 import { binDir, homeDir } from "./environment.js";
-import "jest-extended";
 
-jest.unstable_mockModule("@actions/exec", () => ({
-  exec: jest.fn(),
-}));
+class ChildProcess {
+  #events: Record<string, any[] | undefined> = {};
 
-describe("install Python packages", () => {
-  it("should install a package", async () => {
-    const { exec } = await import("@actions/exec");
-    const { installPackage } = await import("./install.js");
+  constructor(events: Record<string, any[]>) {
+    this.#events = events;
+  }
 
-    jest.mocked(exec).mockReset();
+  on(event: string, callback: (...args: any[]) => any): void {
+    const args = this.#events[event];
+    if (args !== undefined) callback(...args);
+  }
+}
 
-    const prom = installPackage("some-package");
-    await expect(prom).resolves.toBeUndefined();
-
-    expect(exec).toHaveBeenCalledExactlyOnceWith(
+jest.unstable_mockModule("node:child_process", () => ({
+  spawn: (file: string, args: string[], options: object): ChildProcess => {
+    expect([file, args.length, args[0], options]).toEqual([
       "pipx",
-      ["install", "some-package"],
+      2,
+      "install",
       {
+        stdio: "inherit",
         env: {
           PIPX_HOME: homeDir,
           PIPX_BIN_DIR: binDir,
         },
       },
-    );
-  });
+    ]);
 
-  it("should fail to install an package", async () => {
-    const { exec } = await import("@actions/exec");
+    return new ChildProcess({ close: [args[1] === "a-package" ? 0 : 1] });
+  },
+}));
+
+describe("install Python packages", () => {
+  it("should install a package", async () => {
     const { installPackage } = await import("./install.js");
 
-    jest
-      .mocked(exec)
-      .mockReset()
-      .mockRejectedValue(new Error("something went wrong"));
+    await installPackage("a-package");
+  });
 
-    const prom = installPackage("some-package");
-    await expect(prom).rejects.toThrow(
-      "Failed to install some-package: something went wrong",
+  it("should fail to install a package", async () => {
+    const { installPackage } = await import("./install.js");
+
+    await expect(installPackage("an-invalid-package")).rejects.toThrow(
+      "Failed to install an-invalid-package: process exited with code: 1",
     );
   });
 });

@@ -1,55 +1,64 @@
 import { jest } from "@jest/globals";
 import "jest-extended";
 
-jest.unstable_mockModule("@actions/exec", () => ({
-  getExecOutput: jest.fn(),
-}));
-
 jest.unstable_mockModule("gha-utils", () => ({
   addPath: jest.fn(),
 }));
 
+let binDir: string;
+let homeDir: string;
+beforeAll(async () => {
+  const env = await import("./environment.js");
+  binDir = env.binDir;
+  homeDir = env.homeDir;
+});
+
+jest.unstable_mockModule("node:child_process", () => ({
+  execFile: (
+    file: string,
+    args: string[],
+    options: any,
+    callback: (...args: any[]) => void,
+  ) => {
+    try {
+      expect([file, args.length, args.slice(0, 2), options]).toEqual([
+        "pipx",
+        3,
+        ["environment", "--value"],
+        {
+          env: {
+            PATH: process.env["PATH"],
+            PIPX_HOME: homeDir,
+            PIPX_BIN_DIR: binDir,
+          },
+        },
+      ]);
+
+      if (args[2] === "AN_ENVIRONMENT") {
+        callback(null, "a value");
+      } else {
+        callback(new Error("unknown environment"));
+      }
+    } catch (err) {
+      callback(err);
+    }
+  },
+}));
+
 describe("get pipx environments", () => {
   it("should get an environment", async () => {
-    const { getExecOutput } = await import("@actions/exec");
-    const { binDir, getEnvironment, homeDir } = await import(
-      "./environment.js"
-    );
+    const { getEnvironment } = await import("./environment.js");
 
-    jest.mocked(getExecOutput).mockReset().mockResolvedValue({
-      exitCode: 0,
-      stdout: "some value",
-      stderr: "",
-    });
-
-    const prom = getEnvironment("SOME_ENVIRONMENT");
-    await expect(prom).resolves.toBe("some value");
-
-    expect(getExecOutput).toHaveBeenCalledExactlyOnceWith(
-      "pipx",
-      ["environment", "--value", "SOME_ENVIRONMENT"],
-      {
-        silent: true,
-        env: {
-          PIPX_HOME: homeDir,
-          PIPX_BIN_DIR: binDir,
-        },
-      },
-    );
+    const value = await getEnvironment("AN_ENVIRONMENT");
+    expect(value).toBe("a value");
   });
 
   it("should fail to get an environment", async () => {
-    const { getExecOutput } = await import("@actions/exec");
     const { getEnvironment } = await import("./environment.js");
 
-    jest
-      .mocked(getExecOutput)
-      .mockReset()
-      .mockRejectedValue(new Error("something went wrong"));
-
-    const prom = getEnvironment("SOME_ENVIRONMENT");
+    const prom = getEnvironment("AN_INVALID_ENVIRONMENT");
     await expect(prom).rejects.toThrow(
-      "Failed to get SOME_ENVIRONMENT: something went wrong",
+      "Failed to get AN_INVALID_ENVIRONMENT: unknown environment",
     );
   });
 });
