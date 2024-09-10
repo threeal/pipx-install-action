@@ -80235,7 +80235,7 @@ exports.AbortError = AbortError;
 
 __nccwpck_require__.a(module, async (__webpack_handle_async_dependencies__, __webpack_async_result__) => { try {
 /* harmony import */ var gha_utils__WEBPACK_IMPORTED_MODULE_0__ = __nccwpck_require__(3410);
-/* harmony import */ var pipx_install_action__WEBPACK_IMPORTED_MODULE_1__ = __nccwpck_require__(3914);
+/* harmony import */ var pipx_install_action__WEBPACK_IMPORTED_MODULE_1__ = __nccwpck_require__(5016);
 
 
 try {
@@ -82195,7 +82195,7 @@ function endLogGroup() {
 
 /***/ }),
 
-/***/ 3914:
+/***/ 5016:
 /***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __nccwpck_require__) => {
 
 
@@ -82272,17 +82272,31 @@ async function restorePackageCache(pkg) {
     }
 }
 
+;// CONCATENATED MODULE: external "node:child_process"
+const external_node_child_process_namespaceObject = __WEBPACK_EXTERNAL_createRequire(import.meta.url)("node:child_process");
 ;// CONCATENATED MODULE: ./lib/pipx-install-action/dist/pipx/install.js
 
 
 
 async function installPackage(pkg) {
     try {
-        await (0,exec.exec)("pipx", ["install", pkg], {
+        const pipx = (0,external_node_child_process_namespaceObject.spawn)("pipx", ["install", pkg], {
+            stdio: "inherit",
             env: {
                 PIPX_HOME: homeDir,
                 PIPX_BIN_DIR: binDir,
             },
+        });
+        await new Promise((resolve, reject) => {
+            pipx.on("error", reject);
+            pipx.on("close", (code) => {
+                if (code === 0) {
+                    resolve();
+                }
+                else {
+                    reject(new Error(`process exited with code: ${code}`));
+                }
+            });
         });
     }
     catch (err) {
