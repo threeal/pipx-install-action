@@ -7,6 +7,7 @@ export async function installPackage(pkg: string): Promise<void> {
     const pipx = spawn("pipx", ["install", pkg], {
       stdio: "inherit",
       env: {
+        PATH: process.env["PATH"],
         PIPX_HOME: homeDir,
         PIPX_BIN_DIR: binDir,
       },

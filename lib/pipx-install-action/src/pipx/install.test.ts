@@ -23,6 +23,7 @@ jest.unstable_mockModule("node:child_process", () => ({
       {
         stdio: "inherit",
         env: {
+          PATH: process.env.PATH,
           PIPX_HOME: homeDir,
           PIPX_BIN_DIR: binDir,
         },
