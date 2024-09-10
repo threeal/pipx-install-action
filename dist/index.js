@@ -82212,8 +82212,8 @@ function r(r){return function(r){if("object"==typeof(e=r)&&null!==e&&"message"in
 var dist = __nccwpck_require__(3410);
 // EXTERNAL MODULE: ../../../.yarn/berry/cache/@actions-cache-npm-3.2.4-c57b047f14-10c0.zip/node_modules/@actions/cache/lib/cache.js
 var cache = __nccwpck_require__(3193);
-// EXTERNAL MODULE: ../../../.yarn/berry/cache/@actions-exec-npm-1.1.1-90973d2f96-10c0.zip/node_modules/@actions/exec/lib/exec.js
-var exec = __nccwpck_require__(4926);
+;// CONCATENATED MODULE: external "node:child_process"
+const external_node_child_process_namespaceObject = __WEBPACK_EXTERNAL_createRequire(import.meta.url)("node:child_process");
 // EXTERNAL MODULE: external "os"
 var external_os_ = __nccwpck_require__(2037);
 // EXTERNAL MODULE: external "path"
@@ -82223,23 +82223,25 @@ var external_path_ = __nccwpck_require__(1017);
 
 
 
-
 const homeDir = external_path_.join(external_os_.homedir(), ".local/pipx");
 const binDir = external_path_.join(external_os_.homedir(), ".local/bin");
 async function getEnvironment(env) {
-    try {
-        const res = await (0,exec.getExecOutput)("pipx", ["environment", "--value", env], {
-            silent: true,
+    return new Promise((resolve, reject) => {
+        (0,external_node_child_process_namespaceObject.execFile)("pipx", ["environment", "--value", env], {
             env: {
+                PATH: process.env["PATH"],
                 PIPX_HOME: homeDir,
                 PIPX_BIN_DIR: binDir,
             },
+        }, (err, stdout) => {
+            if (err) {
+                reject(new Error(`Failed to get ${env}: ${err.message}`));
+            }
+            else {
+                resolve(stdout);
+            }
         });
-        return res.stdout;
-    }
-    catch (err) {
-        throw new Error(`Failed to get ${env}: ${r(err)}`);
-    }
+    });
 }
 function ensurePath() {
     (0,dist/* addPath */.QM)(binDir);
@@ -82272,8 +82274,6 @@ async function restorePackageCache(pkg) {
     }
 }
 
-;// CONCATENATED MODULE: external "node:child_process"
-const external_node_child_process_namespaceObject = __WEBPACK_EXTERNAL_createRequire(import.meta.url)("node:child_process");
 ;// CONCATENATED MODULE: ./lib/pipx-install-action/dist/pipx/install.js
 
 

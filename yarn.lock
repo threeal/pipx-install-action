@@ -40,7 +40,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@actions/exec@npm:^1.0.1, @actions/exec@npm:^1.1.1":
+"@actions/exec@npm:^1.0.1":
   version: 1.1.1
   resolution: "@actions/exec@npm:1.1.1"
   dependencies:
@@ -4284,7 +4284,6 @@ __metadata:
   resolution: "pipx-install-action@workspace:lib/pipx-install-action"
   dependencies:
     "@actions/cache": "npm:^3.2.4"
-    "@actions/exec": "npm:^1.1.1"
     "@eslint/js": "npm:^9.9.1"
     "@jest/globals": "npm:^29.7.0"
     "@types/jest": "npm:^29.5.12"
