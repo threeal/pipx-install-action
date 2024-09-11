@@ -35,7 +35,7 @@ jest.unstable_mockModule("node:child_process", () => ({
       ]);
 
       if (args[2] === "AN_ENVIRONMENT") {
-        callback(null, "a value");
+        callback(null, "  a value\n");
       } else {
         callback(new Error("unknown environment"));
       }

@@ -82238,7 +82238,7 @@ async function getEnvironment(env) {
                 reject(new Error(`Failed to get ${env}: ${err.message}`));
             }
             else {
-                resolve(stdout);
+                resolve(stdout.trim());
             }
         });
     });
