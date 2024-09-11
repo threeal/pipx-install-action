@@ -82223,6 +82223,7 @@ var external_path_ = __nccwpck_require__(1017);
 
 
 
+
 const homeDir = external_path_.join(external_os_.homedir(), ".local/pipx");
 const binDir = external_path_.join(external_os_.homedir(), ".local/bin");
 async function getEnvironment(env) {
@@ -82246,6 +82247,22 @@ async function getEnvironment(env) {
 function ensurePath() {
     (0,dist/* addPath */.QM)(binDir);
 }
+/**
+ * Appends the binary path of a specified package to the system paths.
+ *
+ * @param pkg - The name of the package.
+ * @returns A promise that resolves when the system paths have been successfully appended.
+ */
+async function addPackagePath(pkg) {
+    const localVenvs = await getEnvironment("PIPX_LOCAL_VENVS");
+    const { name } = parsePackage(pkg);
+    if (process.platform === "win32") {
+        addPath(path.join(localVenvs, name, "Scripts"));
+    }
+    else {
+        addPath(path.join(localVenvs, name, "bin"));
+    }
+}
 
 ;// CONCATENATED MODULE: ./lib/pipx-install-action/dist/pipx/utils.js
 /**
@@ -82256,7 +82273,7 @@ function ensurePath() {
  *          If the version is not specified, it defaults to "latest".
  * @throws An error if the package string cannot be parsed.
  */
-function parsePackage(pkg) {
+function utils_parsePackage(pkg) {
     const match = pkg.match(/^([\w\d._-]+)(==([\d.]+))?$/);
     if (match == null || match.length < 2) {
         throw new Error(`unable to parse package name and version from: ${pkg}`);
@@ -82277,7 +82294,7 @@ async function savePackageCache(pkg) {
     try {
         const binDir = await getEnvironment("PIPX_BIN_DIR");
         const localVenvs = await getEnvironment("PIPX_LOCAL_VENVS");
-        const { name, version } = parsePackage(pkg);
+        const { name, version } = utils_parsePackage(pkg);
         await (0,cache.saveCache)([external_path_.join(binDir, `${name}*`), external_path_.join(localVenvs, name)], `pipx-${process.platform}-${name}-${version}`);
     }
     catch (err) {
@@ -82288,7 +82305,7 @@ async function restorePackageCache(pkg) {
     try {
         const binDir = await getEnvironment("PIPX_BIN_DIR");
         const localVenvs = await getEnvironment("PIPX_LOCAL_VENVS");
-        const { name, version } = parsePackage(pkg);
+        const { name, version } = utils_parsePackage(pkg);
         const key = await (0,cache.restoreCache)([external_path_.join(binDir, `${name}*`), external_path_.join(localVenvs, name)], `pipx-${process.platform}-${name}-${version}`);
         return key !== undefined;
     }
