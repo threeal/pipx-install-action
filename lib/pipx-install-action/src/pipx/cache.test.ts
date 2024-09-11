@@ -36,7 +36,7 @@ describe("save Python package caches", () => {
 
     expect(saveCache).toHaveBeenCalledExactlyOnceWith(
       ["/path/to/bin/some-package*", "/path/to/venvs/some-package"],
-      `pipx-${process.platform}-some-package`,
+      `pipx-${process.platform}-some-package-latest`,
     );
   });
 
@@ -73,7 +73,7 @@ describe("restore Python package caches", () => {
 
     expect(restoreCache).toHaveBeenCalledExactlyOnceWith(
       ["/path/to/bin/some-package*", "/path/to/venvs/some-package"],
-      `pipx-${process.platform}-some-package`,
+      `pipx-${process.platform}-some-package-latest`,
     );
   });
 
@@ -88,7 +88,7 @@ describe("restore Python package caches", () => {
 
     expect(restoreCache).toHaveBeenCalledExactlyOnceWith(
       ["/path/to/bin/some-package*", "/path/to/venvs/some-package"],
-      `pipx-${process.platform}-some-package`,
+      `pipx-${process.platform}-some-package-latest`,
     );
   });
 

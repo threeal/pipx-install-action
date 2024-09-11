@@ -80235,7 +80235,7 @@ exports.AbortError = AbortError;
 
 __nccwpck_require__.a(module, async (__webpack_handle_async_dependencies__, __webpack_async_result__) => { try {
 /* harmony import */ var gha_utils__WEBPACK_IMPORTED_MODULE_0__ = __nccwpck_require__(3410);
-/* harmony import */ var pipx_install_action__WEBPACK_IMPORTED_MODULE_1__ = __nccwpck_require__(5016);
+/* harmony import */ var pipx_install_action__WEBPACK_IMPORTED_MODULE_1__ = __nccwpck_require__(880);
 
 
 try {
@@ -82195,7 +82195,7 @@ function endLogGroup() {
 
 /***/ }),
 
-/***/ 5016:
+/***/ 880:
 /***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __nccwpck_require__) => {
 
 
@@ -82247,7 +82247,28 @@ function ensurePath() {
     (0,dist/* addPath */.QM)(binDir);
 }
 
+;// CONCATENATED MODULE: ./lib/pipx-install-action/dist/pipx/utils.js
+/**
+ * Parses the package name and version from the given string.
+ *
+ * @param pkg - The package string to parse in the format "name==version" or just "name".
+ * @returns A `Package` object containing the parsed package name and version.
+ *          If the version is not specified, it defaults to "latest".
+ * @throws An error if the package string cannot be parsed.
+ */
+function parsePackage(pkg) {
+    const match = pkg.match(/^([\w\d._-]+)(==([\d.]+))?$/);
+    if (match == null || match.length < 2) {
+        throw new Error(`unable to parse package name and version from: ${pkg}`);
+    }
+    return {
+        name: match[1],
+        version: match[3] ?? "latest",
+    };
+}
+
 ;// CONCATENATED MODULE: ./lib/pipx-install-action/dist/pipx/cache.js
+
 
 
 
@@ -82256,7 +82277,8 @@ async function savePackageCache(pkg) {
     try {
         const binDir = await getEnvironment("PIPX_BIN_DIR");
         const localVenvs = await getEnvironment("PIPX_LOCAL_VENVS");
-        await (0,cache.saveCache)([external_path_.join(binDir, `${pkg}*`), external_path_.join(localVenvs, pkg)], `pipx-${process.platform}-${pkg}`);
+        const { name, version } = parsePackage(pkg);
+        await (0,cache.saveCache)([external_path_.join(binDir, `${name}*`), external_path_.join(localVenvs, name)], `pipx-${process.platform}-${name}-${version}`);
     }
     catch (err) {
         throw new Error(`Failed to save ${pkg} cache: ${r(err)}`);
@@ -82266,7 +82288,8 @@ async function restorePackageCache(pkg) {
     try {
         const binDir = await getEnvironment("PIPX_BIN_DIR");
         const localVenvs = await getEnvironment("PIPX_LOCAL_VENVS");
-        const key = await (0,cache.restoreCache)([external_path_.join(binDir, `${pkg}*`), external_path_.join(localVenvs, pkg)], `pipx-${process.platform}-${pkg}`);
+        const { name, version } = parsePackage(pkg);
+        const key = await (0,cache.restoreCache)([external_path_.join(binDir, `${name}*`), external_path_.join(localVenvs, name)], `pipx-${process.platform}-${name}-${version}`);
         return key !== undefined;
     }
     catch (err) {
