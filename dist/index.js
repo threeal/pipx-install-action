@@ -82288,10 +82288,9 @@ async function addPackagePath(pkg) {
 
 async function savePackageCache(pkg) {
     try {
-        const binDir = await getEnvironment("PIPX_BIN_DIR");
         const localVenvs = await getEnvironment("PIPX_LOCAL_VENVS");
         const { name, version } = parsePackage(pkg);
-        await (0,cache.saveCache)([external_path_.join(binDir, `${name}*`), external_path_.join(localVenvs, name)], `pipx-${process.platform}-${name}-${version}`);
+        await (0,cache.saveCache)([external_path_.join(localVenvs, name)], `pipx-${process.platform}-${name}-${version}`);
     }
     catch (err) {
         throw new Error(`Failed to save ${pkg} cache: ${r(err)}`);
@@ -82299,10 +82298,9 @@ async function savePackageCache(pkg) {
 }
 async function restorePackageCache(pkg) {
     try {
-        const binDir = await getEnvironment("PIPX_BIN_DIR");
         const localVenvs = await getEnvironment("PIPX_LOCAL_VENVS");
         const { name, version } = parsePackage(pkg);
-        const key = await (0,cache.restoreCache)([external_path_.join(binDir, `${name}*`), external_path_.join(localVenvs, name)], `pipx-${process.platform}-${name}-${version}`);
+        const key = await (0,cache.restoreCache)([external_path_.join(localVenvs, name)], `pipx-${process.platform}-${name}-${version}`);
         return key !== undefined;
     }
     catch (err) {

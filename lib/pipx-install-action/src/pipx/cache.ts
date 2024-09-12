@@ -6,12 +6,11 @@ import { parsePackage } from "./utils.js";
 
 export async function savePackageCache(pkg: string): Promise<void> {
   try {
-    const binDir = await getEnvironment("PIPX_BIN_DIR");
     const localVenvs = await getEnvironment("PIPX_LOCAL_VENVS");
     const { name, version } = parsePackage(pkg);
 
     await saveCache(
-      [path.join(binDir, `${name}*`), path.join(localVenvs, name)],
+      [path.join(localVenvs, name)],
       `pipx-${process.platform}-${name}-${version}`,
     );
   } catch (err) {
@@ -21,12 +20,11 @@ export async function savePackageCache(pkg: string): Promise<void> {
 
 export async function restorePackageCache(pkg: string): Promise<boolean> {
   try {
-    const binDir = await getEnvironment("PIPX_BIN_DIR");
     const localVenvs = await getEnvironment("PIPX_LOCAL_VENVS");
     const { name, version } = parsePackage(pkg);
 
     const key = await restoreCache(
-      [path.join(binDir, `${name}*`), path.join(localVenvs, name)],
+      [path.join(localVenvs, name)],
       `pipx-${process.platform}-${name}-${version}`,
     );
 
