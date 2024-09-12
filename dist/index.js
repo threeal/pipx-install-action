@@ -82263,9 +82263,6 @@ async function getEnvironment(env) {
         });
     });
 }
-function ensurePath() {
-    (0,dist/* addPath */.QM)(binDir);
-}
 /**
  * Appends the binary path of a specified package to the system paths.
  *
@@ -82350,7 +82347,6 @@ async function installPackage(pkg) {
 
 /* harmony default export */ const pipx = ({
     addPackagePath: addPackagePath,
-    ensurePath: ensurePath,
     getEnvironment: getEnvironment,
     installPackage: installPackage,
     restorePackageCache: restorePackageCache,

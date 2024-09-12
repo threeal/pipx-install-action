@@ -70,16 +70,6 @@ describe("get pipx environments", () => {
   });
 });
 
-describe("ensure pipx path", () => {
-  it("should ensure path", async () => {
-    const { binDir, ensurePath } = await import("./environment.js");
-
-    ensurePath();
-
-    expect(sysPaths).toEqual([binDir]);
-  });
-});
-
 describe("add path of pipx packages", () => {
   it("should add path of a pipx package on Windows", async () => {
     const { addPackagePath } = await import("./environment.js");

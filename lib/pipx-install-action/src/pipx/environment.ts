@@ -30,10 +30,6 @@ export async function getEnvironment(env: string): Promise<string> {
   });
 }
 
-export function ensurePath() {
-  addPath(binDir);
-}
-
 /**
  * Appends the binary path of a specified package to the system paths.
  *
