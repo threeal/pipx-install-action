@@ -1,5 +1,5 @@
 import { jest } from "@jest/globals";
-import { binDir, homeDir } from "./environment.js";
+import { homeDir } from "./environment.js";
 
 class ChildProcess {
   #events: Record<string, any[] | undefined> = {};
@@ -25,7 +25,6 @@ jest.unstable_mockModule("node:child_process", () => ({
         env: {
           PATH: process.env.PATH,
           PIPX_HOME: homeDir,
-          PIPX_BIN_DIR: binDir,
         },
       },
     ]);

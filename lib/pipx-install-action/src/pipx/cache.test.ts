@@ -14,13 +14,7 @@ beforeEach(async () => {
   const { getEnvironment } = await import("./environment.js");
 
   jest.mocked(getEnvironment).mockImplementation(async (env) => {
-    switch (env) {
-      case "PIPX_BIN_DIR":
-        return "/path/to/bin";
-      case "PIPX_LOCAL_VENVS":
-        return "/path/to/venvs";
-    }
-    return "";
+    return env === "PIPX_LOCAL_VENVS" ? "/path/to/venvs" : "";
   });
 });
 
@@ -35,7 +29,7 @@ describe("save Python package caches", () => {
     await expect(prom).resolves.toBeUndefined();
 
     expect(saveCache).toHaveBeenCalledExactlyOnceWith(
-      ["/path/to/bin/some-package*", "/path/to/venvs/some-package"],
+      ["/path/to/venvs/some-package"],
       `pipx-${process.platform}-some-package-latest`,
     );
   });
@@ -72,7 +66,7 @@ describe("restore Python package caches", () => {
     await expect(prom).resolves.toBe(true);
 
     expect(restoreCache).toHaveBeenCalledExactlyOnceWith(
-      ["/path/to/bin/some-package*", "/path/to/venvs/some-package"],
+      ["/path/to/venvs/some-package"],
       `pipx-${process.platform}-some-package-latest`,
     );
   });
@@ -87,7 +81,7 @@ describe("restore Python package caches", () => {
     await expect(prom).resolves.toBe(false);
 
     expect(restoreCache).toHaveBeenCalledExactlyOnceWith(
-      ["/path/to/bin/some-package*", "/path/to/venvs/some-package"],
+      ["/path/to/venvs/some-package"],
       `pipx-${process.platform}-some-package-latest`,
     );
   });

@@ -82088,11 +82088,10 @@ __nccwpck_require__.d(__webpack_exports__, {
   "zq": () => (/* binding */ beginLogGroup),
   "sH": () => (/* binding */ endLogGroup),
   "Np": () => (/* binding */ getInput),
-  "H": () => (/* binding */ logError),
-  "PN": () => (/* binding */ logInfo)
+  "H": () => (/* binding */ logError)
 });
 
-// UNUSED EXPORTS: logCommand, logWarning, setEnv, setOutput
+// UNUSED EXPORTS: logCommand, logInfo, logWarning, setEnv, setOutput
 
 ;// CONCATENATED MODULE: external "node:fs"
 const external_node_fs_namespaceObject = __WEBPACK_EXTERNAL_createRequire(import.meta.url)("node:fs");
@@ -82148,7 +82147,7 @@ function addPath(sysPath) {
  * @param message - The information message to log.
  */
 function logInfo(message) {
-    process.stdout.write(`${message}${external_node_os_namespaceObject.EOL}`);
+    process.stdout.write(`${message}${os.EOL}`);
 }
 /**
  * Logs a warning message in GitHub Actions.
@@ -82218,35 +82217,6 @@ const external_node_child_process_namespaceObject = __WEBPACK_EXTERNAL_createReq
 var external_os_ = __nccwpck_require__(2037);
 // EXTERNAL MODULE: external "path"
 var external_path_ = __nccwpck_require__(1017);
-;// CONCATENATED MODULE: ./lib/pipx-install-action/dist/pipx/environment.js
-
-
-
-
-const homeDir = external_path_.join(external_os_.homedir(), ".local/pipx");
-const binDir = external_path_.join(external_os_.homedir(), ".local/bin");
-async function getEnvironment(env) {
-    return new Promise((resolve, reject) => {
-        (0,external_node_child_process_namespaceObject.execFile)("pipx", ["environment", "--value", env], {
-            env: {
-                PATH: process.env["PATH"],
-                PIPX_HOME: homeDir,
-                PIPX_BIN_DIR: binDir,
-            },
-        }, (err, stdout) => {
-            if (err) {
-                reject(new Error(`Failed to get ${env}: ${err.message}`));
-            }
-            else {
-                resolve(stdout.trim());
-            }
-        });
-    });
-}
-function ensurePath() {
-    (0,dist/* addPath */.QM)(binDir);
-}
-
 ;// CONCATENATED MODULE: ./lib/pipx-install-action/dist/pipx/utils.js
 /**
  * Parses the package name and version from the given string.
@@ -82267,6 +82237,47 @@ function parsePackage(pkg) {
     };
 }
 
+;// CONCATENATED MODULE: ./lib/pipx-install-action/dist/pipx/environment.js
+
+
+
+
+
+const homeDir = external_path_.join(external_os_.homedir(), ".local/pipx");
+async function getEnvironment(env) {
+    return new Promise((resolve, reject) => {
+        (0,external_node_child_process_namespaceObject.execFile)("pipx", ["environment", "--value", env], {
+            env: {
+                PATH: process.env["PATH"],
+                PIPX_HOME: homeDir,
+            },
+        }, (err, stdout) => {
+            if (err) {
+                reject(new Error(`Failed to get ${env}: ${err.message}`));
+            }
+            else {
+                resolve(stdout.trim());
+            }
+        });
+    });
+}
+/**
+ * Appends the binary path of a specified package to the system paths.
+ *
+ * @param pkg - The name of the package.
+ * @returns A promise that resolves when the system paths have been successfully appended.
+ */
+async function addPackagePath(pkg) {
+    const localVenvs = await getEnvironment("PIPX_LOCAL_VENVS");
+    const { name } = parsePackage(pkg);
+    if (process.platform === "win32") {
+        (0,dist/* addPath */.QM)(external_path_.join(localVenvs, name, "Scripts"));
+    }
+    else {
+        (0,dist/* addPath */.QM)(external_path_.join(localVenvs, name, "bin"));
+    }
+}
+
 ;// CONCATENATED MODULE: ./lib/pipx-install-action/dist/pipx/cache.js
 
 
@@ -82275,10 +82286,9 @@ function parsePackage(pkg) {
 
 async function savePackageCache(pkg) {
     try {
-        const binDir = await getEnvironment("PIPX_BIN_DIR");
         const localVenvs = await getEnvironment("PIPX_LOCAL_VENVS");
         const { name, version } = parsePackage(pkg);
-        await (0,cache.saveCache)([external_path_.join(binDir, `${name}*`), external_path_.join(localVenvs, name)], `pipx-${process.platform}-${name}-${version}`);
+        await (0,cache.saveCache)([external_path_.join(localVenvs, name)], `pipx-${process.platform}-${name}-${version}`);
     }
     catch (err) {
         throw new Error(`Failed to save ${pkg} cache: ${r(err)}`);
@@ -82286,10 +82296,9 @@ async function savePackageCache(pkg) {
 }
 async function restorePackageCache(pkg) {
     try {
-        const binDir = await getEnvironment("PIPX_BIN_DIR");
         const localVenvs = await getEnvironment("PIPX_LOCAL_VENVS");
         const { name, version } = parsePackage(pkg);
-        const key = await (0,cache.restoreCache)([external_path_.join(binDir, `${name}*`), external_path_.join(localVenvs, name)], `pipx-${process.platform}-${name}-${version}`);
+        const key = await (0,cache.restoreCache)([external_path_.join(localVenvs, name)], `pipx-${process.platform}-${name}-${version}`);
         return key !== undefined;
     }
     catch (err) {
@@ -82308,7 +82317,6 @@ async function installPackage(pkg) {
             env: {
                 PATH: process.env["PATH"],
                 PIPX_HOME: homeDir,
-                PIPX_BIN_DIR: binDir,
             },
         });
         await new Promise((resolve, reject) => {
@@ -82333,7 +82341,7 @@ async function installPackage(pkg) {
 
 
 /* harmony default export */ const pipx = ({
-    ensurePath: ensurePath,
+    addPackagePath: addPackagePath,
     getEnvironment: getEnvironment,
     installPackage: installPackage,
     restorePackageCache: restorePackageCache,
@@ -82345,20 +82353,13 @@ async function installPackage(pkg) {
 
 
 async function pipxInstallAction(...pkgs) {
-    (0,dist/* logInfo */.PN)("Ensuring pipx path...");
-    try {
-        pipx.ensurePath();
-    }
-    catch (err) {
-        (0,dist/* logError */.H)(`Failed to ensure pipx path: ${r(err)}`);
-        process.exitCode = 1;
-        return;
-    }
     for (const pkg of pkgs) {
         let cacheFound;
         (0,dist/* beginLogGroup */.zq)(`Restoring \u001b[34m${pkg}\u001b[39m cache...`);
         try {
             cacheFound = await pipx.restorePackageCache(pkg);
+            if (cacheFound)
+                await pipx.addPackagePath(pkg);
         }
         catch (err) {
             (0,dist/* endLogGroup */.sH)();
@@ -82371,6 +82372,7 @@ async function pipxInstallAction(...pkgs) {
             (0,dist/* beginLogGroup */.zq)(`Cache not found, installing \u001b[34m${pkg}\u001b[39m...`);
             try {
                 await pipx.installPackage(pkg);
+                await pipx.addPackagePath(pkg);
             }
             catch (err) {
                 (0,dist/* endLogGroup */.sH)();

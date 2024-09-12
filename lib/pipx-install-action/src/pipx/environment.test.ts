@@ -1,15 +1,18 @@
 import { jest } from "@jest/globals";
-import "jest-extended";
+import path from "node:path";
+
+let sysPaths: string[] = [];
+beforeEach(() => (sysPaths = []));
 
 jest.unstable_mockModule("gha-utils", () => ({
-  addPath: jest.fn(),
+  addPath: (sysPath: string) => {
+    sysPaths.push(sysPath);
+  },
 }));
 
-let binDir: string;
 let homeDir: string;
 beforeAll(async () => {
   const env = await import("./environment.js");
-  binDir = env.binDir;
   homeDir = env.homeDir;
 });
 
@@ -29,13 +32,14 @@ jest.unstable_mockModule("node:child_process", () => ({
           env: {
             PATH: process.env["PATH"],
             PIPX_HOME: homeDir,
-            PIPX_BIN_DIR: binDir,
           },
         },
       ]);
 
       if (args[2] === "AN_ENVIRONMENT") {
         callback(null, "  a value\n");
+      } else if (args[2] === "PIPX_LOCAL_VENVS") {
+        callback(null, "path-to-local-venvs");
       } else {
         callback(new Error("unknown environment"));
       }
@@ -63,15 +67,26 @@ describe("get pipx environments", () => {
   });
 });
 
-describe("ensure pipx path", () => {
-  it("should ensure path", async () => {
-    const { addPath } = await import("gha-utils");
-    const { binDir, ensurePath } = await import("./environment.js");
+describe("add path of pipx packages", () => {
+  it("should add path of a pipx package on Windows", async () => {
+    const { addPackagePath } = await import("./environment.js");
+    Object.defineProperty(process, "platform", { value: "win32" });
 
-    jest.mocked(addPath).mockReset();
+    await addPackagePath("a-package");
 
-    expect(() => ensurePath()).not.toThrow();
+    expect(sysPaths).toEqual([
+      path.join("path-to-local-venvs", "a-package", "Scripts"),
+    ]);
+  });
 
-    expect(addPath).toHaveBeenCalledExactlyOnceWith(binDir);
+  it("should add path of a pipx package on other OS", async () => {
+    const { addPackagePath } = await import("./environment.js");
+    Object.defineProperty(process, "platform", { value: "other" });
+
+    await addPackagePath("a-package");
+
+    expect(sysPaths).toEqual([
+      path.join("path-to-local-venvs", "a-package", "bin"),
+    ]);
   });
 });
