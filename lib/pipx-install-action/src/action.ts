@@ -17,6 +17,7 @@ export async function pipxInstallAction(...pkgs: string[]): Promise<void> {
     beginLogGroup(`Restoring \u001b[34m${pkg}\u001b[39m cache...`);
     try {
       cacheFound = await pipx.restorePackageCache(pkg);
+      if (cacheFound) await pipx.addPackagePath(pkg);
     } catch (err) {
       endLogGroup();
       logError(`Failed to restore ${pkg} cache: ${getErrorMessage(err)}`);
@@ -31,6 +32,7 @@ export async function pipxInstallAction(...pkgs: string[]): Promise<void> {
       );
       try {
         await pipx.installPackage(pkg);
+        await pipx.addPackagePath(pkg);
       } catch (err) {
         endLogGroup();
         logError(`Failed to install ${pkg}: ${getErrorMessage(err)}`);
