@@ -82244,14 +82244,12 @@ function parsePackage(pkg) {
 
 
 const homeDir = external_path_.join(external_os_.homedir(), ".local/pipx");
-const binDir = external_path_.join(external_os_.homedir(), ".local/bin");
 async function getEnvironment(env) {
     return new Promise((resolve, reject) => {
         (0,external_node_child_process_namespaceObject.execFile)("pipx", ["environment", "--value", env], {
             env: {
                 PATH: process.env["PATH"],
                 PIPX_HOME: homeDir,
-                PIPX_BIN_DIR: binDir,
             },
         }, (err, stdout) => {
             if (err) {
@@ -82319,7 +82317,6 @@ async function installPackage(pkg) {
             env: {
                 PATH: process.env["PATH"],
                 PIPX_HOME: homeDir,
-                PIPX_BIN_DIR: binDir,
             },
         });
         await new Promise((resolve, reject) => {

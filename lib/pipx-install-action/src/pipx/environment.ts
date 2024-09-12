@@ -5,7 +5,6 @@ import path from "path";
 import { parsePackage } from "./utils.js";
 
 export const homeDir = path.join(os.homedir(), ".local/pipx");
-export const binDir = path.join(os.homedir(), ".local/bin");
 
 export async function getEnvironment(env: string): Promise<string> {
   return new Promise<string>((resolve, reject) => {
@@ -16,7 +15,6 @@ export async function getEnvironment(env: string): Promise<string> {
         env: {
           PATH: process.env["PATH"],
           PIPX_HOME: homeDir,
-          PIPX_BIN_DIR: binDir,
         },
       },
       (err, stdout) => {
