@@ -1,4 +1,4 @@
-import { restoreCache, saveCache } from "@actions/cache";
+import { restoreCache, saveCache } from "cache-action";
 import { getErrorMessage } from "catched-error-message";
 import { getEnvironment } from "./environment.js";
 import path from "path";
@@ -9,10 +9,9 @@ export async function savePackageCache(pkg: string): Promise<void> {
     const localVenvs = await getEnvironment("PIPX_LOCAL_VENVS");
     const { name, version } = parsePackage(pkg);
 
-    await saveCache(
-      [path.join(localVenvs, name)],
-      `pipx-${process.platform}-${name}-${version}`,
-    );
+    await saveCache(`pipx-${process.platform}-${name}`, version, [
+      path.join(localVenvs, name),
+    ]);
   } catch (err) {
     throw new Error(`Failed to save ${pkg} cache: ${getErrorMessage(err)}`);
   }
@@ -20,15 +19,8 @@ export async function savePackageCache(pkg: string): Promise<void> {
 
 export async function restorePackageCache(pkg: string): Promise<boolean> {
   try {
-    const localVenvs = await getEnvironment("PIPX_LOCAL_VENVS");
     const { name, version } = parsePackage(pkg);
-
-    const key = await restoreCache(
-      [path.join(localVenvs, name)],
-      `pipx-${process.platform}-${name}-${version}`,
-    );
-
-    return key !== undefined;
+    return await restoreCache(`pipx-${process.platform}-${name}`, version);
   } catch (err) {
     throw new Error(`Failed to restore ${pkg} cache: ${getErrorMessage(err)}`);
   }

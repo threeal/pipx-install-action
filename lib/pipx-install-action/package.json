@@ -35,7 +35,7 @@
     "test": "jest"
   },
   "dependencies": {
-    "@actions/cache": "^3.2.4",
+    "cache-action": "^0.2.0",
     "catched-error-message": "^0.0.1",
     "gha-utils": "^0.2.0"
   },
