@@ -23,7 +23,6 @@ jest.unstable_mockModule("gha-utils", () => ({
 jest.unstable_mockModule("./pipx/index.js", () => ({
   default: {
     addPackagePath: jest.fn(),
-    ensurePath: jest.fn(),
     installPackage: jest.fn(),
     restorePackageCache: jest.fn(),
     savePackageCache: jest.fn(),
@@ -39,10 +38,6 @@ describe("install Python packages action", () => {
 
     jest.mocked(pipx.addPackagePath).mockImplementation(async (pkg) => {
       logs.push(`${pkg} path added`);
-    });
-
-    jest.mocked(pipx.ensurePath).mockImplementation(() => {
-      logs.push("path ensured");
     });
 
     jest.mocked(pipx.installPackage).mockImplementation(async (pkg) => {
@@ -72,8 +67,6 @@ describe("install Python packages action", () => {
 
     expect(failed).toBe(false);
     expect(logs).toStrictEqual([
-      "Ensuring pipx path...",
-      "path ensured",
       "::group::Restoring \u001b[34many-pkg\u001b[39m cache...",
       "any-pkg cache found",
       "any-pkg path added",
@@ -88,8 +81,6 @@ describe("install Python packages action", () => {
 
     expect(failed).toBe(false);
     expect(logs).toStrictEqual([
-      "Ensuring pipx path...",
-      "path ensured",
       "::group::Restoring \u001b[34many-pkg\u001b[39m cache...",
       "any-pkg cache not found",
       "::endgroup::",
@@ -100,23 +91,6 @@ describe("install Python packages action", () => {
       "::group::Saving \u001b[34many-pkg\u001b[39m cache...",
       "any-pkg cache saved",
       "::endgroup::",
-    ]);
-  });
-
-  it("should failed to ensure pipx path", async () => {
-    const { ensurePath } = (await import("./pipx/index.js")).default;
-    const { pipxInstallAction } = await import("./action.js");
-
-    jest.mocked(ensurePath).mockImplementation(() => {
-      throw new Error("something happened");
-    });
-
-    await expect(pipxInstallAction("any-pkg")).resolves.toBeUndefined();
-
-    expect(failed).toBe(true);
-    expect(logs.slice(-2)).toStrictEqual([
-      "Ensuring pipx path...",
-      "Failed to ensure pipx path: something happened",
     ]);
   });
 

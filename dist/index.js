@@ -82088,11 +82088,10 @@ __nccwpck_require__.d(__webpack_exports__, {
   "zq": () => (/* binding */ beginLogGroup),
   "sH": () => (/* binding */ endLogGroup),
   "Np": () => (/* binding */ getInput),
-  "H": () => (/* binding */ logError),
-  "PN": () => (/* binding */ logInfo)
+  "H": () => (/* binding */ logError)
 });
 
-// UNUSED EXPORTS: logCommand, logWarning, setEnv, setOutput
+// UNUSED EXPORTS: logCommand, logInfo, logWarning, setEnv, setOutput
 
 ;// CONCATENATED MODULE: external "node:fs"
 const external_node_fs_namespaceObject = __WEBPACK_EXTERNAL_createRequire(import.meta.url)("node:fs");
@@ -82148,7 +82147,7 @@ function addPath(sysPath) {
  * @param message - The information message to log.
  */
 function logInfo(message) {
-    process.stdout.write(`${message}${external_node_os_namespaceObject.EOL}`);
+    process.stdout.write(`${message}${os.EOL}`);
 }
 /**
  * Logs a warning message in GitHub Actions.
@@ -82363,15 +82362,6 @@ async function installPackage(pkg) {
 
 
 async function pipxInstallAction(...pkgs) {
-    (0,dist/* logInfo */.PN)("Ensuring pipx path...");
-    try {
-        pipx.ensurePath();
-    }
-    catch (err) {
-        (0,dist/* logError */.H)(`Failed to ensure pipx path: ${r(err)}`);
-        process.exitCode = 1;
-        return;
-    }
     for (const pkg of pkgs) {
         let cacheFound;
         (0,dist/* beginLogGroup */.zq)(`Restoring \u001b[34m${pkg}\u001b[39m cache...`);
