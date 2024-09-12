@@ -67,10 +67,9 @@ describe("install Python packages action", () => {
 
     expect(failed).toBe(false);
     expect(logs).toStrictEqual([
-      "::group::Restoring \u001b[34many-pkg\u001b[39m cache...",
+      "Restoring \u001b[34many-pkg\u001b[39m cache...",
       "any-pkg cache found",
       "any-pkg path added",
-      "::endgroup::",
     ]);
   });
 
@@ -81,16 +80,14 @@ describe("install Python packages action", () => {
 
     expect(failed).toBe(false);
     expect(logs).toStrictEqual([
-      "::group::Restoring \u001b[34many-pkg\u001b[39m cache...",
+      "Restoring \u001b[34many-pkg\u001b[39m cache...",
       "any-pkg cache not found",
-      "::endgroup::",
       "::group::Cache not found, installing \u001b[34many-pkg\u001b[39m...",
       "any-pkg installed",
       "any-pkg path added",
       "::endgroup::",
-      "::group::Saving \u001b[34many-pkg\u001b[39m cache...",
+      "Saving \u001b[34many-pkg\u001b[39m cache...",
       "any-pkg cache saved",
-      "::endgroup::",
     ]);
   });
 
@@ -105,9 +102,8 @@ describe("install Python packages action", () => {
     await expect(pipxInstallAction("any-pkg")).resolves.toBeUndefined();
 
     expect(failed).toBe(true);
-    expect(logs.slice(-3)).toStrictEqual([
-      "::group::Restoring \u001b[34many-pkg\u001b[39m cache...",
-      "::endgroup::",
+    expect(logs.slice(-2)).toStrictEqual([
+      "Restoring \u001b[34many-pkg\u001b[39m cache...",
       "Failed to restore any-pkg cache: something happened",
     ]);
   });
@@ -141,9 +137,8 @@ describe("install Python packages action", () => {
     await expect(pipxInstallAction("any-pkg")).resolves.toBeUndefined();
 
     expect(failed).toBe(true);
-    expect(logs.slice(-3)).toStrictEqual([
-      "::group::Saving \u001b[34many-pkg\u001b[39m cache...",
-      "::endgroup::",
+    expect(logs.slice(-2)).toStrictEqual([
+      "Saving \u001b[34many-pkg\u001b[39m cache...",
       "Failed to save any-pkg cache: something happened",
     ]);
   });

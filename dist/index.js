@@ -52,11 +52,12 @@ module.exports = __WEBPACK_EXTERNAL_createRequire(import.meta.url)("node:path");
 /* harmony export */ __nccwpck_require__.d(__webpack_exports__, {
 /* harmony export */   "H": () => (/* binding */ logError),
 /* harmony export */   "Np": () => (/* binding */ getInput),
+/* harmony export */   "PN": () => (/* binding */ logInfo),
 /* harmony export */   "QM": () => (/* binding */ addPath),
 /* harmony export */   "sH": () => (/* binding */ endLogGroup),
 /* harmony export */   "zq": () => (/* binding */ beginLogGroup)
 /* harmony export */ });
-/* unused harmony exports setOutput, setEnv, logInfo, logWarning, logCommand */
+/* unused harmony exports setOutput, setEnv, logWarning, logCommand */
 /* harmony import */ var node_fs__WEBPACK_IMPORTED_MODULE_0__ = __nccwpck_require__(561);
 /* harmony import */ var node_os__WEBPACK_IMPORTED_MODULE_1__ = __nccwpck_require__(612);
 /* harmony import */ var node_path__WEBPACK_IMPORTED_MODULE_2__ = __nccwpck_require__(411);
@@ -107,7 +108,7 @@ function addPath(sysPath) {
  * @param message - The information message to log.
  */
 function logInfo(message) {
-    process.stdout.write(`${message}${os.EOL}`);
+    process.stdout.write(`${message}${node_os__WEBPACK_IMPORTED_MODULE_1__.EOL}`);
 }
 /**
  * Logs a warning message in GitHub Actions.
@@ -719,19 +720,17 @@ async function installPackage(pkg) {
 async function pipxInstallAction(...pkgs) {
     for (const pkg of pkgs) {
         let cacheFound;
-        (0,dist/* beginLogGroup */.zq)(`Restoring \u001b[34m${pkg}\u001b[39m cache...`);
+        (0,dist/* logInfo */.PN)(`Restoring \u001b[34m${pkg}\u001b[39m cache...`);
         try {
             cacheFound = await pipx.restorePackageCache(pkg);
             if (cacheFound)
                 await pipx.addPackagePath(pkg);
         }
         catch (err) {
-            (0,dist/* endLogGroup */.sH)();
             (0,dist/* logError */.H)(`Failed to restore ${pkg} cache: ${r(err)}`);
             process.exitCode = 1;
             return;
         }
-        (0,dist/* endLogGroup */.sH)();
         if (!cacheFound) {
             (0,dist/* beginLogGroup */.zq)(`Cache not found, installing \u001b[34m${pkg}\u001b[39m...`);
             try {
@@ -745,17 +744,15 @@ async function pipxInstallAction(...pkgs) {
                 return;
             }
             (0,dist/* endLogGroup */.sH)();
-            (0,dist/* beginLogGroup */.zq)(`Saving \u001b[34m${pkg}\u001b[39m cache...`);
+            (0,dist/* logInfo */.PN)(`Saving \u001b[34m${pkg}\u001b[39m cache...`);
             try {
                 await pipx.savePackageCache(pkg);
             }
             catch (err) {
-                (0,dist/* endLogGroup */.sH)();
                 (0,dist/* logError */.H)(`Failed to save ${pkg} cache: ${r(err)}`);
                 process.exitCode = 1;
                 return;
             }
-            (0,dist/* endLogGroup */.sH)();
         }
     }
 }
