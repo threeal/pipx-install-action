@@ -6,7 +6,7 @@
     "lib/*"
   ],
   "scripts": {
-    "build": "ncc build src/index.ts",
+    "build": "rollup -c",
     "format": "prettier --write --cache .",
     "lint": "eslint"
   },
@@ -16,10 +16,14 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.10.0",
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "@rollup/plugin-typescript": "^11.1.6",
     "@types/node": "^22.5.4",
     "@vercel/ncc": "^0.38.1",
     "eslint": "^9.10.0",
     "prettier": "^3.3.3",
+    "rollup": "^4.21.3",
+    "tslib": "^2.7.0",
     "typescript": "^5.5.4",
     "typescript-eslint": "^8.4.0"
   },
