@@ -1,68 +1,11 @@
-import { createRequire as __WEBPACK_EXTERNAL_createRequire } from "module";
-/******/ var __webpack_modules__ = ({
-
-/***/ 510:
-/***/ ((module, __unused_webpack___webpack_exports__, __nccwpck_require__) => {
-
-__nccwpck_require__.a(module, async (__webpack_handle_async_dependencies__, __webpack_async_result__) => { try {
-/* harmony import */ var gha_utils__WEBPACK_IMPORTED_MODULE_0__ = __nccwpck_require__(748);
-/* harmony import */ var pipx_install_action__WEBPACK_IMPORTED_MODULE_1__ = __nccwpck_require__(44);
-
-
-try {
-    const pkgs = (0,gha_utils__WEBPACK_IMPORTED_MODULE_0__/* .getInput */ .Np)("packages")
-        .split(/(\s+)/)
-        .filter((pkg) => pkg.trim().length > 0);
-    await (0,pipx_install_action__WEBPACK_IMPORTED_MODULE_1__/* .pipxInstallAction */ .y)(...pkgs);
-}
-catch (err) {
-    (0,gha_utils__WEBPACK_IMPORTED_MODULE_0__/* .logError */ .H)(err);
-    process.exit(1);
-}
-
-__webpack_async_result__();
-} catch(e) { __webpack_async_result__(e); } }, 1);
-
-/***/ }),
-
-/***/ 561:
-/***/ ((module) => {
-
-module.exports = __WEBPACK_EXTERNAL_createRequire(import.meta.url)("node:fs");
-
-/***/ }),
-
-/***/ 612:
-/***/ ((module) => {
-
-module.exports = __WEBPACK_EXTERNAL_createRequire(import.meta.url)("node:os");
-
-/***/ }),
-
-/***/ 411:
-/***/ ((module) => {
-
-module.exports = __WEBPACK_EXTERNAL_createRequire(import.meta.url)("node:path");
-
-/***/ }),
-
-/***/ 748:
-/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __nccwpck_require__) => {
-
-/* harmony export */ __nccwpck_require__.d(__webpack_exports__, {
-/* harmony export */   "H": () => (/* binding */ logError),
-/* harmony export */   "Np": () => (/* binding */ getInput),
-/* harmony export */   "PN": () => (/* binding */ logInfo),
-/* harmony export */   "QM": () => (/* binding */ addPath),
-/* harmony export */   "sH": () => (/* binding */ endLogGroup),
-/* harmony export */   "zq": () => (/* binding */ beginLogGroup)
-/* harmony export */ });
-/* unused harmony exports setOutput, setEnv, logWarning, logCommand */
-/* harmony import */ var node_fs__WEBPACK_IMPORTED_MODULE_0__ = __nccwpck_require__(561);
-/* harmony import */ var node_os__WEBPACK_IMPORTED_MODULE_1__ = __nccwpck_require__(612);
-/* harmony import */ var node_path__WEBPACK_IMPORTED_MODULE_2__ = __nccwpck_require__(411);
-
-
+import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
+import fsPromises from 'node:fs/promises';
+import https from 'node:https';
+import { spawn, execFile } from 'node:child_process';
+import os$1 from 'os';
+import path$1 from 'path';
 
 /**
  * Retrieves the value of a GitHub Actions input.
@@ -75,32 +18,13 @@ function getInput(name) {
     return value.trim();
 }
 /**
- * Sets the value of a GitHub Actions output.
- *
- * @param name - The name of the GitHub Actions output.
- * @param value - The value of the GitHub Actions output
- */
-function setOutput(name, value) {
-    fs.appendFileSync(process.env["GITHUB_OUTPUT"], `${name}=${value}${os.EOL}`);
-}
-/**
- * Sets the value of an environment variable in GitHub Actions.
- *
- * @param name - The name of the environment variable.
- * @param value - The value of the environment variable.
- */
-function setEnv(name, value) {
-    process.env[name] = value;
-    fs.appendFileSync(process.env["GITHUB_ENV"], `${name}=${value}${os.EOL}`);
-}
-/**
  * Adds a system path to the environment in GitHub Actions.
  *
  * @param sysPath - The system path to add.
  */
 function addPath(sysPath) {
-    process.env["PATH"] = `${sysPath}${node_path__WEBPACK_IMPORTED_MODULE_2__.delimiter}${process.env["PATH"]}`;
-    node_fs__WEBPACK_IMPORTED_MODULE_0__.appendFileSync(process.env["GITHUB_PATH"], `${sysPath}${node_os__WEBPACK_IMPORTED_MODULE_1__.EOL}`);
+    process.env["PATH"] = `${sysPath}${path.delimiter}${process.env["PATH"]}`;
+    fs.appendFileSync(process.env["GITHUB_PATH"], `${sysPath}${os.EOL}`);
 }
 /**
  * Logs an information message in GitHub Actions.
@@ -108,15 +32,7 @@ function addPath(sysPath) {
  * @param message - The information message to log.
  */
 function logInfo(message) {
-    process.stdout.write(`${message}${node_os__WEBPACK_IMPORTED_MODULE_1__.EOL}`);
-}
-/**
- * Logs a warning message in GitHub Actions.
- *
- * @param message - The warning message to log.
- */
-function logWarning(message) {
-    process.stdout.write(`::warning::${message}${os.EOL}`);
+    process.stdout.write(`${message}${os.EOL}`);
 }
 /**
  * Logs an error message in GitHub Actions.
@@ -125,17 +41,7 @@ function logWarning(message) {
  */
 function logError(err) {
     const message = err instanceof Error ? err.message : String(err);
-    process.stdout.write(`::error::${message}${node_os__WEBPACK_IMPORTED_MODULE_1__.EOL}`);
-}
-/**
- * Logs a command along with its arguments in GitHub Actions.
- *
- * @param command - The command to log.
- * @param args - The arguments of the command.
- */
-function logCommand(command, args) {
-    const message = [command, ...args].join(" ");
-    process.stdout.write(`[command]${message}${os.EOL}`);
+    process.stdout.write(`::error::${message}${os.EOL}`);
 }
 /**
  * Begins a log group in GitHub Actions.
@@ -143,52 +49,16 @@ function logCommand(command, args) {
  * @param name - The name of the log group.
  */
 function beginLogGroup(name) {
-    process.stdout.write(`::group::${name}${node_os__WEBPACK_IMPORTED_MODULE_1__.EOL}`);
+    process.stdout.write(`::group::${name}${os.EOL}`);
 }
 /**
  * Ends the current log group in GitHub Actions.
  */
 function endLogGroup() {
-    process.stdout.write(`::endgroup::${node_os__WEBPACK_IMPORTED_MODULE_1__.EOL}`);
+    process.stdout.write(`::endgroup::${os.EOL}`);
 }
 
-
-/***/ }),
-
-/***/ 44:
-/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __nccwpck_require__) => {
-
-
-// EXPORTS
-__nccwpck_require__.d(__webpack_exports__, {
-  "y": () => (/* reexport */ pipxInstallAction)
-});
-
-;// CONCATENATED MODULE: ../../../.yarn/berry/cache/catched-error-message-npm-0.0.1-9126a73d25-10c0.zip/node_modules/catched-error-message/dist/index.esm.js
 function r(r){return function(r){if("object"==typeof(e=r)&&null!==e&&"message"in e&&"string"==typeof e.message)return r;var e;try{return new Error(JSON.stringify(r))}catch(e){return new Error(String(r))}}(r).message}
-//# sourceMappingURL=index.esm.js.map
-
-// EXTERNAL MODULE: ../../../.yarn/berry/cache/gha-utils-npm-0.2.0-572860ffdf-10c0.zip/node_modules/gha-utils/dist/index.js
-var dist = __nccwpck_require__(748);
-;// CONCATENATED MODULE: external "node:fs/promises"
-const promises_namespaceObject = __WEBPACK_EXTERNAL_createRequire(import.meta.url)("node:fs/promises");
-// EXTERNAL MODULE: external "node:os"
-var external_node_os_ = __nccwpck_require__(612);
-// EXTERNAL MODULE: external "node:path"
-var external_node_path_ = __nccwpck_require__(411);
-// EXTERNAL MODULE: external "node:fs"
-var external_node_fs_ = __nccwpck_require__(561);
-;// CONCATENATED MODULE: external "node:https"
-const external_node_https_namespaceObject = __WEBPACK_EXTERNAL_createRequire(import.meta.url)("node:https");
-;// CONCATENATED MODULE: external "node:child_process"
-const external_node_child_process_namespaceObject = __WEBPACK_EXTERNAL_createRequire(import.meta.url)("node:child_process");
-;// CONCATENATED MODULE: ../../../.yarn/berry/cache/cache-action-npm-0.2.0-ab6ba29157-10c0.zip/node_modules/cache-action/dist/lib.mjs
-
-
-
-
-
-
 
 /**
  * Sends an HTTP request containing raw data.
@@ -320,7 +190,7 @@ async function readErrorIncomingMessage(msg) {
 
 function createCacheRequest(resourcePath, options) {
     const url = `${process.env["ACTIONS_CACHE_URL"]}_apis/artifactcache/${resourcePath}`;
-    const req = external_node_https_namespaceObject.request(url, options);
+    const req = https.request(url, options);
     req.setHeader("Accept", "application/json;api-version=6.0-preview");
     const bearer = `Bearer ${process.env["ACTIONS_RUNTIME_TOKEN"]}`;
     req.setHeader("Authorization", bearer);
@@ -393,7 +263,7 @@ async function requestUploadCache(id, filePath, fileSize, options) {
     for (let start = 0; start < fileSize; start += maxChunkSize) {
         proms.push((async () => {
             const end = Math.min(start + maxChunkSize - 1, fileSize);
-            const bin = external_node_fs_.createReadStream(filePath, { start, end });
+            const bin = fs.createReadStream(filePath, { start, end });
             const req = createCacheRequest(`caches/${id}`, { method: "PATCH" });
             const res = await sendStreamRequest(req, bin, start, end);
             switch (res.statusCode) {
@@ -456,8 +326,8 @@ async function waitChildProcess(proc) {
  * @returns A promise that resolves when the compressed archive is created.
  */
 async function createArchive(archivePath, filePaths) {
-    const tar = (0,external_node_child_process_namespaceObject.spawn)("tar", ["-cf", "-", "-P", ...filePaths]);
-    const zstd = (0,external_node_child_process_namespaceObject.spawn)("zstd", ["-T0", "-o", archivePath]);
+    const tar = spawn("tar", ["-cf", "-", "-P", ...filePaths]);
+    const zstd = spawn("zstd", ["-T0", "-o", archivePath]);
     tar.stdout.pipe(zstd.stdin);
     await Promise.all([waitChildProcess(tar), waitChildProcess(zstd)]);
 }
@@ -468,8 +338,8 @@ async function createArchive(archivePath, filePaths) {
  * @returns A promise that resolves when the files have been successfully extracted.
  */
 async function extractArchive(archivePath) {
-    const zstd = (0,external_node_child_process_namespaceObject.spawn)("zstd", ["-d", "-T0", "-c", archivePath]);
-    const tar = (0,external_node_child_process_namespaceObject.spawn)("tar", ["-xf", "-", "-P"]);
+    const zstd = spawn("zstd", ["-d", "-T0", "-c", archivePath]);
+    const tar = spawn("tar", ["-xf", "-", "-P"]);
     zstd.stdout.pipe(tar.stdin);
     await Promise.all([waitChildProcess(zstd), waitChildProcess(tar)]);
 }
@@ -481,7 +351,7 @@ async function extractArchive(archivePath) {
  * @returns A promise that resolves to the size of the file to be downloaded, in bytes.
  */
 async function getDownloadFileSize(url) {
-    const req = external_node_https_namespaceObject.request(url, { method: "HEAD" });
+    const req = https.request(url, { method: "HEAD" });
     const res = await sendRequest(req);
     switch (res.statusCode) {
         case 200: {
@@ -508,14 +378,14 @@ async function downloadFile(url, savePath, options) {
         ...options,
     };
     const [file, fileSize] = await Promise.all([
-        promises_namespaceObject.open(savePath, "w"),
+        fsPromises.open(savePath, "w"),
         getDownloadFileSize(url),
     ]);
     const proms = [];
     for (let start = 0; start < fileSize; start += maxChunkSize) {
         proms.push((async () => {
             const end = Math.min(start + maxChunkSize - 1, fileSize);
-            const req = external_node_https_namespaceObject.request(url, { method: "GET" });
+            const req = https.request(url, { method: "GET" });
             req.setHeader("range", `bytes=${start}-${end}`);
             const res = await sendRequest(req);
             if (res.statusCode === 206) {
@@ -544,11 +414,11 @@ async function restoreCache(key, version) {
     const cache = await requestGetCache(key, version);
     if (cache === null)
         return false;
-    const tempDir = await promises_namespaceObject.mkdtemp(external_node_path_.join(external_node_os_.tmpdir(), "temp-"));
-    const archivePath = external_node_path_.join(tempDir, "cache.tar.zst");
+    const tempDir = await fsPromises.mkdtemp(path.join(os.tmpdir(), "temp-"));
+    const archivePath = path.join(tempDir, "cache.tar.zst");
     await downloadFile(cache.archiveLocation, archivePath);
     await extractArchive(archivePath);
-    await promises_namespaceObject.rm(tempDir, { recursive: true });
+    await fsPromises.rm(tempDir, { recursive: true });
     return true;
 }
 /**
@@ -561,28 +431,21 @@ async function restoreCache(key, version) {
  * file was saved successfully.
  */
 async function saveCache(key, version, filePaths) {
-    const tempDir = await promises_namespaceObject.mkdtemp(external_node_path_.join(external_node_os_.tmpdir(), "temp-"));
-    const archivePath = external_node_path_.join(tempDir, "cache.tar.zst");
+    const tempDir = await fsPromises.mkdtemp(path.join(os.tmpdir(), "temp-"));
+    const archivePath = path.join(tempDir, "cache.tar.zst");
     await createArchive(archivePath, filePaths);
-    const archiveStat = await promises_namespaceObject.stat(archivePath);
+    const archiveStat = await fsPromises.stat(archivePath);
     const cacheId = await requestReserveCache(key, version, archiveStat.size);
     if (cacheId === null) {
-        await promises_namespaceObject.rm(tempDir, { recursive: true });
+        await fsPromises.rm(tempDir, { recursive: true });
         return false;
     }
     await requestUploadCache(cacheId, archivePath, archiveStat.size);
     await requestCommitCache(cacheId, archiveStat.size);
-    await promises_namespaceObject.rm(tempDir, { recursive: true });
+    await fsPromises.rm(tempDir, { recursive: true });
     return true;
 }
 
-
-
-;// CONCATENATED MODULE: external "os"
-const external_os_namespaceObject = __WEBPACK_EXTERNAL_createRequire(import.meta.url)("os");
-;// CONCATENATED MODULE: external "path"
-const external_path_namespaceObject = __WEBPACK_EXTERNAL_createRequire(import.meta.url)("path");
-;// CONCATENATED MODULE: ./lib/pipx-install-action/dist/pipx/utils.js
 /**
  * Parses the package name and version from the given string.
  *
@@ -602,16 +465,10 @@ function parsePackage(pkg) {
     };
 }
 
-;// CONCATENATED MODULE: ./lib/pipx-install-action/dist/pipx/environment.js
-
-
-
-
-
-const homeDir = external_path_namespaceObject.join(external_os_namespaceObject.homedir(), ".local/pipx");
+const homeDir = path$1.join(os$1.homedir(), ".local/pipx");
 async function getEnvironment(env) {
     return new Promise((resolve, reject) => {
-        (0,external_node_child_process_namespaceObject.execFile)("pipx", ["environment", "--value", env], {
+        execFile("pipx", ["environment", "--value", env], {
             env: {
                 PATH: process.env["PATH"],
                 PIPX_HOME: homeDir,
@@ -636,25 +493,19 @@ async function addPackagePath(pkg) {
     const localVenvs = await getEnvironment("PIPX_LOCAL_VENVS");
     const { name } = parsePackage(pkg);
     if (process.platform === "win32") {
-        (0,dist/* addPath */.QM)(external_path_namespaceObject.join(localVenvs, name, "Scripts"));
+        addPath(path$1.join(localVenvs, name, "Scripts"));
     }
     else {
-        (0,dist/* addPath */.QM)(external_path_namespaceObject.join(localVenvs, name, "bin"));
+        addPath(path$1.join(localVenvs, name, "bin"));
     }
 }
-
-;// CONCATENATED MODULE: ./lib/pipx-install-action/dist/pipx/cache.js
-
-
-
-
 
 async function savePackageCache(pkg) {
     try {
         const localVenvs = await getEnvironment("PIPX_LOCAL_VENVS");
         const { name, version } = parsePackage(pkg);
         await saveCache(`pipx-${process.platform}-${name}`, version, [
-            external_path_namespaceObject.join(localVenvs, name),
+            path$1.join(localVenvs, name),
         ]);
     }
     catch (err) {
@@ -671,13 +522,9 @@ async function restorePackageCache(pkg) {
     }
 }
 
-;// CONCATENATED MODULE: ./lib/pipx-install-action/dist/pipx/install.js
-
-
-
 async function installPackage(pkg) {
     try {
-        const pipx = (0,external_node_child_process_namespaceObject.spawn)("pipx", ["install", pkg], {
+        const pipx = spawn("pipx", ["install", pkg], {
             stdio: "inherit",
             env: {
                 PATH: process.env["PATH"],
@@ -701,55 +548,47 @@ async function installPackage(pkg) {
     }
 }
 
-;// CONCATENATED MODULE: ./lib/pipx-install-action/dist/pipx/index.js
-
-
-
-/* harmony default export */ const pipx = ({
-    addPackagePath: addPackagePath,
-    getEnvironment: getEnvironment,
-    installPackage: installPackage,
-    restorePackageCache: restorePackageCache,
-    savePackageCache: savePackageCache,
-});
-
-;// CONCATENATED MODULE: ./lib/pipx-install-action/dist/action.js
-
-
+var pipx = {
+    addPackagePath,
+    getEnvironment,
+    installPackage,
+    restorePackageCache,
+    savePackageCache,
+};
 
 async function pipxInstallAction(...pkgs) {
     for (const pkg of pkgs) {
         let cacheFound;
-        (0,dist/* logInfo */.PN)(`Restoring \u001b[34m${pkg}\u001b[39m cache...`);
+        logInfo(`Restoring \u001b[34m${pkg}\u001b[39m cache...`);
         try {
             cacheFound = await pipx.restorePackageCache(pkg);
             if (cacheFound)
                 await pipx.addPackagePath(pkg);
         }
         catch (err) {
-            (0,dist/* logError */.H)(`Failed to restore ${pkg} cache: ${r(err)}`);
+            logError(`Failed to restore ${pkg} cache: ${r(err)}`);
             process.exitCode = 1;
             return;
         }
         if (!cacheFound) {
-            (0,dist/* beginLogGroup */.zq)(`Cache not found, installing \u001b[34m${pkg}\u001b[39m...`);
+            beginLogGroup(`Cache not found, installing \u001b[34m${pkg}\u001b[39m...`);
             try {
                 await pipx.installPackage(pkg);
                 await pipx.addPackagePath(pkg);
             }
             catch (err) {
-                (0,dist/* endLogGroup */.sH)();
-                (0,dist/* logError */.H)(`Failed to install ${pkg}: ${r(err)}`);
+                endLogGroup();
+                logError(`Failed to install ${pkg}: ${r(err)}`);
                 process.exitCode = 1;
                 return;
             }
-            (0,dist/* endLogGroup */.sH)();
-            (0,dist/* logInfo */.PN)(`Saving \u001b[34m${pkg}\u001b[39m cache...`);
+            endLogGroup();
+            logInfo(`Saving \u001b[34m${pkg}\u001b[39m cache...`);
             try {
                 await pipx.savePackageCache(pkg);
             }
             catch (err) {
-                (0,dist/* logError */.H)(`Failed to save ${pkg} cache: ${r(err)}`);
+                logError(`Failed to save ${pkg} cache: ${r(err)}`);
                 process.exitCode = 1;
                 return;
             }
@@ -757,140 +596,13 @@ async function pipxInstallAction(...pkgs) {
     }
 }
 
-;// CONCATENATED MODULE: ./lib/pipx-install-action/dist/index.js
-
-
-
-/***/ })
-
-/******/ });
-/************************************************************************/
-/******/ // The module cache
-/******/ var __webpack_module_cache__ = {};
-/******/ 
-/******/ // The require function
-/******/ function __nccwpck_require__(moduleId) {
-/******/ 	// Check if module is in cache
-/******/ 	var cachedModule = __webpack_module_cache__[moduleId];
-/******/ 	if (cachedModule !== undefined) {
-/******/ 		return cachedModule.exports;
-/******/ 	}
-/******/ 	// Create a new module (and put it into the cache)
-/******/ 	var module = __webpack_module_cache__[moduleId] = {
-/******/ 		// no module.id needed
-/******/ 		// no module.loaded needed
-/******/ 		exports: {}
-/******/ 	};
-/******/ 
-/******/ 	// Execute the module function
-/******/ 	var threw = true;
-/******/ 	try {
-/******/ 		__webpack_modules__[moduleId](module, module.exports, __nccwpck_require__);
-/******/ 		threw = false;
-/******/ 	} finally {
-/******/ 		if(threw) delete __webpack_module_cache__[moduleId];
-/******/ 	}
-/******/ 
-/******/ 	// Return the exports of the module
-/******/ 	return module.exports;
-/******/ }
-/******/ 
-/************************************************************************/
-/******/ /* webpack/runtime/async module */
-/******/ (() => {
-/******/ 	var webpackQueues = typeof Symbol === "function" ? Symbol("webpack queues") : "__webpack_queues__";
-/******/ 	var webpackExports = typeof Symbol === "function" ? Symbol("webpack exports") : "__webpack_exports__";
-/******/ 	var webpackError = typeof Symbol === "function" ? Symbol("webpack error") : "__webpack_error__";
-/******/ 	var resolveQueue = (queue) => {
-/******/ 		if(queue && !queue.d) {
-/******/ 			queue.d = 1;
-/******/ 			queue.forEach((fn) => (fn.r--));
-/******/ 			queue.forEach((fn) => (fn.r-- ? fn.r++ : fn()));
-/******/ 		}
-/******/ 	}
-/******/ 	var wrapDeps = (deps) => (deps.map((dep) => {
-/******/ 		if(dep !== null && typeof dep === "object") {
-/******/ 			if(dep[webpackQueues]) return dep;
-/******/ 			if(dep.then) {
-/******/ 				var queue = [];
-/******/ 				queue.d = 0;
-/******/ 				dep.then((r) => {
-/******/ 					obj[webpackExports] = r;
-/******/ 					resolveQueue(queue);
-/******/ 				}, (e) => {
-/******/ 					obj[webpackError] = e;
-/******/ 					resolveQueue(queue);
-/******/ 				});
-/******/ 				var obj = {};
-/******/ 				obj[webpackQueues] = (fn) => (fn(queue));
-/******/ 				return obj;
-/******/ 			}
-/******/ 		}
-/******/ 		var ret = {};
-/******/ 		ret[webpackQueues] = x => {};
-/******/ 		ret[webpackExports] = dep;
-/******/ 		return ret;
-/******/ 	}));
-/******/ 	__nccwpck_require__.a = (module, body, hasAwait) => {
-/******/ 		var queue;
-/******/ 		hasAwait && ((queue = []).d = 1);
-/******/ 		var depQueues = new Set();
-/******/ 		var exports = module.exports;
-/******/ 		var currentDeps;
-/******/ 		var outerResolve;
-/******/ 		var reject;
-/******/ 		var promise = new Promise((resolve, rej) => {
-/******/ 			reject = rej;
-/******/ 			outerResolve = resolve;
-/******/ 		});
-/******/ 		promise[webpackExports] = exports;
-/******/ 		promise[webpackQueues] = (fn) => (queue && fn(queue), depQueues.forEach(fn), promise["catch"](x => {}));
-/******/ 		module.exports = promise;
-/******/ 		body((deps) => {
-/******/ 			currentDeps = wrapDeps(deps);
-/******/ 			var fn;
-/******/ 			var getResult = () => (currentDeps.map((d) => {
-/******/ 				if(d[webpackError]) throw d[webpackError];
-/******/ 				return d[webpackExports];
-/******/ 			}))
-/******/ 			var promise = new Promise((resolve) => {
-/******/ 				fn = () => (resolve(getResult));
-/******/ 				fn.r = 0;
-/******/ 				var fnQueue = (q) => (q !== queue && !depQueues.has(q) && (depQueues.add(q), q && !q.d && (fn.r++, q.push(fn))));
-/******/ 				currentDeps.map((dep) => (dep[webpackQueues](fnQueue)));
-/******/ 			});
-/******/ 			return fn.r ? promise : getResult();
-/******/ 		}, (err) => ((err ? reject(promise[webpackError] = err) : outerResolve(exports)), resolveQueue(queue)));
-/******/ 		queue && (queue.d = 0);
-/******/ 	};
-/******/ })();
-/******/ 
-/******/ /* webpack/runtime/define property getters */
-/******/ (() => {
-/******/ 	// define getter functions for harmony exports
-/******/ 	__nccwpck_require__.d = (exports, definition) => {
-/******/ 		for(var key in definition) {
-/******/ 			if(__nccwpck_require__.o(definition, key) && !__nccwpck_require__.o(exports, key)) {
-/******/ 				Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
-/******/ 			}
-/******/ 		}
-/******/ 	};
-/******/ })();
-/******/ 
-/******/ /* webpack/runtime/hasOwnProperty shorthand */
-/******/ (() => {
-/******/ 	__nccwpck_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
-/******/ })();
-/******/ 
-/******/ /* webpack/runtime/compat */
-/******/ 
-/******/ if (typeof __nccwpck_require__ !== 'undefined') __nccwpck_require__.ab = new URL('.', import.meta.url).pathname.slice(import.meta.url.match(/^file:\/\/\/\w:/) ? 1 : 0, -1) + "/";
-/******/ 
-/************************************************************************/
-/******/ 
-/******/ // startup
-/******/ // Load entry module and return exports
-/******/ // This entry module used 'module' so it can't be inlined
-/******/ var __webpack_exports__ = __nccwpck_require__(510);
-/******/ __webpack_exports__ = await __webpack_exports__;
-/******/ 
+try {
+    const pkgs = getInput("packages")
+        .split(/(\s+)/)
+        .filter((pkg) => pkg.trim().length > 0);
+    await pipxInstallAction(...pkgs);
+}
+catch (err) {
+    logError(err);
+    process.exit(1);
+}
