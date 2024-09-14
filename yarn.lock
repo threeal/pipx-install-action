@@ -1824,10 +1824,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cache-action@npm:^0.2.0":
-  version: 0.2.0
-  resolution: "cache-action@npm:0.2.0"
-  checksum: 10c0/53041b81f718258ee776c31d7548ecefd7c8f36f4a415811b67b3a5d8124594dceac243f409b91522f7b12c123793bdc3e257186c62a62b851c30ad769769869
+"cache-action@npm:^0.2.1":
+  version: 0.2.1
+  resolution: "cache-action@npm:0.2.1"
+  checksum: 10c0/4ffd655055ff06a38f3a745b13ff5a9908238d8c971f9f6633821750e63f7bd76dbbecd9e700e81b1073849af025ac95e1c0811bf97c5aa96b90ec70a30f4e40
   languageName: node
   linkType: hard
 
@@ -4185,7 +4185,7 @@ __metadata:
     "@jest/globals": "npm:^29.7.0"
     "@types/jest": "npm:^29.5.12"
     "@types/node": "npm:^22.5.4"
-    cache-action: "npm:^0.2.0"
+    cache-action: "npm:^0.2.1"
     catched-error-message: "npm:^0.0.1"
     eslint: "npm:^9.10.0"
     gha-utils: "npm:^0.2.0"
