@@ -18,7 +18,7 @@ Use the following snippet to include the action in a GitHub workflow:
 
 ```yaml
 - name: Install Packages
-  uses: threeal/pipx-install-action@v1.0.0
+  uses: threeal/pipx-install-action@v2.0.0
   with:
     packages: a-package another-package
 ```
@@ -46,7 +46,7 @@ jobs:
         uses: actions/checkout@v4.1.7
 
       - name: Install Ruff
-        uses: threeal/pipx-install-action@v1.0.0
+        uses: threeal/pipx-install-action@v2.0.0
         with:
           packages: ruff
 
