@@ -21,13 +21,13 @@ jobs:
         uses: threeal/setup-yarn-action@v2.0.0
 
       - name: Package Workspace
-        run: yarn workspace pipx-install-action pack
+        run: yarn pack
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4.4.0
         with:
-          name: pipx-install-action
-          path: pipx-install-action/package.tgz
+          name: package
+          path: package.tgz
 
   build-workspaces:
     name: Build Workspaces

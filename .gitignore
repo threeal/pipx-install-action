@@ -4,6 +4,7 @@
 !.nvmrc
 !.prettierignore
 
+dist/lib.*
 node_modules/
 
 package.tgz

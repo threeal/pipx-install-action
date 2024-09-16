@@ -1,5 +1,5 @@
 import { getInput, logError } from "gha-utils";
-import { pipxInstallAction } from "pipx-install-action";
+import { pipxInstallAction } from "./lib.js";
 
 try {
   const pkgs = getInput("packages")

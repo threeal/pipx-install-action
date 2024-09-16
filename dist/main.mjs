@@ -1,12 +1,26 @@
 import fs from 'node:fs';
+import fsPromises from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
-import fsPromises from 'node:fs/promises';
 import https from 'node:https';
 import { spawn, execFile } from 'node:child_process';
 import os$1 from 'os';
 import path$1 from 'path';
 
+/**
+ * Retrieves the value of an environment variable.
+ *
+ * @param name - The name of the environment variable.
+ * @returns The value of the environment variable.
+ * @throws Error if the environment variable is not defined.
+ */
+function mustGetEnvironment(name) {
+    const value = process.env[name];
+    if (value === undefined) {
+        throw new Error(`the ${name} environment variable must be defined`);
+    }
+    return value;
+}
 /**
  * Retrieves the value of a GitHub Actions input.
  *
@@ -20,12 +34,15 @@ function getInput(name) {
 /**
  * Adds a system path to the environment in GitHub Actions.
  *
- * @param sysPath - The system path to add.
+ * @param sysPath - The system path to add to the environment.
+ * @returns A promise that resolves when the system path is successfully added.
  */
-function addPath(sysPath) {
+async function addPath(sysPath) {
     process.env["PATH"] = `${sysPath}${path.delimiter}${process.env["PATH"]}`;
-    fs.appendFileSync(process.env["GITHUB_PATH"], `${sysPath}${os.EOL}`);
+    const filePath = mustGetEnvironment("GITHUB_PATH");
+    await fsPromises.appendFile(filePath, `${sysPath}${os.EOL}`);
 }
+
 /**
  * Logs an information message in GitHub Actions.
  *
