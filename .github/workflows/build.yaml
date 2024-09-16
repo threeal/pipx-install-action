@@ -5,8 +5,8 @@ on:
   push:
     branches: [main]
 jobs:
-  package-library:
-    name: Package Library
+  package-package:
+    name: Build Package
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Project
@@ -20,32 +20,11 @@ jobs:
       - name: Setup Yarn
         uses: threeal/setup-yarn-action@v2.0.0
 
-      - name: Package Workspace
-        run: yarn pack
+      - name: Build Package
+        run: yarn build
 
-      - name: Upload Artifact
+      - name: Upload Package
         uses: actions/upload-artifact@v4.4.0
         with:
           name: package
           path: package.tgz
-
-  build-workspaces:
-    name: Build Workspaces
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Project
-        uses: actions/checkout@v4.1.7
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4.0.3
-        with:
-          node-version-file: .nvmrc
-
-      - name: Setup Yarn
-        uses: threeal/setup-yarn-action@v2.0.0
-
-      - name: Build Workspaces
-        run: yarn workspaces foreach --all --topological run build
-
-      - name: Check Diff
-        run: git diff && git diff-index --quiet --exit-code HEAD
