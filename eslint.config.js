@@ -6,6 +6,12 @@ export default [
   ...tseslint.configs.recommended,
   ...tseslint.configs.stylistic,
   {
-    ignores: [".*", "dist", "lib"],
+    ignores: [".*", "dist"],
+  },
+  {
+    files: ["**/*.test.ts"],
+    rules: {
+      "@typescript-eslint/no-explicit-any": "off",
+    },
   },
 ];

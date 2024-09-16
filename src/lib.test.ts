@@ -56,7 +56,7 @@ describe("install Python packages action", () => {
 
   it("should successfully restore cache", async () => {
     const { restorePackageCache } = (await import("./pipx/index.js")).default;
-    const { pipxInstallAction } = await import("./action.js");
+    const { pipxInstallAction } = await import("./lib.js");
 
     jest.mocked(restorePackageCache).mockImplementation(async (pkg) => {
       logs.push(`${pkg} cache found`);
@@ -74,7 +74,7 @@ describe("install Python packages action", () => {
   });
 
   it("should successfully install package and save cache", async () => {
-    const { pipxInstallAction } = await import("./action.js");
+    const { pipxInstallAction } = await import("./lib.js");
 
     await expect(pipxInstallAction("any-pkg")).resolves.toBeUndefined();
 
@@ -93,7 +93,7 @@ describe("install Python packages action", () => {
 
   it("should failed to restore package cache", async () => {
     const { restorePackageCache } = (await import("./pipx/index.js")).default;
-    const { pipxInstallAction } = await import("./action.js");
+    const { pipxInstallAction } = await import("./lib.js");
 
     jest
       .mocked(restorePackageCache)
@@ -110,7 +110,7 @@ describe("install Python packages action", () => {
 
   it("should failed to install package", async () => {
     const { installPackage } = (await import("./pipx/index.js")).default;
-    const { pipxInstallAction } = await import("./action.js");
+    const { pipxInstallAction } = await import("./lib.js");
 
     jest
       .mocked(installPackage)
@@ -128,7 +128,7 @@ describe("install Python packages action", () => {
 
   it("should failed to save package cache", async () => {
     const { savePackageCache } = (await import("./pipx/index.js")).default;
-    const { pipxInstallAction } = await import("./action.js");
+    const { pipxInstallAction } = await import("./lib.js");
 
     jest
       .mocked(savePackageCache)

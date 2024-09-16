@@ -5,8 +5,8 @@ on:
   push:
     branches: [main]
 jobs:
-  test-workspaces:
-    name: Test Workspaces
+  test-package:
+    name: Test Package
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Project
@@ -20,8 +20,8 @@ jobs:
       - name: Setup Yarn
         uses: threeal/setup-yarn-action@v2.0.0
 
-      - name: Test Workspaces
-        run: yarn workspaces foreach --all --topological run test
+      - name: Test Package
+        run: yarn test
 
   test-action:
     name: Test Action

@@ -5,8 +5,8 @@ on:
   push:
     branches: [main]
 jobs:
-  check-workspaces:
-    name: Check Workspaces
+  check-package:
+    name: Check Package
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Project
@@ -21,10 +21,10 @@ jobs:
         uses: threeal/setup-yarn-action@v2.0.0
 
       - name: Check Formatting
-        run: yarn workspaces foreach --all --topological run format
+        run: yarn format
 
       - name: Check Diff
         run: git diff && git diff-index --quiet --exit-code HEAD
 
       - name: Check Lint
-        run: yarn workspaces foreach --all --topological run lint
+        run: yarn lint
