@@ -565,22 +565,14 @@ async function installPipxPackage(pkg) {
     }
 }
 
-var pipx = {
-    addPipxPackagePath,
-    getPipxEnvironment,
-    installPipxPackage,
-    restorePipxPackageCache,
-    savePipxPackageCache,
-};
-
 async function pipxInstallAction(...pkgs) {
     for (const pkg of pkgs) {
         let cacheFound;
         logInfo(`Restoring \u001b[34m${pkg}\u001b[39m cache...`);
         try {
-            cacheFound = await pipx.restorePipxPackageCache(pkg);
+            cacheFound = await restorePipxPackageCache(pkg);
             if (cacheFound)
-                await pipx.addPipxPackagePath(pkg);
+                await addPipxPackagePath(pkg);
         }
         catch (err) {
             logError(`Failed to restore ${pkg} cache: ${r(err)}`);
@@ -590,8 +582,8 @@ async function pipxInstallAction(...pkgs) {
         if (!cacheFound) {
             beginLogGroup(`Cache not found, installing \u001b[34m${pkg}\u001b[39m...`);
             try {
-                await pipx.installPipxPackage(pkg);
-                await pipx.addPipxPackagePath(pkg);
+                await installPipxPackage(pkg);
+                await addPipxPackagePath(pkg);
             }
             catch (err) {
                 endLogGroup();
@@ -602,7 +594,7 @@ async function pipxInstallAction(...pkgs) {
             endLogGroup();
             logInfo(`Saving \u001b[34m${pkg}\u001b[39m cache...`);
             try {
-                await pipx.savePipxPackageCache(pkg);
+                await savePipxPackageCache(pkg);
             }
             catch (err) {
                 logError(`Failed to save ${pkg} cache: ${r(err)}`);
