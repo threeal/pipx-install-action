@@ -40,8 +40,8 @@ export async function addPipxPackagePath(pkg: string): Promise<void> {
   const { name } = parsePipxPackage(pkg);
 
   if (process.platform === "win32") {
-    addPath(path.join(localVenvs, name, "Scripts"));
+    await addPath(path.join(localVenvs, name, "Scripts"));
   } else {
-    addPath(path.join(localVenvs, name, "bin"));
+    await addPath(path.join(localVenvs, name, "bin"));
   }
 }

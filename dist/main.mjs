@@ -510,10 +510,10 @@ async function addPipxPackagePath(pkg) {
     const localVenvs = await getPipxEnvironment("PIPX_LOCAL_VENVS");
     const { name } = parsePipxPackage(pkg);
     if (process.platform === "win32") {
-        addPath(path$1.join(localVenvs, name, "Scripts"));
+        await addPath(path$1.join(localVenvs, name, "Scripts"));
     }
     else {
-        addPath(path$1.join(localVenvs, name, "bin"));
+        await addPath(path$1.join(localVenvs, name, "bin"));
     }
 }
 

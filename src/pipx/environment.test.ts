@@ -5,9 +5,13 @@ let sysPaths: string[] = [];
 beforeEach(() => (sysPaths = []));
 
 jest.unstable_mockModule("gha-utils", () => ({
-  addPath: (sysPath: string) => {
-    sysPaths.push(sysPath);
-  },
+  addPath: async (sysPath: string) =>
+    new Promise<void>((resolve) => {
+      setTimeout(() => {
+        sysPaths.push(sysPath);
+        resolve();
+      }, 100);
+    }),
 }));
 
 let homeDir: string;
