@@ -51,16 +51,16 @@ jest.unstable_mockModule("node:child_process", () => ({
 
 describe("get pipx environments", () => {
   it("should get an environment", async () => {
-    const { getEnvironment } = await import("./environment.js");
+    const { getPipxEnvironment } = await import("./environment.js");
 
-    const value = await getEnvironment("AN_ENVIRONMENT");
+    const value = await getPipxEnvironment("AN_ENVIRONMENT");
     expect(value).toBe("a value");
   });
 
   it("should fail to get an environment", async () => {
-    const { getEnvironment } = await import("./environment.js");
+    const { getPipxEnvironment } = await import("./environment.js");
 
-    const prom = getEnvironment("AN_INVALID_ENVIRONMENT");
+    const prom = getPipxEnvironment("AN_INVALID_ENVIRONMENT");
     await expect(prom).rejects.toThrow(
       "Failed to get AN_INVALID_ENVIRONMENT: unknown environment",
     );

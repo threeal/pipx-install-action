@@ -6,7 +6,7 @@ import { parsePipxPackage } from "./utils.js";
 
 export const homeDir = path.join(os.homedir(), ".local/pipx");
 
-export async function getEnvironment(env: string): Promise<string> {
+export async function getPipxEnvironment(env: string): Promise<string> {
   return new Promise<string>((resolve, reject) => {
     execFile(
       "pipx",
@@ -35,7 +35,7 @@ export async function getEnvironment(env: string): Promise<string> {
  * @returns A promise that resolves when the system paths have been successfully appended.
  */
 export async function addPackagePath(pkg: string): Promise<void> {
-  const localVenvs = await getEnvironment("PIPX_LOCAL_VENVS");
+  const localVenvs = await getPipxEnvironment("PIPX_LOCAL_VENVS");
   const { name } = parsePipxPackage(pkg);
 
   if (process.platform === "win32") {

@@ -1,11 +1,11 @@
-import { restorePackageCache, savePackageCache } from "./cache.js";
-import { addPackagePath, getEnvironment } from "./environment.js";
-import { installPackage } from "./install.js";
+import { restorePipxPackageCache, savePipxPackageCache } from "./cache.js";
+import { addPackagePath, getPipxEnvironment } from "./environment.js";
+import { installPipxPackage } from "./install.js";
 
 export default {
   addPackagePath,
-  getEnvironment,
-  installPackage,
-  restorePackageCache,
-  savePackageCache,
+  getPipxEnvironment,
+  installPipxPackage,
+  restorePipxPackageCache,
+  savePipxPackageCache,
 };

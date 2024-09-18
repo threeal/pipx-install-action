@@ -2,7 +2,7 @@ import { getErrorMessage } from "catched-error-message";
 import { spawn } from "node:child_process";
 import { homeDir } from "./environment.js";
 
-export async function installPackage(pkg: string): Promise<void> {
+export async function installPipxPackage(pkg: string): Promise<void> {
   try {
     const pipx = spawn("pipx", ["install", pkg], {
       stdio: "inherit",

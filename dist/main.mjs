@@ -482,7 +482,7 @@ function parsePipxPackage(pkg) {
 }
 
 const homeDir = path$1.join(os$1.homedir(), ".local/pipx");
-async function getEnvironment(env) {
+async function getPipxEnvironment(env) {
     return new Promise((resolve, reject) => {
         execFile("pipx", ["environment", "--value", env], {
             env: {
@@ -506,7 +506,7 @@ async function getEnvironment(env) {
  * @returns A promise that resolves when the system paths have been successfully appended.
  */
 async function addPackagePath(pkg) {
-    const localVenvs = await getEnvironment("PIPX_LOCAL_VENVS");
+    const localVenvs = await getPipxEnvironment("PIPX_LOCAL_VENVS");
     const { name } = parsePipxPackage(pkg);
     if (process.platform === "win32") {
         addPath(path$1.join(localVenvs, name, "Scripts"));
@@ -516,9 +516,9 @@ async function addPackagePath(pkg) {
     }
 }
 
-async function savePackageCache(pkg) {
+async function savePipxPackageCache(pkg) {
     try {
-        const localVenvs = await getEnvironment("PIPX_LOCAL_VENVS");
+        const localVenvs = await getPipxEnvironment("PIPX_LOCAL_VENVS");
         const { name, version } = parsePipxPackage(pkg);
         await saveCache(`pipx-${process.platform}-${name}`, version, [
             path$1.join(localVenvs, name),
@@ -528,7 +528,7 @@ async function savePackageCache(pkg) {
         throw new Error(`Failed to save ${pkg} cache: ${r(err)}`);
     }
 }
-async function restorePackageCache(pkg) {
+async function restorePipxPackageCache(pkg) {
     try {
         const { name, version } = parsePipxPackage(pkg);
         return await restoreCache(`pipx-${process.platform}-${name}`, version);
@@ -538,7 +538,7 @@ async function restorePackageCache(pkg) {
     }
 }
 
-async function installPackage(pkg) {
+async function installPipxPackage(pkg) {
     try {
         const pipx = spawn("pipx", ["install", pkg], {
             stdio: "inherit",
@@ -566,10 +566,10 @@ async function installPackage(pkg) {
 
 var pipx = {
     addPackagePath,
-    getEnvironment,
-    installPackage,
-    restorePackageCache,
-    savePackageCache,
+    getPipxEnvironment,
+    installPipxPackage,
+    restorePipxPackageCache,
+    savePipxPackageCache,
 };
 
 async function pipxInstallAction(...pkgs) {
@@ -577,7 +577,7 @@ async function pipxInstallAction(...pkgs) {
         let cacheFound;
         logInfo(`Restoring \u001b[34m${pkg}\u001b[39m cache...`);
         try {
-            cacheFound = await pipx.restorePackageCache(pkg);
+            cacheFound = await pipx.restorePipxPackageCache(pkg);
             if (cacheFound)
                 await pipx.addPackagePath(pkg);
         }
@@ -589,7 +589,7 @@ async function pipxInstallAction(...pkgs) {
         if (!cacheFound) {
             beginLogGroup(`Cache not found, installing \u001b[34m${pkg}\u001b[39m...`);
             try {
-                await pipx.installPackage(pkg);
+                await pipx.installPipxPackage(pkg);
                 await pipx.addPackagePath(pkg);
             }
             catch (err) {
@@ -601,7 +601,7 @@ async function pipxInstallAction(...pkgs) {
             endLogGroup();
             logInfo(`Saving \u001b[34m${pkg}\u001b[39m cache...`);
             try {
-                await pipx.savePackageCache(pkg);
+                await pipx.savePipxPackageCache(pkg);
             }
             catch (err) {
                 logError(`Failed to save ${pkg} cache: ${r(err)}`);
