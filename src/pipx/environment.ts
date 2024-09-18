@@ -2,7 +2,7 @@ import { addPath } from "gha-utils";
 import { execFile } from "node:child_process";
 import os from "os";
 import path from "path";
-import { parsePackage } from "./utils.js";
+import { parsePipxPackage } from "./utils.js";
 
 export const homeDir = path.join(os.homedir(), ".local/pipx");
 
@@ -36,7 +36,7 @@ export async function getEnvironment(env: string): Promise<string> {
  */
 export async function addPackagePath(pkg: string): Promise<void> {
   const localVenvs = await getEnvironment("PIPX_LOCAL_VENVS");
-  const { name } = parsePackage(pkg);
+  const { name } = parsePipxPackage(pkg);
 
   if (process.platform === "win32") {
     addPath(path.join(localVenvs, name, "Scripts"));

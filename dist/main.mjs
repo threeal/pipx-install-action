@@ -464,14 +464,13 @@ async function saveCache(key, version, filePaths) {
 }
 
 /**
- * Parses the package name and version from the given string.
+ * Parses the name and version of a Pipx package from a package string.
  *
- * @param pkg - The package string to parse in the format "name==version" or just "name".
- * @returns A `Package` object containing the parsed package name and version.
- *          If the version is not specified, it defaults to "latest".
+ * @param str - The package string to parse, either in the format `name==version` or just `name`.
+ * @returns An object containing the parsed package name and version. If the version is not specified, it defaults to `latest`.
  * @throws An error if the package string cannot be parsed.
  */
-function parsePackage(pkg) {
+function parsePipxPackage(pkg) {
     const match = pkg.match(/^([\w\d._-]+)(==([\d.]+))?$/);
     if (match == null || match.length < 2) {
         throw new Error(`unable to parse package name and version from: ${pkg}`);
@@ -508,7 +507,7 @@ async function getEnvironment(env) {
  */
 async function addPackagePath(pkg) {
     const localVenvs = await getEnvironment("PIPX_LOCAL_VENVS");
-    const { name } = parsePackage(pkg);
+    const { name } = parsePipxPackage(pkg);
     if (process.platform === "win32") {
         addPath(path$1.join(localVenvs, name, "Scripts"));
     }
@@ -520,7 +519,7 @@ async function addPackagePath(pkg) {
 async function savePackageCache(pkg) {
     try {
         const localVenvs = await getEnvironment("PIPX_LOCAL_VENVS");
-        const { name, version } = parsePackage(pkg);
+        const { name, version } = parsePipxPackage(pkg);
         await saveCache(`pipx-${process.platform}-${name}`, version, [
             path$1.join(localVenvs, name),
         ]);
@@ -531,7 +530,7 @@ async function savePackageCache(pkg) {
 }
 async function restorePackageCache(pkg) {
     try {
-        const { name, version } = parsePackage(pkg);
+        const { name, version } = parsePipxPackage(pkg);
         return await restoreCache(`pipx-${process.platform}-${name}`, version);
     }
     catch (err) {
