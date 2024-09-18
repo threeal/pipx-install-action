@@ -28,3 +28,27 @@ jobs:
         with:
           name: package
           path: package.tgz
+
+  build-docs:
+    name: Build Documentation
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout Project
+        uses: actions/checkout@v4.1.7
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4.0.3
+        with:
+          node-version-file: .nvmrc
+
+      - name: Setup Yarn
+        uses: threeal/setup-yarn-action@v2.0.0
+
+      - name: Build Documentation
+        run: yarn docs
+
+      - name: Upload Documentation
+        uses: actions/upload-artifact@v4.4.0
+        with:
+          name: docs
+          path: docs

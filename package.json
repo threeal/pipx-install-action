@@ -30,6 +30,7 @@
   ],
   "scripts": {
     "build": "rollup -c",
+    "docs": "typedoc src/lib.ts",
     "format": "prettier --write --cache .",
     "lint": "eslint",
     "prepack": "rollup -c",
@@ -54,6 +55,7 @@
     "rollup-plugin-ts": "^3.4.5",
     "ts-jest": "^29.2.5",
     "tslib": "^2.7.0",
+    "typedoc": "^0.26.7",
     "typescript": "^5.6.2",
     "typescript-eslint": "^8.5.0"
   },
