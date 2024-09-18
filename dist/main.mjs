@@ -500,12 +500,13 @@ async function getPipxEnvironment(env) {
     });
 }
 /**
- * Appends the binary path of a specified package to the system paths.
+ * Appends the executable path of a Pipx package to the system paths.
  *
- * @param pkg - The name of the package.
- * @returns A promise that resolves when the system paths have been successfully appended.
+ * @param pkg - The name of the Pipx package.
+ *
+ * @returns A promise that resolves once the system paths has been successfully updated.
  */
-async function addPackagePath(pkg) {
+async function addPipxPackagePath(pkg) {
     const localVenvs = await getPipxEnvironment("PIPX_LOCAL_VENVS");
     const { name } = parsePipxPackage(pkg);
     if (process.platform === "win32") {
@@ -565,7 +566,7 @@ async function installPipxPackage(pkg) {
 }
 
 var pipx = {
-    addPackagePath,
+    addPipxPackagePath,
     getPipxEnvironment,
     installPipxPackage,
     restorePipxPackageCache,
@@ -579,7 +580,7 @@ async function pipxInstallAction(...pkgs) {
         try {
             cacheFound = await pipx.restorePipxPackageCache(pkg);
             if (cacheFound)
-                await pipx.addPackagePath(pkg);
+                await pipx.addPipxPackagePath(pkg);
         }
         catch (err) {
             logError(`Failed to restore ${pkg} cache: ${r(err)}`);
@@ -590,7 +591,7 @@ async function pipxInstallAction(...pkgs) {
             beginLogGroup(`Cache not found, installing \u001b[34m${pkg}\u001b[39m...`);
             try {
                 await pipx.installPipxPackage(pkg);
-                await pipx.addPackagePath(pkg);
+                await pipx.addPipxPackagePath(pkg);
             }
             catch (err) {
                 endLogGroup();

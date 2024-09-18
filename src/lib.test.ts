@@ -22,7 +22,7 @@ jest.unstable_mockModule("gha-utils", () => ({
 
 jest.unstable_mockModule("./pipx/index.js", () => ({
   default: {
-    addPackagePath: jest.fn(),
+    addPipxPackagePath: jest.fn(),
     installPipxPackage: jest.fn(),
     restorePipxPackageCache: jest.fn(),
     savePipxPackageCache: jest.fn(),
@@ -36,7 +36,7 @@ describe("install Python packages action", () => {
     logs = [];
     failed = false;
 
-    jest.mocked(pipx.addPackagePath).mockImplementation(async (pkg) => {
+    jest.mocked(pipx.addPipxPackagePath).mockImplementation(async (pkg) => {
       logs.push(`${pkg} path added`);
     });
 

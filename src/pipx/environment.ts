@@ -29,12 +29,13 @@ export async function getPipxEnvironment(env: string): Promise<string> {
 }
 
 /**
- * Appends the binary path of a specified package to the system paths.
+ * Appends the executable path of a Pipx package to the system paths.
  *
- * @param pkg - The name of the package.
- * @returns A promise that resolves when the system paths have been successfully appended.
+ * @param pkg - The name of the Pipx package.
+ *
+ * @returns A promise that resolves once the system paths has been successfully updated.
  */
-export async function addPackagePath(pkg: string): Promise<void> {
+export async function addPipxPackagePath(pkg: string): Promise<void> {
   const localVenvs = await getPipxEnvironment("PIPX_LOCAL_VENVS");
   const { name } = parsePipxPackage(pkg);
 

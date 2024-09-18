@@ -69,10 +69,10 @@ describe("get pipx environments", () => {
 
 describe("add path of pipx packages", () => {
   it("should add path of a pipx package on Windows", async () => {
-    const { addPackagePath } = await import("./environment.js");
+    const { addPipxPackagePath } = await import("./environment.js");
     Object.defineProperty(process, "platform", { value: "win32" });
 
-    await addPackagePath("a-package");
+    await addPipxPackagePath("a-package");
 
     expect(sysPaths).toEqual([
       path.join("path-to-local-venvs", "a-package", "Scripts"),
@@ -80,10 +80,10 @@ describe("add path of pipx packages", () => {
   });
 
   it("should add path of a pipx package on other OS", async () => {
-    const { addPackagePath } = await import("./environment.js");
+    const { addPipxPackagePath } = await import("./environment.js");
     Object.defineProperty(process, "platform", { value: "other" });
 
-    await addPackagePath("a-package");
+    await addPipxPackagePath("a-package");
 
     expect(sysPaths).toEqual([
       path.join("path-to-local-venvs", "a-package", "bin"),
