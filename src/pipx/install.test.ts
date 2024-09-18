@@ -35,15 +35,15 @@ jest.unstable_mockModule("node:child_process", () => ({
 
 describe("install Python packages", () => {
   it("should install a package", async () => {
-    const { installPackage } = await import("./install.js");
+    const { installPipxPackage } = await import("./install.js");
 
-    await installPackage("a-package");
+    await installPipxPackage("a-package");
   });
 
   it("should fail to install a package", async () => {
-    const { installPackage } = await import("./install.js");
+    const { installPipxPackage } = await import("./install.js");
 
-    await expect(installPackage("an-invalid-package")).rejects.toThrow(
+    await expect(installPipxPackage("an-invalid-package")).rejects.toThrow(
       "Failed to install an-invalid-package: process exited with code: 1",
     );
   });

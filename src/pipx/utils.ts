@@ -1,17 +1,14 @@
-export interface Package {
-  name: string;
-  version: string | "latest";
-}
-
 /**
- * Parses the package name and version from the given string.
+ * Parses the name and version of a Pipx package from a package string.
  *
- * @param pkg - The package string to parse in the format "name==version" or just "name".
- * @returns A `Package` object containing the parsed package name and version.
- *          If the version is not specified, it defaults to "latest".
+ * @param str - The package string to parse, either in the format `name==version` or just `name`.
+ * @returns An object containing the parsed package name and version. If the version is not specified, it defaults to `latest`.
  * @throws An error if the package string cannot be parsed.
  */
-export function parsePackage(pkg: string): Package {
+export function parsePipxPackage(pkg: string): {
+  name: string;
+  version: string;
+} {
   const match = pkg.match(/^([\w\d._-]+)(==([\d.]+))?$/);
   if (match == null || match.length < 2) {
     throw new Error(`unable to parse package name and version from: ${pkg}`);

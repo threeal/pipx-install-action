@@ -2,11 +2,11 @@ import { addPath } from "gha-utils";
 import { execFile } from "node:child_process";
 import os from "os";
 import path from "path";
-import { parsePackage } from "./utils.js";
+import { parsePipxPackage } from "./utils.js";
 
 export const homeDir = path.join(os.homedir(), ".local/pipx");
 
-export async function getEnvironment(env: string): Promise<string> {
+export async function getPipxEnvironment(env: string): Promise<string> {
   return new Promise<string>((resolve, reject) => {
     execFile(
       "pipx",
@@ -29,14 +29,15 @@ export async function getEnvironment(env: string): Promise<string> {
 }
 
 /**
- * Appends the binary path of a specified package to the system paths.
+ * Appends the executable path of a Pipx package to the system paths.
  *
- * @param pkg - The name of the package.
- * @returns A promise that resolves when the system paths have been successfully appended.
+ * @param pkg - The name of the Pipx package.
+ *
+ * @returns A promise that resolves once the system paths has been successfully updated.
  */
-export async function addPackagePath(pkg: string): Promise<void> {
-  const localVenvs = await getEnvironment("PIPX_LOCAL_VENVS");
-  const { name } = parsePackage(pkg);
+export async function addPipxPackagePath(pkg: string): Promise<void> {
+  const localVenvs = await getPipxEnvironment("PIPX_LOCAL_VENVS");
+  const { name } = parsePipxPackage(pkg);
 
   if (process.platform === "win32") {
     addPath(path.join(localVenvs, name, "Scripts"));

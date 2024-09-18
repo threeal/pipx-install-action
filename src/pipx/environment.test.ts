@@ -51,16 +51,16 @@ jest.unstable_mockModule("node:child_process", () => ({
 
 describe("get pipx environments", () => {
   it("should get an environment", async () => {
-    const { getEnvironment } = await import("./environment.js");
+    const { getPipxEnvironment } = await import("./environment.js");
 
-    const value = await getEnvironment("AN_ENVIRONMENT");
+    const value = await getPipxEnvironment("AN_ENVIRONMENT");
     expect(value).toBe("a value");
   });
 
   it("should fail to get an environment", async () => {
-    const { getEnvironment } = await import("./environment.js");
+    const { getPipxEnvironment } = await import("./environment.js");
 
-    const prom = getEnvironment("AN_INVALID_ENVIRONMENT");
+    const prom = getPipxEnvironment("AN_INVALID_ENVIRONMENT");
     await expect(prom).rejects.toThrow(
       "Failed to get AN_INVALID_ENVIRONMENT: unknown environment",
     );
@@ -69,10 +69,10 @@ describe("get pipx environments", () => {
 
 describe("add path of pipx packages", () => {
   it("should add path of a pipx package on Windows", async () => {
-    const { addPackagePath } = await import("./environment.js");
+    const { addPipxPackagePath } = await import("./environment.js");
     Object.defineProperty(process, "platform", { value: "win32" });
 
-    await addPackagePath("a-package");
+    await addPipxPackagePath("a-package");
 
     expect(sysPaths).toEqual([
       path.join("path-to-local-venvs", "a-package", "Scripts"),
@@ -80,10 +80,10 @@ describe("add path of pipx packages", () => {
   });
 
   it("should add path of a pipx package on other OS", async () => {
-    const { addPackagePath } = await import("./environment.js");
+    const { addPipxPackagePath } = await import("./environment.js");
     Object.defineProperty(process, "platform", { value: "other" });
 
-    await addPackagePath("a-package");
+    await addPipxPackagePath("a-package");
 
     expect(sysPaths).toEqual([
       path.join("path-to-local-venvs", "a-package", "bin"),

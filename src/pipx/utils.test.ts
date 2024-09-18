@@ -1,22 +1,22 @@
-import { parsePackage } from "./utils";
+import { parsePipxPackage } from "./utils";
 
-describe("parse package strings", () => {
-  it("should parse a package string with a version specifier", () => {
-    expect(parsePackage("a-package==1.2.3")).toEqual({
+describe("parse name and version of Pipx packages from package strings", () => {
+  it("should parse from a package string with a version specifier", () => {
+    expect(parsePipxPackage("a-package==1.2.3")).toEqual({
       name: "a-package",
       version: "1.2.3",
     });
   });
 
-  it("should parse a package string without a version specifier", () => {
-    expect(parsePackage("a-package")).toEqual({
+  it("should parse from a package string without a version specifier", () => {
+    expect(parsePipxPackage("a-package")).toEqual({
       name: "a-package",
       version: "latest",
     });
   });
 
-  it("should fail to parse an invalid package string", () => {
-    expect(() => parsePackage("???")).toThrow(
+  it("should fail to parse from an invalid package string", () => {
+    expect(() => parsePipxPackage("???")).toThrow(
       "unable to parse package name and version from: ???",
     );
   });

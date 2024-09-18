@@ -7,13 +7,13 @@ jest.unstable_mockModule("cache-action", () => ({
 }));
 
 jest.unstable_mockModule("./environment.js", () => ({
-  getEnvironment: jest.fn(),
+  getPipxEnvironment: jest.fn(),
 }));
 
 beforeEach(async () => {
-  const { getEnvironment } = await import("./environment.js");
+  const { getPipxEnvironment } = await import("./environment.js");
 
-  jest.mocked(getEnvironment).mockImplementation(async (env) => {
+  jest.mocked(getPipxEnvironment).mockImplementation(async (env) => {
     return env === "PIPX_LOCAL_VENVS" ? "/path/to/venvs" : "";
   });
 });
@@ -21,11 +21,11 @@ beforeEach(async () => {
 describe("save Python package caches", () => {
   it("should save a package cache", async () => {
     const { saveCache } = await import("cache-action");
-    const { savePackageCache } = await import("./cache.js");
+    const { savePipxPackageCache } = await import("./cache.js");
 
     jest.mocked(saveCache).mockReset();
 
-    const prom = savePackageCache("some-package");
+    const prom = savePipxPackageCache("some-package");
     await expect(prom).resolves.toBeUndefined();
 
     expect(saveCache).toHaveBeenCalledExactlyOnceWith(
@@ -37,7 +37,7 @@ describe("save Python package caches", () => {
 
   it("should fail to save a package cache", async () => {
     const { saveCache } = await import("cache-action");
-    const { savePackageCache } = await import("./cache.js");
+    const { savePipxPackageCache } = await import("./cache.js");
 
     jest
       .mocked(saveCache)
@@ -46,7 +46,7 @@ describe("save Python package caches", () => {
         throw new Error("something went wrong");
       });
 
-    const prom = savePackageCache("some-package");
+    const prom = savePipxPackageCache("some-package");
     await expect(prom).rejects.toThrow(
       "Failed to save some-package cache: something went wrong",
     );
@@ -56,11 +56,11 @@ describe("save Python package caches", () => {
 describe("restore Python package caches", () => {
   it("should restore a saved package cache", async () => {
     const { restoreCache } = await import("cache-action");
-    const { restorePackageCache } = await import("./cache.js");
+    const { restorePipxPackageCache } = await import("./cache.js");
 
     jest.mocked(restoreCache).mockReset().mockResolvedValue(true);
 
-    const prom = restorePackageCache("some-package");
+    const prom = restorePipxPackageCache("some-package");
     await expect(prom).resolves.toBe(true);
 
     expect(restoreCache).toHaveBeenCalledExactlyOnceWith(
@@ -71,11 +71,11 @@ describe("restore Python package caches", () => {
 
   it("should restore an unsaved package cache", async () => {
     const { restoreCache } = await import("cache-action");
-    const { restorePackageCache } = await import("./cache.js");
+    const { restorePipxPackageCache } = await import("./cache.js");
 
     jest.mocked(restoreCache).mockReset().mockResolvedValue(false);
 
-    const prom = restorePackageCache("some-package");
+    const prom = restorePipxPackageCache("some-package");
     await expect(prom).resolves.toBe(false);
 
     expect(restoreCache).toHaveBeenCalledExactlyOnceWith(
@@ -86,7 +86,7 @@ describe("restore Python package caches", () => {
 
   it("should fail to restore a package cache", async () => {
     const { restoreCache } = await import("cache-action");
-    const { restorePackageCache } = await import("./cache.js");
+    const { restorePipxPackageCache } = await import("./cache.js");
 
     jest
       .mocked(restoreCache)
@@ -95,7 +95,7 @@ describe("restore Python package caches", () => {
         throw new Error("something went wrong");
       });
 
-    const prom = restorePackageCache("some-package");
+    const prom = restorePipxPackageCache("some-package");
     await expect(prom).rejects.toThrow(
       "Failed to restore some-package cache: something went wrong",
     );
