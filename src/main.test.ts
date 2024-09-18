@@ -28,6 +28,7 @@ describe("install Python packages", () => {
     installedPackages = [];
     inputs = {};
     loggedError = undefined;
+    process.exitCode = undefined;
   });
 
   it("should install packages", async () => {
@@ -37,6 +38,7 @@ describe("install Python packages", () => {
 
     expect(installedPackages).toEqual(["a-package", "another-package"]);
     expect(loggedError).toBeUndefined();
+    expect(process.exitCode).toBeUndefined();
   });
 
   it("should fail to install an invalid package", async () => {
@@ -46,5 +48,8 @@ describe("install Python packages", () => {
 
     expect(installedPackages).toEqual([]);
     expect(loggedError).toEqual(new Error("invalid package"));
+    expect(process.exitCode).toBe(1);
+
+    process.exitCode = undefined;
   });
 });
