@@ -1,5 +1,4 @@
 import { jest } from "@jest/globals";
-import { homeDir } from "./environment.js";
 
 class ChildProcess {
   #events: Record<string, any[] | undefined> = {};
@@ -24,7 +23,7 @@ jest.unstable_mockModule("node:child_process", () => ({
         stdio: "inherit",
         env: {
           PATH: process.env.PATH,
-          PIPX_HOME: homeDir,
+          PIPX_HOME: "a-home-dir",
         },
       },
     ]);
@@ -33,11 +32,29 @@ jest.unstable_mockModule("node:child_process", () => ({
   },
 }));
 
+let addedPackagePaths: string[] = [];
+jest.unstable_mockModule("./environment.js", () => ({
+  addPipxPackagePath: async (pkg: string) =>
+    new Promise<void>((resolve) => {
+      setTimeout(() => {
+        addedPackagePaths.push(pkg);
+        resolve();
+      }, 100);
+    }),
+  homeDir: "a-home-dir",
+}));
+
 describe("install Python packages", () => {
+  beforeEach(() => {
+    addedPackagePaths = [];
+  });
+
   it("should install a package", async () => {
     const { installPipxPackage } = await import("./install.js");
 
     await installPipxPackage("a-package");
+
+    expect(addedPackagePaths).toEqual(["a-package"]);
   });
 
   it("should fail to install a package", async () => {
@@ -46,5 +63,7 @@ describe("install Python packages", () => {
     await expect(installPipxPackage("an-invalid-package")).rejects.toThrow(
       "Failed to install an-invalid-package: process exited with code: 1",
     );
+
+    expect(addedPackagePaths).toEqual([]);
   });
 });

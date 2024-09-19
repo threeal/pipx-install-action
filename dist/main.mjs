@@ -559,6 +559,7 @@ async function installPipxPackage(pkg) {
                 }
             });
         });
+        await addPipxPackagePath(pkg);
     }
     catch (err) {
         throw new Error(`Failed to install ${pkg}: ${r(err)}`);
@@ -583,7 +584,6 @@ async function pipxInstallAction(...pkgs) {
             beginLogGroup(`Cache not found, installing \u001b[34m${pkg}\u001b[39m...`);
             try {
                 await installPipxPackage(pkg);
-                await addPipxPackagePath(pkg);
             }
             catch (err) {
                 endLogGroup();

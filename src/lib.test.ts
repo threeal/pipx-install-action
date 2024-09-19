@@ -96,7 +96,6 @@ describe("install Python packages action", () => {
       "any-pkg cache not found",
       "::group::Cache not found, installing \u001b[34many-pkg\u001b[39m...",
       "any-pkg installed",
-      "any-pkg path added",
       "::endgroup::",
       "Saving \u001b[34many-pkg\u001b[39m cache...",
       "any-pkg cache saved",

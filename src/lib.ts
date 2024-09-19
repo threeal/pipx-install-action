@@ -23,7 +23,6 @@ export async function pipxInstallAction(...pkgs: string[]): Promise<void> {
       );
       try {
         await installPipxPackage(pkg);
-        await addPipxPackagePath(pkg);
       } catch (err) {
         endLogGroup();
         logError(`Failed to install ${pkg}: ${getErrorMessage(err)}`);
