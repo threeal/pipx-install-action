@@ -4,7 +4,6 @@ import os from 'node:os';
 import path from 'node:path';
 import https from 'node:https';
 import { spawn, execFile } from 'node:child_process';
-import os$1 from 'os';
 import path$1 from 'path';
 
 /**
@@ -482,13 +481,13 @@ function parsePackage(pkg) {
     };
 }
 
-const homeDir = path$1.join(os$1.homedir(), ".local/pipx");
+// export const homeDir = path.join(os.homedir(), ".local/pipx");
 async function getEnvironment(env) {
     return new Promise((resolve, reject) => {
         execFile("pipx", ["environment", "--value", env], {
             env: {
                 PATH: process.env["PATH"],
-                PIPX_HOME: homeDir,
+                // PIPX_HOME: homeDir,
             },
         }, (err, stdout) => {
             if (err) {
@@ -539,13 +538,14 @@ async function restorePackageCache(pkg) {
     }
 }
 
+// import { homeDir } from "./environment.js";
 async function installPackage(pkg) {
     try {
         const pipx = spawn("pipx", ["install", pkg], {
             stdio: "inherit",
             env: {
                 PATH: process.env["PATH"],
-                PIPX_HOME: homeDir,
+                // PIPX_HOME: homeDir,
             },
         });
         await new Promise((resolve, reject) => {

@@ -1,10 +1,10 @@
 import { addPath } from "gha-utils";
 import { execFile } from "node:child_process";
-import os from "os";
+// import os from "os";
 import path from "path";
 import { parsePackage } from "./utils.js";
 
-export const homeDir = path.join(os.homedir(), ".local/pipx");
+// export const homeDir = path.join(os.homedir(), ".local/pipx");
 
 export async function getEnvironment(env: string): Promise<string> {
   return new Promise<string>((resolve, reject) => {
@@ -14,7 +14,7 @@ export async function getEnvironment(env: string): Promise<string> {
       {
         env: {
           PATH: process.env["PATH"],
-          PIPX_HOME: homeDir,
+          // PIPX_HOME: homeDir,
         },
       },
       (err, stdout) => {

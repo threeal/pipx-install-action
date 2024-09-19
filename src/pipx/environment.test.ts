@@ -10,10 +10,10 @@ jest.unstable_mockModule("gha-utils", () => ({
   },
 }));
 
-let homeDir: string;
+// let homeDir: string;
 beforeAll(async () => {
-  const env = await import("./environment.js");
-  homeDir = env.homeDir;
+  // const env = await import("./environment.js");
+  // homeDir = env.homeDir;
 });
 
 jest.unstable_mockModule("node:child_process", () => ({
@@ -31,7 +31,7 @@ jest.unstable_mockModule("node:child_process", () => ({
         {
           env: {
             PATH: process.env["PATH"],
-            PIPX_HOME: homeDir,
+            // PIPX_HOME: homeDir,
           },
         },
       ]);
