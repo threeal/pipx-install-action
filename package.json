@@ -14,11 +14,7 @@
     "url": "https://github.com/threeal/pipx-install-action/issues",
     "email": "alfi.maulana.f@gmail.com"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/threeal/pipx-install-action.git",
-    "directory": "lib/pipx-install-action"
-  },
+  "repository": "github:threeal/pipx-install-action",
   "license": "MIT",
   "author": "Alfi Maulana <alfi.maulana.f@gmail.com>",
   "type": "module",
