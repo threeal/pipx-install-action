@@ -1,6 +1,6 @@
 import { restoreCache, saveCache } from "cache-action";
 import { getErrorMessage } from "catched-error-message";
-import { getPipxEnvironment } from "./environment.js";
+import { addPipxPackagePath, getPipxEnvironment } from "./environment.js";
 import path from "path";
 import { parsePipxPackage } from "./utils.js";
 
@@ -20,7 +20,12 @@ export async function savePipxPackageCache(pkg: string): Promise<void> {
 export async function restorePipxPackageCache(pkg: string): Promise<boolean> {
   try {
     const { name, version } = parsePipxPackage(pkg);
-    return await restoreCache(`pipx-${process.platform}-${name}`, version);
+    const restored = await restoreCache(
+      `pipx-${process.platform}-${name}`,
+      version,
+    );
+    if (restored) await addPipxPackagePath(pkg);
+    return restored;
   } catch (err) {
     throw new Error(`Failed to restore ${pkg} cache: ${getErrorMessage(err)}`);
   }

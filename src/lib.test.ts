@@ -25,10 +25,6 @@ jest.unstable_mockModule("./pipx/cache.js", () => ({
   savePipxPackageCache: jest.fn(),
 }));
 
-jest.unstable_mockModule("./pipx/environment.js", () => ({
-  addPipxPackagePath: jest.fn(),
-}));
-
 jest.unstable_mockModule("./pipx/install.js", () => ({
   installPipxPackage: jest.fn(),
 }));
@@ -37,20 +33,14 @@ describe("install Python packages action", () => {
   beforeEach(async () => {
     const [
       { restorePipxPackageCache, savePipxPackageCache },
-      { addPipxPackagePath },
       { installPipxPackage },
     ] = await Promise.all([
       import("./pipx/cache.js"),
-      import("./pipx/environment.js"),
       import("./pipx/install.js"),
     ]);
 
     logs = [];
     failed = false;
-
-    jest.mocked(addPipxPackagePath).mockImplementation(async (pkg) => {
-      logs.push(`${pkg} path added`);
-    });
 
     jest.mocked(installPipxPackage).mockImplementation(async (pkg) => {
       logs.push(`${pkg} installed`);
@@ -81,7 +71,6 @@ describe("install Python packages action", () => {
     expect(logs).toStrictEqual([
       "Restoring \u001b[34many-pkg\u001b[39m cache...",
       "any-pkg cache found",
-      "any-pkg path added",
     ]);
   });
 

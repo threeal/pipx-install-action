@@ -7,6 +7,7 @@ jest.unstable_mockModule("cache-action", () => ({
 }));
 
 jest.unstable_mockModule("./environment.js", () => ({
+  addPipxPackagePath: jest.fn(),
   getPipxEnvironment: jest.fn(),
 }));
 
@@ -57,8 +58,10 @@ describe("restore Python package caches", () => {
   it("should restore a saved package cache", async () => {
     const { restoreCache } = await import("cache-action");
     const { restorePipxPackageCache } = await import("./cache.js");
+    const { addPipxPackagePath } = await import("./environment.js");
 
     jest.mocked(restoreCache).mockReset().mockResolvedValue(true);
+    jest.mocked(addPipxPackagePath).mockReset();
 
     const prom = restorePipxPackageCache("some-package");
     await expect(prom).resolves.toBe(true);
@@ -67,13 +70,17 @@ describe("restore Python package caches", () => {
       `pipx-${process.platform}-some-package`,
       "latest",
     );
+
+    expect(addPipxPackagePath).toHaveBeenCalledExactlyOnceWith("some-package");
   });
 
   it("should restore an unsaved package cache", async () => {
     const { restoreCache } = await import("cache-action");
     const { restorePipxPackageCache } = await import("./cache.js");
+    const { addPipxPackagePath } = await import("./environment.js");
 
     jest.mocked(restoreCache).mockReset().mockResolvedValue(false);
+    jest.mocked(addPipxPackagePath).mockReset();
 
     const prom = restorePipxPackageCache("some-package");
     await expect(prom).resolves.toBe(false);
@@ -82,11 +89,14 @@ describe("restore Python package caches", () => {
       `pipx-${process.platform}-some-package`,
       "latest",
     );
+
+    expect(addPipxPackagePath).toHaveBeenCalledTimes(0);
   });
 
   it("should fail to restore a package cache", async () => {
     const { restoreCache } = await import("cache-action");
     const { restorePipxPackageCache } = await import("./cache.js");
+    const { addPipxPackagePath } = await import("./environment.js");
 
     jest
       .mocked(restoreCache)
@@ -95,9 +105,13 @@ describe("restore Python package caches", () => {
         throw new Error("something went wrong");
       });
 
+    jest.mocked(addPipxPackagePath).mockReset();
+
     const prom = restorePipxPackageCache("some-package");
     await expect(prom).rejects.toThrow(
       "Failed to restore some-package cache: something went wrong",
     );
+
+    expect(addPipxPackagePath).toHaveBeenCalledTimes(0);
   });
 });
