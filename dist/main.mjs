@@ -500,21 +500,22 @@ async function getPipxEnvironment(env) {
     });
 }
 /**
- * Appends the executable path of a Pipx package to the system paths.
+ * Appends the executable path of a Pipx package to the system path.
  *
  * @param pkg - The name of the Pipx package.
  *
- * @returns A promise that resolves once the system paths has been successfully updated.
+ * @returns A promise that resolves once the system path has been successfully updated.
  */
 async function addPipxPackagePath(pkg) {
     const localVenvs = await getPipxEnvironment("PIPX_LOCAL_VENVS");
     const { name } = parsePipxPackage(pkg);
-    if (process.platform === "win32") {
-        await addPath(path$1.join(localVenvs, name, "Scripts"));
-    }
-    else {
-        await addPath(path$1.join(localVenvs, name, "bin"));
-    }
+    const pkgPath = process.platform === "win32"
+        ? path$1.join(localVenvs, name, "Scripts")
+        : path$1.join(localVenvs, name, "bin");
+    // Skip if already added to the system path.
+    if (process.env.PATH?.includes(pkgPath))
+        return;
+    await addPath(pkgPath);
 }
 
 async function savePipxPackageCache(pkg) {
