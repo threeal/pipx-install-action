@@ -3,6 +3,7 @@ import { jest } from "@jest/globals";
 describe("install Python packages", () => {
   let logs: string[] = [];
   let inputs: Record<string, string | undefined> = {};
+
   jest.unstable_mockModule("gha-utils", () => ({
     beginLogGroup(name: string): void {
       logs.push(`::group::${name}`);
@@ -22,17 +23,16 @@ describe("install Python packages", () => {
   }));
 
   let cachedPackages: string[] = [];
+  let installedPackages: string[] = [];
+
+  const installPipxPackage = jest.fn<(pkg: string) => Promise<void>>();
   const restorePipxPackageCache = jest.fn<(pkg: string) => Promise<boolean>>();
   const savePipxPackageCache = jest.fn<(pkg: string) => Promise<void>>();
-  jest.unstable_mockModule("./pipx/cache.js", () => ({
+
+  jest.unstable_mockModule("./lib.js", () => ({
+    installPipxPackage,
     restorePipxPackageCache,
     savePipxPackageCache,
-  }));
-
-  let installedPackages: string[] = [];
-  const installPipxPackage = jest.fn<(pkg: string) => Promise<void>>();
-  jest.unstable_mockModule("./pipx/install.js", () => ({
-    installPipxPackage,
   }));
 
   beforeEach(() => {
@@ -43,6 +43,15 @@ describe("install Python packages", () => {
 
     cachedPackages = [];
     installedPackages = [];
+
+    installPipxPackage.mockImplementation((pkg: string) => {
+      return new Promise<void>((resolve) => {
+        setTimeout(() => {
+          installedPackages.push(pkg);
+          resolve();
+        }, 100);
+      });
+    });
 
     restorePipxPackageCache.mockImplementation((pkg) => {
       return new Promise<boolean>((resolve) => {
@@ -61,15 +70,6 @@ describe("install Python packages", () => {
       return new Promise<void>((resolve) => {
         setTimeout(() => {
           cachedPackages.push(pkg);
-          resolve();
-        }, 100);
-      });
-    });
-
-    installPipxPackage.mockImplementation((pkg: string) => {
-      return new Promise<void>((resolve) => {
-        setTimeout(() => {
-          installedPackages.push(pkg);
           resolve();
         }, 100);
       });

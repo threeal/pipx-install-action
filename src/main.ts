@@ -8,8 +8,11 @@ import {
   logInfo,
 } from "gha-utils";
 
-import { restorePipxPackageCache, savePipxPackageCache } from "./pipx/cache.js";
-import { installPipxPackage } from "./pipx/install.js";
+import {
+  installPipxPackage,
+  restorePipxPackageCache,
+  savePipxPackageCache,
+} from "./lib.js";
 
 try {
   const pkgs = getInput("packages")
