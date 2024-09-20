@@ -14,12 +14,6 @@ jest.unstable_mockModule("gha-utils", () => ({
     }),
 }));
 
-let homeDir: string;
-beforeAll(async () => {
-  const env = await import("./environment.js");
-  homeDir = env.homeDir;
-});
-
 jest.unstable_mockModule("node:child_process", () => ({
   execFile: (
     file: string,
@@ -32,12 +26,7 @@ jest.unstable_mockModule("node:child_process", () => ({
         "pipx",
         3,
         ["environment", "--value"],
-        {
-          env: {
-            PATH: process.env["PATH"],
-            PIPX_HOME: homeDir,
-          },
-        },
+        { env: { PATH: process.env["PATH"] } },
       ]);
 
       if (args[2] === "AN_ENVIRONMENT") {

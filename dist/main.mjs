@@ -4,7 +4,6 @@ import os from 'node:os';
 import path from 'node:path';
 import https from 'node:https';
 import { spawn, execFile } from 'node:child_process';
-import os$1 from 'os';
 import path$1 from 'path';
 
 /**
@@ -481,15 +480,9 @@ function parsePipxPackage(pkg) {
     };
 }
 
-const homeDir = path$1.join(os$1.homedir(), ".local/pipx");
 async function getPipxEnvironment(env) {
     return new Promise((resolve, reject) => {
-        execFile("pipx", ["environment", "--value", env], {
-            env: {
-                PATH: process.env["PATH"],
-                PIPX_HOME: homeDir,
-            },
-        }, (err, stdout) => {
+        execFile("pipx", ["environment", "--value", env], { env: { PATH: process.env["PATH"] } }, (err, stdout) => {
             if (err) {
                 reject(new Error(`Failed to get ${env}: ${err.message}`));
             }
@@ -547,10 +540,7 @@ async function installPipxPackage(pkg) {
     try {
         const pipx = spawn("pipx", ["install", pkg], {
             stdio: "inherit",
-            env: {
-                PATH: process.env["PATH"],
-                PIPX_HOME: homeDir,
-            },
+            env: { PATH: process.env["PATH"] },
         });
         await new Promise((resolve, reject) => {
             pipx.on("error", reject);
