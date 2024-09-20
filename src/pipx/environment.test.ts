@@ -1,14 +1,14 @@
 import { jest } from "@jest/globals";
 import path from "node:path";
 
-let sysPaths: string[] = [];
-beforeEach(() => (sysPaths = []));
-
 jest.unstable_mockModule("gha-utils", () => ({
   addPath: async (sysPath: string) =>
     new Promise<void>((resolve) => {
       setTimeout(() => {
-        sysPaths.push(sysPath);
+        process.env.PATH =
+          process.env.PATH !== undefined
+            ? `${sysPath}${path.delimiter}${process.env.PATH}`
+            : sysPath;
         resolve();
       }, 100);
     }),
@@ -71,26 +71,44 @@ describe("get pipx environments", () => {
   });
 });
 
-describe("add path of pipx packages", () => {
-  it("should add path of a pipx package on Windows", async () => {
+describe("add the executable path of pipx packages", () => {
+  beforeEach(() => {
+    delete process.env.PATH;
+  });
+
+  it("should add the path on Windows", async () => {
     const { addPipxPackagePath } = await import("./environment.js");
     Object.defineProperty(process, "platform", { value: "win32" });
 
     await addPipxPackagePath("a-package");
 
-    expect(sysPaths).toEqual([
+    expect(process.env.PATH?.split(path.delimiter).reverse()).toEqual([
       path.join("path-to-local-venvs", "a-package", "Scripts"),
     ]);
   });
 
-  it("should add path of a pipx package on other OS", async () => {
+  it("should add the path on other OS", async () => {
     const { addPipxPackagePath } = await import("./environment.js");
     Object.defineProperty(process, "platform", { value: "other" });
 
     await addPipxPackagePath("a-package");
 
-    expect(sysPaths).toEqual([
+    expect(process.env.PATH?.split(path.delimiter).reverse()).toEqual([
       path.join("path-to-local-venvs", "a-package", "bin"),
+    ]);
+  });
+
+  it("should not add duplicate paths", async () => {
+    const { addPipxPackagePath } = await import("./environment.js");
+    Object.defineProperty(process, "platform", { value: "other" });
+
+    await addPipxPackagePath("a-package");
+    await addPipxPackagePath("a-package");
+    await addPipxPackagePath("another-package");
+
+    expect(process.env.PATH?.split(path.delimiter).reverse()).toEqual([
+      path.join("path-to-local-venvs", "a-package", "bin"),
+      path.join("path-to-local-venvs", "another-package", "bin"),
     ]);
   });
 });

@@ -29,19 +29,23 @@ export async function getPipxEnvironment(env: string): Promise<string> {
 }
 
 /**
- * Appends the executable path of a Pipx package to the system paths.
+ * Appends the executable path of a Pipx package to the system path.
  *
  * @param pkg - The name of the Pipx package.
  *
- * @returns A promise that resolves once the system paths has been successfully updated.
+ * @returns A promise that resolves once the system path has been successfully updated.
  */
 export async function addPipxPackagePath(pkg: string): Promise<void> {
   const localVenvs = await getPipxEnvironment("PIPX_LOCAL_VENVS");
   const { name } = parsePipxPackage(pkg);
 
-  if (process.platform === "win32") {
-    await addPath(path.join(localVenvs, name, "Scripts"));
-  } else {
-    await addPath(path.join(localVenvs, name, "bin"));
-  }
+  const pkgPath =
+    process.platform === "win32"
+      ? path.join(localVenvs, name, "Scripts")
+      : path.join(localVenvs, name, "bin");
+
+  // Skip if already added to the system path.
+  if (process.env.PATH?.includes(pkgPath)) return;
+
+  await addPath(pkgPath);
 }
