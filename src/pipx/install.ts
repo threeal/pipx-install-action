@@ -1,15 +1,12 @@
 import { getErrorMessage } from "catched-error-message";
 import { spawn } from "node:child_process";
-import { addPipxPackagePath, homeDir } from "./environment.js";
+import { addPipxPackagePath } from "./environment.js";
 
 export async function installPipxPackage(pkg: string): Promise<void> {
   try {
     const pipx = spawn("pipx", ["install", pkg], {
       stdio: "inherit",
-      env: {
-        PATH: process.env["PATH"],
-        PIPX_HOME: homeDir,
-      },
+      env: { PATH: process.env["PATH"] },
     });
     await new Promise<void>((resolve, reject) => {
       pipx.on("error", reject);

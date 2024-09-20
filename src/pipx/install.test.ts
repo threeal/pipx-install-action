@@ -21,10 +21,7 @@ jest.unstable_mockModule("node:child_process", () => ({
       "install",
       {
         stdio: "inherit",
-        env: {
-          PATH: process.env.PATH,
-          PIPX_HOME: "a-home-dir",
-        },
+        env: { PATH: process.env.PATH },
       },
     ]);
 
@@ -41,7 +38,6 @@ jest.unstable_mockModule("./environment.js", () => ({
         resolve();
       }, 100);
     }),
-  homeDir: "a-home-dir",
 }));
 
 describe("install Python packages", () => {
