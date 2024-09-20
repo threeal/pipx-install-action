@@ -6,6 +6,8 @@ import https from 'node:https';
 import { spawn, execFile } from 'node:child_process';
 import path$1 from 'path';
 
+function r(r){return function(r){if("object"==typeof(e=r)&&null!==e&&"message"in e&&"string"==typeof e.message)return r;var e;try{return new Error(JSON.stringify(r))}catch(e){return new Error(String(r))}}(r).message}
+
 /**
  * Retrieves the value of an environment variable.
  *
@@ -73,8 +75,6 @@ function beginLogGroup(name) {
 function endLogGroup() {
     process.stdout.write(`::endgroup::${os.EOL}`);
 }
-
-function r(r){return function(r){if("object"==typeof(e=r)&&null!==e&&"message"in e&&"string"==typeof e.message)return r;var e;try{return new Error(JSON.stringify(r))}catch(e){return new Error(String(r))}}(r).message}
 
 /**
  * Sends an HTTP request containing raw data.
@@ -560,7 +560,10 @@ async function installPipxPackage(pkg) {
     }
 }
 
-async function pipxInstallAction(...pkgs) {
+try {
+    const pkgs = getInput("packages")
+        .split(/(\s+)/)
+        .filter((pkg) => pkg.trim().length > 0);
     for (const pkg of pkgs) {
         let cacheFound;
         logInfo(`Restoring \u001b[34m${pkg}\u001b[39m cache...`);
@@ -568,9 +571,7 @@ async function pipxInstallAction(...pkgs) {
             cacheFound = await restorePipxPackageCache(pkg);
         }
         catch (err) {
-            logError(`Failed to restore ${pkg} cache: ${r(err)}`);
-            process.exitCode = 1;
-            return;
+            throw new Error(`Failed to restore ${pkg} cache: ${r(err)}`);
         }
         if (!cacheFound) {
             beginLogGroup(`Cache not found, installing \u001b[34m${pkg}\u001b[39m...`);
@@ -579,9 +580,7 @@ async function pipxInstallAction(...pkgs) {
             }
             catch (err) {
                 endLogGroup();
-                logError(`Failed to install ${pkg}: ${r(err)}`);
-                process.exitCode = 1;
-                return;
+                throw new Error(`Failed to install ${pkg}: ${r(err)}`);
             }
             endLogGroup();
             logInfo(`Saving \u001b[34m${pkg}\u001b[39m cache...`);
@@ -589,19 +588,10 @@ async function pipxInstallAction(...pkgs) {
                 await savePipxPackageCache(pkg);
             }
             catch (err) {
-                logError(`Failed to save ${pkg} cache: ${r(err)}`);
-                process.exitCode = 1;
-                return;
+                throw new Error(`Failed to save ${pkg} cache: ${r(err)}`);
             }
         }
     }
-}
-
-try {
-    const pkgs = getInput("packages")
-        .split(/(\s+)/)
-        .filter((pkg) => pkg.trim().length > 0);
-    await pipxInstallAction(...pkgs);
 }
 catch (err) {
     logError(err);
