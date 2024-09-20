@@ -29,7 +29,7 @@ Use the following snippet to include the action in a GitHub workflow:
 | ---------- | ---------------- | --------------------------------------------- |
 | `packages` | Multiple strings | Names of the Python packages to be installed. |
 
-### Example Usages
+### Example Usage
 
 This example demonstrates how to use the Pipx Install Action to install [Ruff](https://pypi.org/project/ruff/) in a GitHub Actions workflow:
 
@@ -61,17 +61,27 @@ Install the JavaScript library using a package manager:
 npm install pipx-install-action
 ```
 
-The library provides a `pipxInstallAction` function for installing Python packages within GitHub Actions.
+The library provides several functions for installing and caching Python packages within GitHub Actions. Refer to the [documentation](https://threeal.github.io/pipx-install-action/) for more information about the functions available in this action and their usage.
 
-## Example Usages
+## Example Usage
 
-This example demonstrates how to use the `pipxInstallAction` function to install [Ruff](https://pypi.org/project/ruff/) in a JavaScript action:
+This example demonstrates how to use this library to install and cache [Ruff](https://pypi.org/project/ruff/) in a JavaScript action:
 
 ```js
-import { pipxInstallAction } from "pipx-install-action";
+import {
+  installPipxPackage,
+  restorePipxPackageCache,
+  savePipxPackageCache,
+} from "pipx-install-action";
 
-pipxInstallAction("ruff");
+const restored = await restorePipxPackageCache("ruff");
+if (!restored) {
+  await installPipxPackage("ruff");
+  await savePipxPackageCache("ruff");
+}
 ```
+
+The code above first attempts to restore the Ruff package cache. If the cache is unavailable, it installs the package and saves it to the cache for future workflow runs.
 
 ## License
 
