@@ -22,7 +22,9 @@ beforeEach(async () => {
 describe("save Python package caches", () => {
   it("should save a package cache", async () => {
     const { saveCache } = await import("cache-action");
-    const { savePipxPackageCache } = await import("./cache.js");
+    const { pipxPackageCacheVersion, savePipxPackageCache } = await import(
+      "./cache.js"
+    );
 
     jest.mocked(saveCache).mockReset();
 
@@ -31,7 +33,7 @@ describe("save Python package caches", () => {
 
     expect(saveCache).toHaveBeenCalledExactlyOnceWith(
       `pipx-${process.platform}-some-package`,
-      "latest",
+      pipxPackageCacheVersion,
       ["/path/to/venvs/some-package"],
     );
   });
@@ -57,7 +59,9 @@ describe("save Python package caches", () => {
 describe("restore Python package caches", () => {
   it("should restore a saved package cache", async () => {
     const { restoreCache } = await import("cache-action");
-    const { restorePipxPackageCache } = await import("./cache.js");
+    const { pipxPackageCacheVersion, restorePipxPackageCache } = await import(
+      "./cache.js"
+    );
     const { addPipxPackagePath } = await import("./environment.js");
 
     jest.mocked(restoreCache).mockReset().mockResolvedValue(true);
@@ -68,7 +72,7 @@ describe("restore Python package caches", () => {
 
     expect(restoreCache).toHaveBeenCalledExactlyOnceWith(
       `pipx-${process.platform}-some-package`,
-      "latest",
+      pipxPackageCacheVersion,
     );
 
     expect(addPipxPackagePath).toHaveBeenCalledExactlyOnceWith("some-package");
@@ -76,7 +80,9 @@ describe("restore Python package caches", () => {
 
   it("should restore an unsaved package cache", async () => {
     const { restoreCache } = await import("cache-action");
-    const { restorePipxPackageCache } = await import("./cache.js");
+    const { pipxPackageCacheVersion, restorePipxPackageCache } = await import(
+      "./cache.js"
+    );
     const { addPipxPackagePath } = await import("./environment.js");
 
     jest.mocked(restoreCache).mockReset().mockResolvedValue(false);
@@ -87,7 +93,7 @@ describe("restore Python package caches", () => {
 
     expect(restoreCache).toHaveBeenCalledExactlyOnceWith(
       `pipx-${process.platform}-some-package`,
-      "latest",
+      pipxPackageCacheVersion,
     );
 
     expect(addPipxPackagePath).toHaveBeenCalledTimes(0);
