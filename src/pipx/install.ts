@@ -1,6 +1,6 @@
 import { getErrorMessage } from "catched-error-message";
 import { spawn } from "node:child_process";
-import { homeDir } from "./environment.js";
+import { addPipxPackagePath, homeDir } from "./environment.js";
 
 export async function installPipxPackage(pkg: string): Promise<void> {
   try {
@@ -21,6 +21,7 @@ export async function installPipxPackage(pkg: string): Promise<void> {
         }
       });
     });
+    await addPipxPackagePath(pkg);
   } catch (err) {
     throw new Error(`Failed to install ${pkg}: ${getErrorMessage(err)}`);
   }

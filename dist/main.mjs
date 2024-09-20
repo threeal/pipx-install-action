@@ -532,7 +532,10 @@ async function savePipxPackageCache(pkg) {
 async function restorePipxPackageCache(pkg) {
     try {
         const { name, version } = parsePipxPackage(pkg);
-        return await restoreCache(`pipx-${process.platform}-${name}`, version);
+        const restored = await restoreCache(`pipx-${process.platform}-${name}`, version);
+        if (restored)
+            await addPipxPackagePath(pkg);
+        return restored;
     }
     catch (err) {
         throw new Error(`Failed to restore ${pkg} cache: ${r(err)}`);
@@ -559,6 +562,7 @@ async function installPipxPackage(pkg) {
                 }
             });
         });
+        await addPipxPackagePath(pkg);
     }
     catch (err) {
         throw new Error(`Failed to install ${pkg}: ${r(err)}`);
@@ -571,8 +575,6 @@ async function pipxInstallAction(...pkgs) {
         logInfo(`Restoring \u001b[34m${pkg}\u001b[39m cache...`);
         try {
             cacheFound = await restorePipxPackageCache(pkg);
-            if (cacheFound)
-                await addPipxPackagePath(pkg);
         }
         catch (err) {
             logError(`Failed to restore ${pkg} cache: ${r(err)}`);
@@ -583,7 +585,6 @@ async function pipxInstallAction(...pkgs) {
             beginLogGroup(`Cache not found, installing \u001b[34m${pkg}\u001b[39m...`);
             try {
                 await installPipxPackage(pkg);
-                await addPipxPackagePath(pkg);
             }
             catch (err) {
                 endLogGroup();
