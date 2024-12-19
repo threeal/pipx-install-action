@@ -26,7 +26,7 @@ export default [
     input: "src/main.ts",
     output: {
       dir: "dist",
-      entryFileNames: "[name].mjs",
+      entryFileNames: "[name].bundle.mjs",
     },
     plugins: [nodeResolve(), ts({ transpileOnly: true })],
   },
