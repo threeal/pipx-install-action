@@ -1,7 +1,8 @@
-import { jest } from "@jest/globals";
 import path from "node:path";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { addPipxPackagePath, getPipxEnvironment } from "./environment.js";
 
-jest.unstable_mockModule("gha-utils", () => ({
+vi.mock("gha-utils", () => ({
   addPath: async (sysPath: string) =>
     new Promise<void>((resolve) => {
       setTimeout(() => {
@@ -14,7 +15,7 @@ jest.unstable_mockModule("gha-utils", () => ({
     }),
 }));
 
-jest.unstable_mockModule("node:child_process", () => ({
+vi.mock("node:child_process", () => ({
   execFile: (
     file: string,
     args: string[],
@@ -44,15 +45,11 @@ jest.unstable_mockModule("node:child_process", () => ({
 
 describe("get pipx environments", () => {
   it("should get an environment", async () => {
-    const { getPipxEnvironment } = await import("./environment.js");
-
     const value = await getPipxEnvironment("AN_ENVIRONMENT");
     expect(value).toBe("a value");
   });
 
   it("should fail to get an environment", async () => {
-    const { getPipxEnvironment } = await import("./environment.js");
-
     const prom = getPipxEnvironment("AN_INVALID_ENVIRONMENT");
     await expect(prom).rejects.toThrow(
       "Failed to get AN_INVALID_ENVIRONMENT: unknown environment",
@@ -66,7 +63,6 @@ describe("add the executable path of pipx packages", () => {
   });
 
   it("should add the path on Windows", async () => {
-    const { addPipxPackagePath } = await import("./environment.js");
     Object.defineProperty(process, "platform", { value: "win32" });
 
     await addPipxPackagePath("a-package");
@@ -77,7 +73,6 @@ describe("add the executable path of pipx packages", () => {
   });
 
   it("should add the path on other OS", async () => {
-    const { addPipxPackagePath } = await import("./environment.js");
     Object.defineProperty(process, "platform", { value: "other" });
 
     await addPipxPackagePath("a-package");
@@ -88,7 +83,6 @@ describe("add the executable path of pipx packages", () => {
   });
 
   it("should not add duplicate paths", async () => {
-    const { addPipxPackagePath } = await import("./environment.js");
     Object.defineProperty(process, "platform", { value: "other" });
 
     await addPipxPackagePath("a-package");

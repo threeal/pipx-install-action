@@ -1,42 +1,62 @@
-import { jest } from "@jest/globals";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+
+import {
+  installPipxPackage,
+  restorePipxPackageCache,
+  savePipxPackageCache,
+} from "./lib.js";
+
+import {
+  beginLogGroup,
+  endLogGroup,
+  getInput,
+  logError,
+  logInfo,
+} from "gha-utils";
 
 describe("install Python packages", () => {
   let logs: string[] = [];
   let inputs: Record<string, string | undefined> = {};
 
-  jest.unstable_mockModule("gha-utils", () => ({
-    beginLogGroup(name: string): void {
-      logs.push(`::group::${name}`);
-    },
-    endLogGroup(): void {
-      logs.push("::endgroup::");
-    },
-    getInput(name: string): string {
-      return inputs[name] ?? "";
-    },
-    logError(err: Error): void {
-      logs.push(`::error::${err.message}`);
-    },
-    logInfo(message: string): void {
-      logs.push(message);
-    },
+  vi.mock("gha-utils", () => ({
+    beginLogGroup: vi.fn(),
+    endLogGroup: vi.fn(),
+    getInput: vi.fn(),
+    logError: vi.fn(),
+    logInfo: vi.fn(),
   }));
+
+  vi.mocked(beginLogGroup).mockImplementation((name) => {
+    logs.push(`::group::${name}`);
+  });
+
+  vi.mocked(endLogGroup).mockImplementation(() => {
+    logs.push("::endgroup::");
+  });
+
+  vi.mocked(getInput).mockImplementation((name) => {
+    return inputs[name] ?? "";
+  });
+
+  vi.mocked(logError).mockImplementation((err) => {
+    logs.push(`::error::${(err as Error).message}`);
+  });
+
+  vi.mocked(logInfo).mockImplementation((message) => {
+    logs.push(message);
+  });
 
   let cachedPackages: string[] = [];
   let installedPackages: string[] = [];
 
-  const installPipxPackage = jest.fn<(pkg: string) => Promise<void>>();
-  const restorePipxPackageCache = jest.fn<(pkg: string) => Promise<boolean>>();
-  const savePipxPackageCache = jest.fn<(pkg: string) => Promise<void>>();
-
-  jest.unstable_mockModule("./lib.js", () => ({
-    installPipxPackage,
-    restorePipxPackageCache,
-    savePipxPackageCache,
+  vi.mock("./lib.js", () => ({
+    installPipxPackage: vi.fn(),
+    restorePipxPackageCache: vi.fn(),
+    savePipxPackageCache: vi.fn(),
   }));
 
   beforeEach(() => {
-    jest.resetModules();
+    vi.resetModules();
 
     logs = [];
     inputs = {};
@@ -44,7 +64,7 @@ describe("install Python packages", () => {
     cachedPackages = [];
     installedPackages = [];
 
-    installPipxPackage.mockImplementation((pkg: string) => {
+    vi.mocked(installPipxPackage).mockImplementation((pkg) => {
       return new Promise<void>((resolve) => {
         setTimeout(() => {
           installedPackages.push(pkg);
@@ -53,7 +73,7 @@ describe("install Python packages", () => {
       });
     });
 
-    restorePipxPackageCache.mockImplementation((pkg) => {
+    vi.mocked(restorePipxPackageCache).mockImplementation((pkg) => {
       return new Promise<boolean>((resolve) => {
         setTimeout(() => {
           if (cachedPackages.includes(pkg)) {
@@ -66,7 +86,7 @@ describe("install Python packages", () => {
       });
     });
 
-    savePipxPackageCache.mockImplementation((pkg) => {
+    vi.mocked(savePipxPackageCache).mockImplementation((pkg) => {
       return new Promise<void>((resolve) => {
         setTimeout(() => {
           cachedPackages.push(pkg);
@@ -81,7 +101,9 @@ describe("install Python packages", () => {
   it("should fail to restore a package cache", async () => {
     inputs["packages"] = "a-package";
 
-    restorePipxPackageCache.mockRejectedValue(new Error("unknown error"));
+    vi.mocked(restorePipxPackageCache).mockRejectedValue(
+      new Error("unknown error"),
+    );
 
     await import("../src/main.js");
 
@@ -98,7 +120,7 @@ describe("install Python packages", () => {
   it("should fail to install a package", async () => {
     inputs["packages"] = "a-package";
 
-    installPipxPackage.mockRejectedValue(new Error("unknown error"));
+    vi.mocked(installPipxPackage).mockRejectedValue(new Error("unknown error"));
 
     await import("../src/main.js");
 
@@ -117,7 +139,9 @@ describe("install Python packages", () => {
   it("should fail to save a package cache", async () => {
     inputs["packages"] = "a-package";
 
-    savePipxPackageCache.mockRejectedValue(new Error("unknown error"));
+    vi.mocked(savePipxPackageCache).mockRejectedValue(
+      new Error("unknown error"),
+    );
 
     await import("../src/main.js");
 

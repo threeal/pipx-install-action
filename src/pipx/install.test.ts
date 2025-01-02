@@ -1,4 +1,5 @@
-import { jest } from "@jest/globals";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { installPipxPackage } from "./install.js";
 
 class ChildProcess {
   #events: Record<string, any[] | undefined> = {};
@@ -13,7 +14,7 @@ class ChildProcess {
   }
 }
 
-jest.unstable_mockModule("node:child_process", () => ({
+vi.mock("node:child_process", () => ({
   spawn: (file: string, args: string[], options: object): ChildProcess => {
     expect([file, args.length, args[0], options]).toEqual([
       "pipx",
@@ -30,7 +31,7 @@ jest.unstable_mockModule("node:child_process", () => ({
 }));
 
 let addedPackagePaths: string[] = [];
-jest.unstable_mockModule("./environment.js", () => ({
+vi.mock("./environment.js", () => ({
   addPipxPackagePath: async (pkg: string) =>
     new Promise<void>((resolve) => {
       setTimeout(() => {
@@ -46,16 +47,12 @@ describe("install Python packages", () => {
   });
 
   it("should install a package", async () => {
-    const { installPipxPackage } = await import("./install.js");
-
     await installPipxPackage("a-package");
 
     expect(addedPackagePaths).toEqual(["a-package"]);
   });
 
   it("should fail to install a package", async () => {
-    const { installPipxPackage } = await import("./install.js");
-
     await expect(installPipxPackage("an-invalid-package")).rejects.toThrow(
       "Failed to install an-invalid-package: process exited with code: 1",
     );
