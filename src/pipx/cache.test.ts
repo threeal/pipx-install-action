@@ -1,37 +1,39 @@
-import { jest } from "@jest/globals";
-import "jest-extended";
+import { restoreCache, saveCache } from "cache-action";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
-jest.unstable_mockModule("cache-action", () => ({
-  restoreCache: jest.fn(),
-  saveCache: jest.fn(),
+import {
+  pipxPackageCacheVersion,
+  restorePipxPackageCache,
+  savePipxPackageCache,
+} from "./cache.js";
+
+import { addPipxPackagePath, getPipxEnvironment } from "./environment.js";
+
+vi.mock("cache-action", () => ({
+  restoreCache: vi.fn(),
+  saveCache: vi.fn(),
 }));
 
-jest.unstable_mockModule("./environment.js", () => ({
-  addPipxPackagePath: jest.fn(),
-  getPipxEnvironment: jest.fn(),
+vi.mock("./environment.js", () => ({
+  addPipxPackagePath: vi.fn(),
+  getPipxEnvironment: vi.fn(),
 }));
 
-beforeEach(async () => {
-  const { getPipxEnvironment } = await import("./environment.js");
-
-  jest.mocked(getPipxEnvironment).mockImplementation(async (env) => {
+beforeEach(() => {
+  vi.mocked(getPipxEnvironment).mockImplementation(async (env) => {
     return env === "PIPX_LOCAL_VENVS" ? "/path/to/venvs" : "";
   });
 });
 
 describe("save Python package caches", () => {
   it("should save a package cache", async () => {
-    const { saveCache } = await import("cache-action");
-    const { pipxPackageCacheVersion, savePipxPackageCache } = await import(
-      "./cache.js"
-    );
-
-    jest.mocked(saveCache).mockReset();
+    vi.mocked(saveCache).mockReset();
 
     const prom = savePipxPackageCache("some-package");
     await expect(prom).resolves.toBeUndefined();
 
-    expect(saveCache).toHaveBeenCalledExactlyOnceWith(
+    expect(saveCache).toHaveBeenCalledOnce();
+    expect(saveCache).toHaveBeenCalledWith(
       `pipx-${process.platform}-some-package`,
       pipxPackageCacheVersion,
       ["/path/to/venvs/some-package"],
@@ -39,11 +41,7 @@ describe("save Python package caches", () => {
   });
 
   it("should fail to save a package cache", async () => {
-    const { saveCache } = await import("cache-action");
-    const { savePipxPackageCache } = await import("./cache.js");
-
-    jest
-      .mocked(saveCache)
+    vi.mocked(saveCache)
       .mockReset()
       .mockImplementation(() => {
         throw new Error("something went wrong");
@@ -58,40 +56,31 @@ describe("save Python package caches", () => {
 
 describe("restore Python package caches", () => {
   it("should restore a saved package cache", async () => {
-    const { restoreCache } = await import("cache-action");
-    const { pipxPackageCacheVersion, restorePipxPackageCache } = await import(
-      "./cache.js"
-    );
-    const { addPipxPackagePath } = await import("./environment.js");
-
-    jest.mocked(restoreCache).mockReset().mockResolvedValue(true);
-    jest.mocked(addPipxPackagePath).mockReset();
+    vi.mocked(restoreCache).mockReset().mockResolvedValue(true);
+    vi.mocked(addPipxPackagePath).mockReset();
 
     const prom = restorePipxPackageCache("some-package");
     await expect(prom).resolves.toBe(true);
 
-    expect(restoreCache).toHaveBeenCalledExactlyOnceWith(
+    expect(restoreCache).toHaveBeenCalledOnce();
+    expect(restoreCache).toHaveBeenCalledWith(
       `pipx-${process.platform}-some-package`,
       pipxPackageCacheVersion,
     );
 
-    expect(addPipxPackagePath).toHaveBeenCalledExactlyOnceWith("some-package");
+    expect(addPipxPackagePath).toHaveBeenCalledOnce();
+    expect(addPipxPackagePath).toHaveBeenCalledWith("some-package");
   });
 
   it("should restore an unsaved package cache", async () => {
-    const { restoreCache } = await import("cache-action");
-    const { pipxPackageCacheVersion, restorePipxPackageCache } = await import(
-      "./cache.js"
-    );
-    const { addPipxPackagePath } = await import("./environment.js");
-
-    jest.mocked(restoreCache).mockReset().mockResolvedValue(false);
-    jest.mocked(addPipxPackagePath).mockReset();
+    vi.mocked(restoreCache).mockReset().mockResolvedValue(false);
+    vi.mocked(addPipxPackagePath).mockReset();
 
     const prom = restorePipxPackageCache("some-package");
     await expect(prom).resolves.toBe(false);
 
-    expect(restoreCache).toHaveBeenCalledExactlyOnceWith(
+    expect(restoreCache).toHaveBeenCalledOnce();
+    expect(restoreCache).toHaveBeenCalledWith(
       `pipx-${process.platform}-some-package`,
       pipxPackageCacheVersion,
     );
@@ -100,18 +89,13 @@ describe("restore Python package caches", () => {
   });
 
   it("should fail to restore a package cache", async () => {
-    const { restoreCache } = await import("cache-action");
-    const { restorePipxPackageCache } = await import("./cache.js");
-    const { addPipxPackagePath } = await import("./environment.js");
-
-    jest
-      .mocked(restoreCache)
+    vi.mocked(restoreCache)
       .mockReset()
       .mockImplementation(() => {
         throw new Error("something went wrong");
       });
 
-    jest.mocked(addPipxPackagePath).mockReset();
+    vi.mocked(addPipxPackagePath).mockReset();
 
     const prom = restorePipxPackageCache("some-package");
     await expect(prom).rejects.toThrow(
