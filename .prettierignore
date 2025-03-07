@@ -1,2 +1,3 @@
 dist/
 pipx-install-action/
+pnpm-lock.yaml
