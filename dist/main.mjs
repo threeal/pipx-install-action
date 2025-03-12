@@ -9,6 +9,7 @@ import path$1 from 'path';
 function r(r){return function(r){if("object"==typeof(e=r)&&null!==e&&"message"in e&&"string"==typeof e.message)return r;var e;try{return new Error(JSON.stringify(r))}catch(e){return new Error(String(r))}}(r).message}
 
 /**
+ * @internal
  * Retrieves the value of an environment variable.
  *
  * @param name - The name of the environment variable.
@@ -29,7 +30,7 @@ function mustGetEnvironment(name) {
  * @returns The value of the GitHub Actions input, or an empty string if not found.
  */
 function getInput(name) {
-    const value = process.env[`INPUT_${name.toUpperCase()}`] || "";
+    const value = process.env[`INPUT_${name.toUpperCase()}`] ?? "";
     return value.trim();
 }
 /**
@@ -39,7 +40,10 @@ function getInput(name) {
  * @returns A promise that resolves when the system path is successfully added.
  */
 async function addPath(sysPath) {
-    process.env["PATH"] = `${sysPath}${path.delimiter}${process.env["PATH"]}`;
+    process.env.PATH =
+        process.env.PATH !== undefined
+            ? `${sysPath}${path.delimiter}${process.env.PATH}`
+            : sysPath;
     const filePath = mustGetEnvironment("GITHUB_PATH");
     await fsPromises.appendFile(filePath, `${sysPath}${os.EOL}`);
 }
@@ -511,13 +515,12 @@ async function addPipxPackagePath(pkg) {
     await addPath(pkgPath);
 }
 
+const pipxPackageCacheVersion = "pipx-install-action-2.0.0";
 async function savePipxPackageCache(pkg) {
     try {
         const localVenvs = await getPipxEnvironment("PIPX_LOCAL_VENVS");
-        const { name, version } = parsePipxPackage(pkg);
-        await saveCache(`pipx-${process.platform}-${name}`, version, [
-            path$1.join(localVenvs, name),
-        ]);
+        const { name } = parsePipxPackage(pkg);
+        await saveCache(`pipx-${process.platform}-${pkg}`, pipxPackageCacheVersion, [path$1.join(localVenvs, name)]);
     }
     catch (err) {
         throw new Error(`Failed to save ${pkg} cache: ${r(err)}`);
@@ -525,8 +528,7 @@ async function savePipxPackageCache(pkg) {
 }
 async function restorePipxPackageCache(pkg) {
     try {
-        const { name, version } = parsePipxPackage(pkg);
-        const restored = await restoreCache(`pipx-${process.platform}-${name}`, version);
+        const restored = await restoreCache(`pipx-${process.platform}-${pkg}`, pipxPackageCacheVersion);
         if (restored)
             await addPipxPackagePath(pkg);
         return restored;
