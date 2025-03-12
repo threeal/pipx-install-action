@@ -26,7 +26,7 @@
   ],
   "scripts": {
     "build": "rollup -c",
-    "docs": "typedoc src/lib.ts",
+    "build:docs": "typedoc src/lib.ts",
     "format": "prettier --write --cache .",
     "lint": "eslint",
     "prepack": "rollup -c",
@@ -53,5 +53,9 @@
     "typescript-eslint": "^8.26.1",
     "vitest": "^3.0.8"
   },
-  "packageManager": "yarn@4.6.0"
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild"
+    ]
+  }
 }
