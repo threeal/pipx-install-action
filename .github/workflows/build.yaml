@@ -22,7 +22,7 @@ jobs:
         run: pnpm build --out package.tgz
 
       - name: Upload Package
-        uses: actions/upload-artifact@v4.6.1
+        uses: actions/upload-artifact@v4.6.2
         with:
           name: package
           path: package.tgz
@@ -44,7 +44,7 @@ jobs:
         run: pnpm build:docs
 
       - name: Upload Documentation
-        uses: actions/upload-artifact@v4.6.1
+        uses: actions/upload-artifact@v4.6.2
         with:
           name: docs
           path: docs
