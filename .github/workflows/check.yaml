@@ -24,5 +24,8 @@ jobs:
       - name: Check Diff
         run: git diff && git diff-index --quiet --exit-code HEAD
 
+      - name: Check Types
+        run: pnpm tsc
+
       - name: Check Lint
         run: pnpm lint
