@@ -21,12 +21,6 @@ jobs:
       - name: Build Package
         run: pnpm build --out package.tgz
 
-      - name: Upload Package
-        uses: actions/upload-artifact@v4.6.2
-        with:
-          name: package
-          path: package.tgz
-
   build-docs:
     name: Build Documentation
     runs-on: ubuntu-24.04
@@ -42,9 +36,3 @@ jobs:
 
       - name: Build Documentation
         run: pnpm build:docs
-
-      - name: Upload Documentation
-        uses: actions/upload-artifact@v4.6.2
-        with:
-          name: docs
-          path: docs
