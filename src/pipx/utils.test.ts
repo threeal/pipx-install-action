@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { parsePipxPackage } from "./utils";
+import { parsePipxPackage } from "./utils.js";
 
 describe("parse name and version of Pipx packages from package strings", () => {
   it("should parse from a package string with a version specifier", () => {
