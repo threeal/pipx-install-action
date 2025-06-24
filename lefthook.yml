@@ -24,7 +24,7 @@ pre-commit:
       run: pnpm eslint --no-warn-ignored --fix {staged_files}
 
     - name: check documentation
-      run: pnpm typedoc src/lib.ts --emit none
+      run: pnpm typedoc --emit none
       glob:
         - src/*.ts
         - .npmrc

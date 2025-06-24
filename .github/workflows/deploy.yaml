@@ -27,7 +27,7 @@ jobs:
         run: pnpm install
 
       - name: Build Documentation
-        run: pnpm typedoc src/lib.ts
+        run: pnpm typedoc
 
       - name: Upload Documentation
         uses: actions/upload-pages-artifact@v3.0.1
