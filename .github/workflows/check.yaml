@@ -19,13 +19,10 @@ jobs:
         run: pnpm install
 
       - name: Check Formatting
-        run: pnpm format
-
-      - name: Check Diff
-        run: git diff && git diff-index --quiet --exit-code HEAD
+        run: pnpm prettier --check .
 
       - name: Check Types
         run: pnpm tsc
 
       - name: Check Lint
-        run: pnpm lint
+        run: pnpm eslint

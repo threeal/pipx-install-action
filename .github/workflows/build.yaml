@@ -19,7 +19,7 @@ jobs:
         run: pnpm install
 
       - name: Build Package
-        run: pnpm build
+        run: pnpm pack
 
   build-docs:
     name: Build Documentation
@@ -35,4 +35,4 @@ jobs:
         run: pnpm install
 
       - name: Build Documentation
-        run: pnpm build:docs
+        run: pnpm typedoc src/lib.ts
