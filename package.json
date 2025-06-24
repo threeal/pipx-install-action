@@ -25,10 +25,6 @@
     "dist/lib.d.ts"
   ],
   "scripts": {
-    "build": "rollup -c",
-    "build:docs": "typedoc src/lib.ts",
-    "format": "prettier --write --cache .",
-    "lint": "eslint",
     "prepack": "rollup -c",
     "test": "vitest"
   },
