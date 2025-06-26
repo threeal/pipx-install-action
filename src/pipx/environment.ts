@@ -8,7 +8,7 @@ export async function getPipxEnvironment(env: string): Promise<string> {
     execFile(
       "pipx",
       ["environment", "--value", env],
-      { env: { PATH: process.env["PATH"] } },
+      { env: { PATH: process.env.PATH } },
       (err, stdout) => {
         if (err) {
           reject(new Error(`Failed to get ${env}: ${err.message}`));

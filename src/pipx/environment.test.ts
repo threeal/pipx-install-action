@@ -19,15 +19,15 @@ vi.mock("node:child_process", () => ({
   execFile: (
     file: string,
     args: string[],
-    options: any,
-    callback: (...args: any[]) => void,
+    options: unknown,
+    callback: (error: unknown, stdout?: string, stderr?: string) => void,
   ) => {
     try {
       expect([file, args.length, args.slice(0, 2), options]).toEqual([
         "pipx",
         3,
         ["environment", "--value"],
-        { env: { PATH: process.env["PATH"] } },
+        { env: { PATH: process.env.PATH } },
       ]);
 
       if (args[2] === "AN_ENVIRONMENT") {
