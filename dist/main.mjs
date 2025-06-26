@@ -243,19 +243,19 @@ async function saveCache(key, version, filePaths) {
  * @throws An error if the package string cannot be parsed.
  */
 function parsePipxPackage(pkg) {
-    const match = pkg.match(/^([\w\d._-]+)(==([\d.]+))?$/);
+    const match = /^([\w\d._-]+)(==([\d.]+))?$/.exec(pkg);
     if (match == null || match.length < 2) {
         throw new Error(`unable to parse package name and version from: ${pkg}`);
     }
     return {
         name: match[1],
-        version: match[3] ?? "latest",
+        version: match[3] || "latest",
     };
 }
 
 async function getPipxEnvironment(env) {
     return new Promise((resolve, reject) => {
-        execFile("pipx", ["environment", "--value", env], { env: { PATH: process.env["PATH"] } }, (err, stdout) => {
+        execFile("pipx", ["environment", "--value", env], { env: { PATH: process.env.PATH } }, (err, stdout) => {
             if (err) {
                 reject(new Error(`Failed to get ${env}: ${err.message}`));
             }
@@ -311,7 +311,7 @@ async function installPipxPackage(pkg) {
     try {
         const pipx = spawn("pipx", ["install", pkg], {
             stdio: "inherit",
-            env: { PATH: process.env["PATH"] },
+            env: { PATH: process.env.PATH },
         });
         await new Promise((resolve, reject) => {
             pipx.on("error", reject);
@@ -320,7 +320,10 @@ async function installPipxPackage(pkg) {
                     resolve();
                 }
                 else {
-                    reject(new Error(`process exited with code: ${code}`));
+                    let message = "process exited";
+                    if (code !== null)
+                        message += ` with code: ${code.toString()}`;
+                    reject(new Error(message));
                 }
             });
         });

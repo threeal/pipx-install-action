@@ -9,13 +9,13 @@ export function parsePipxPackage(pkg: string): {
   name: string;
   version: string;
 } {
-  const match = pkg.match(/^([\w\d._-]+)(==([\d.]+))?$/);
+  const match = /^([\w\d._-]+)(==([\d.]+))?$/.exec(pkg);
   if (match == null || match.length < 2) {
     throw new Error(`unable to parse package name and version from: ${pkg}`);
   }
 
   return {
     name: match[1],
-    version: match[3] ?? "latest",
+    version: match[3] || "latest",
   };
 }

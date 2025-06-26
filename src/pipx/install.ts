@@ -6,7 +6,7 @@ export async function installPipxPackage(pkg: string): Promise<void> {
   try {
     const pipx = spawn("pipx", ["install", pkg], {
       stdio: "inherit",
-      env: { PATH: process.env["PATH"] },
+      env: { PATH: process.env.PATH },
     });
     await new Promise<void>((resolve, reject) => {
       pipx.on("error", reject);
@@ -14,7 +14,9 @@ export async function installPipxPackage(pkg: string): Promise<void> {
         if (code === 0) {
           resolve();
         } else {
-          reject(new Error(`process exited with code: ${code}`));
+          let message = "process exited";
+          if (code !== null) message += ` with code: ${code.toString()}`;
+          reject(new Error(message));
         }
       });
     });

@@ -2,13 +2,13 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { installPipxPackage } from "./install.js";
 
 class ChildProcess {
-  #events: Record<string, any[] | undefined> = {};
+  #events: Record<string, unknown[] | undefined> = {};
 
-  constructor(events: Record<string, any[]>) {
+  constructor(events: Record<string, unknown[]>) {
     this.#events = events;
   }
 
-  on(event: string, callback: (...args: any[]) => any): void {
+  on(event: string, callback: (...args: unknown[]) => unknown): void {
     const args = this.#events[event];
     if (args !== undefined) callback(...args);
   }

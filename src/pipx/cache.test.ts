@@ -20,9 +20,12 @@ vi.mock("./environment.js", () => ({
 }));
 
 beforeEach(() => {
-  vi.mocked(getPipxEnvironment).mockImplementation(async (env) => {
-    return env === "PIPX_LOCAL_VENVS" ? "/path/to/venvs" : "";
-  });
+  vi.mocked(getPipxEnvironment).mockImplementation(
+    // eslint-disable-next-line @typescript-eslint/require-await
+    async (env) => {
+      return env === "PIPX_LOCAL_VENVS" ? "/path/to/venvs" : "";
+    },
+  );
 });
 
 describe("save Python package caches", () => {

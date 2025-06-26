@@ -99,7 +99,7 @@ describe("install Python packages", () => {
   });
 
   it("should fail to restore a package cache", async () => {
-    inputs["packages"] = "a-package";
+    inputs.packages = "a-package";
 
     vi.mocked(restorePipxPackageCache).mockRejectedValue(
       new Error("unknown error"),
@@ -118,7 +118,7 @@ describe("install Python packages", () => {
   });
 
   it("should fail to install a package", async () => {
-    inputs["packages"] = "a-package";
+    inputs.packages = "a-package";
 
     vi.mocked(installPipxPackage).mockRejectedValue(new Error("unknown error"));
 
@@ -137,7 +137,7 @@ describe("install Python packages", () => {
   });
 
   it("should fail to save a package cache", async () => {
-    inputs["packages"] = "a-package";
+    inputs.packages = "a-package";
 
     vi.mocked(savePipxPackageCache).mockRejectedValue(
       new Error("unknown error"),
@@ -159,7 +159,7 @@ describe("install Python packages", () => {
   });
 
   it("should install packages and save the cache", async () => {
-    inputs["packages"] = "a-package another-package";
+    inputs.packages = "a-package another-package";
 
     await import("../src/main.js");
 
@@ -180,7 +180,7 @@ describe("install Python packages", () => {
   });
 
   it("should restore packages", async () => {
-    inputs["packages"] = "a-package another-package";
+    inputs.packages = "a-package another-package";
     cachedPackages = ["a-package", "another-package"];
 
     await import("../src/main.js");

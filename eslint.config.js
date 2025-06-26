@@ -1,17 +1,20 @@
 import eslint from "@eslint/js";
+import { globalIgnores } from "eslint/config";
 import tseslint from "typescript-eslint";
 
-export default [
+export default tseslint.config(
+  globalIgnores(["dist", "docs"]),
   eslint.configs.recommended,
-  ...tseslint.configs.recommended,
-  ...tseslint.configs.stylistic,
+  tseslint.configs.strictTypeChecked,
+  tseslint.configs.stylisticTypeChecked,
   {
-    ignores: [".*", "dist", "docs"],
-  },
-  {
-    files: ["**/*.test.ts"],
-    rules: {
-      "@typescript-eslint/no-explicit-any": "off",
+    languageOptions: {
+      parserOptions: {
+        projectService: {
+          allowDefaultProject: ["eslint.config.js", "rollup.config.js"],
+        },
+        tsconfigRootDir: import.meta.dirname,
+      },
     },
   },
-];
+);
