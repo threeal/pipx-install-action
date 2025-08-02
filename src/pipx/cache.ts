@@ -1,7 +1,7 @@
 import { restoreCache, saveCache } from "cache-action";
 import { getErrorMessage } from "catched-error-message";
-import { addPipxPackagePath, getPipxEnvironment } from "./environment.js";
 import path from "path";
+import { addPipxPackagePath, getPipxEnvironment } from "./environment.js";
 import { parsePipxPackage } from "./utils.js";
 
 export const pipxPackageCacheVersion = "pipx-install-action-2.0.0";
