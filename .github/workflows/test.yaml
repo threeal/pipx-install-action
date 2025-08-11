@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout Project
-        uses: actions/checkout@v4.2.2
+        uses: actions/checkout@v5.0.0
 
       - name: Setup pnpm
         uses: threeal/setup-pnpm-action@v1.0.0
@@ -30,7 +30,7 @@ jobs:
         os: [ubuntu-24.04, macos-14, windows-2022]
     steps:
       - name: Checkout Action
-        uses: actions/checkout@v4.2.2
+        uses: actions/checkout@v5.0.0
         with:
           path: pipx-install-action
           sparse-checkout: |
