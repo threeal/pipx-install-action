@@ -1,2 +1,2 @@
-dist/** -diff linguist-generated
+dist/action/** -diff linguist-generated
 pnpm-lock.yaml -diff linguist-generated
