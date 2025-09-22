@@ -5,8 +5,8 @@ on:
   push:
     branches: [main]
 jobs:
-  package-package:
-    name: Build Package
+  build-project:
+    name: Build Project
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout Project
@@ -21,7 +21,7 @@ jobs:
       - name: Check Types
         run: pnpm tsc
 
-      - name: Test Package
+      - name: Test Project
         run: pnpm test
 
       - name: Check Formatting
@@ -30,21 +30,11 @@ jobs:
       - name: Check Lint
         run: pnpm eslint
 
-      - name: Build Package
+      - name: Package Library
         run: pnpm pack
 
-  build-docs:
-    name: Build Documentation
-    runs-on: ubuntu-24.04
-    steps:
-      - name: Checkout Project
-        uses: actions/checkout@v5.0.0
-
-      - name: Setup pnpm
-        uses: threeal/setup-pnpm-action@v1.0.0
-
-      - name: Install Dependencies
-        run: pnpm install
+      - name: Build Action
+        run: pnpm rollup -c && git diff --exit-code dist/main.mjs
 
       - name: Build Documentation
         run: pnpm typedoc
