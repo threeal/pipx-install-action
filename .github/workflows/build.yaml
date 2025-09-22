@@ -34,7 +34,7 @@ jobs:
         run: pnpm pack
 
       - name: Build Action
-        run: pnpm rollup -c && git diff --exit-code dist/main.mjs
+        run: pnpm rollup -c && git diff --exit-code dist/action
 
       - name: Build Documentation
         run: pnpm typedoc

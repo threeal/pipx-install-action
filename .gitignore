@@ -3,7 +3,7 @@
 !.npmrc
 !.prettier*
 
-dist/lib.*
+dist/lib/
 docs/
 node_modules/
 

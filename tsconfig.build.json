@@ -1,0 +1,9 @@
+{
+  "extends": "@tsconfig/node20",
+  "include": ["src/lib"],
+  "exclude": ["**/*.test.ts"],
+  "compilerOptions": {
+    "declaration": true,
+    "outDir": "dist/lib"
+  }
+}

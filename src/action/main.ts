@@ -12,7 +12,7 @@ import {
   installPipxPackage,
   restorePipxPackageCache,
   savePipxPackageCache,
-} from "./lib.js";
+} from "../lib/pipx.js";
 
 try {
   const pkgs = getInput("packages")

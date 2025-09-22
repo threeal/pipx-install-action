@@ -4,7 +4,7 @@ import {
   installPipxPackage,
   restorePipxPackageCache,
   savePipxPackageCache,
-} from "./lib.js";
+} from "../lib/pipx.js";
 
 import {
   beginLogGroup,
@@ -49,7 +49,7 @@ describe("install Python packages", () => {
   let cachedPackages: string[] = [];
   let installedPackages: string[] = [];
 
-  vi.mock("./lib.js", () => ({
+  vi.mock("../lib/pipx.js", () => ({
     installPipxPackage: vi.fn(),
     restorePipxPackageCache: vi.fn(),
     savePipxPackageCache: vi.fn(),
@@ -105,7 +105,7 @@ describe("install Python packages", () => {
       new Error("unknown error"),
     );
 
-    await import("../src/main.js");
+    await import("../action/main.js");
 
     expect(logs).toEqual([
       "Restoring \u001b[34ma-package\u001b[39m cache...",
@@ -122,7 +122,7 @@ describe("install Python packages", () => {
 
     vi.mocked(installPipxPackage).mockRejectedValue(new Error("unknown error"));
 
-    await import("../src/main.js");
+    await import("../action/main.js");
 
     expect(logs).toEqual([
       "Restoring \u001b[34ma-package\u001b[39m cache...",
@@ -143,7 +143,7 @@ describe("install Python packages", () => {
       new Error("unknown error"),
     );
 
-    await import("../src/main.js");
+    await import("../action/main.js");
 
     expect(logs).toEqual([
       "Restoring \u001b[34ma-package\u001b[39m cache...",
@@ -161,7 +161,7 @@ describe("install Python packages", () => {
   it("should install packages and save the cache", async () => {
     inputs.packages = "a-package another-package";
 
-    await import("../src/main.js");
+    await import("../action/main.js");
 
     expect(logs).toEqual([
       "Restoring \u001b[34ma-package\u001b[39m cache...",
@@ -183,7 +183,7 @@ describe("install Python packages", () => {
     inputs.packages = "a-package another-package";
     cachedPackages = ["a-package", "another-package"];
 
-    await import("../src/main.js");
+    await import("../action/main.js");
 
     expect(logs).toEqual([
       "Restoring \u001b[34ma-package\u001b[39m cache...",

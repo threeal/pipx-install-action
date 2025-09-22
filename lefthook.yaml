@@ -20,4 +20,4 @@ pre-commit:
       run: pnpm rollup -c
 
     - name: check diff
-      run: git diff --exit-code dist pnpm-lock.yaml {staged_files}
+      run: git diff --exit-code dist/action pnpm-lock.yaml {staged_files}
