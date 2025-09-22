@@ -21,6 +21,9 @@ jobs:
       - name: Check Types
         run: pnpm tsc
 
+      - name: Test Package
+        run: pnpm test
+
       - name: Check Formatting
         run: pnpm prettier --check .
 
