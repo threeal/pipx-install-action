@@ -9,5 +9,5 @@ inputs:
     description: Python packages to be installed
     required: true
 runs:
-  using: node20
+  using: node24
   main: dist/action/main.bundle.mjs
