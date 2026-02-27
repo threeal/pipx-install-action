@@ -10,13 +10,11 @@ export async function installPipxPackage(pkg: string): Promise<void> {
     });
     await new Promise<void>((resolve, reject) => {
       pipx.on("error", reject);
-      pipx.on("close", (code) => {
+      pipx.on("close", (code: number) => {
         if (code === 0) {
           resolve();
         } else {
-          let message = "process exited";
-          if (code !== null) message += ` with code: ${code.toString()}`;
-          reject(new Error(message));
+          reject(new Error(`process exited (${code.toString()})`));
         }
       });
     });

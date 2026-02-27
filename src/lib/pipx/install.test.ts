@@ -54,7 +54,7 @@ describe("install Python packages", () => {
 
   it("should fail to install a package", async () => {
     await expect(installPipxPackage("an-invalid-package")).rejects.toThrow(
-      "Failed to install an-invalid-package: process exited with code: 1",
+      "Failed to install an-invalid-package: process exited (1)",
     );
 
     expect(addedPackagePaths).toEqual([]);
