@@ -320,10 +320,7 @@ async function installPipxPackage(pkg) {
                     resolve();
                 }
                 else {
-                    let message = "process exited";
-                    if (code !== null)
-                        message += ` with code: ${code.toString()}`;
-                    reject(new Error(message));
+                    reject(new Error(`process exited (${code.toString()})`));
                 }
             });
         });
