@@ -5,7 +5,6 @@ export default {
   input: "src/action/main.ts",
   output: {
     dir: "dist/action",
-    entryFileNames: "[name].bundle.mjs",
   },
   plugins: [nodeResolve(), typescript()],
 };

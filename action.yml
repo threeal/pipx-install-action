@@ -10,4 +10,4 @@ inputs:
     required: true
 runs:
   using: node24
-  main: dist/action/main.bundle.mjs
+  main: dist/action/main.js
