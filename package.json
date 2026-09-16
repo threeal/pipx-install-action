@@ -27,11 +27,6 @@
     "prepack": "rollup -c",
     "test": "vitest"
   },
-  "dependencies": {
-    "cache-action": "^1.0.0",
-    "catched-error-message": "^0.0.1",
-    "gha-utils": "^0.4.1"
-  },
   "devDependencies": {
     "@eslint/js": "^9.39.2",
     "@rollup/plugin-node-resolve": "^16.0.3",
@@ -40,7 +35,10 @@
     "@types/jest": "^30.0.0",
     "@types/node": "^26.5.0",
     "@vitest/coverage-v8": "^4.1.10",
+    "cache-action": "^1.0.0",
+    "catched-error-message": "^0.0.1",
     "eslint": "^10.10.0",
+    "gha-utils": "^0.4.1",
     "jiti": "^2.7.0",
     "prettier": "^3.9.6",
     "prettier-plugin-organize-imports": "^4.3.0",

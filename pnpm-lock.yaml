@@ -7,16 +7,6 @@ settings:
 importers:
 
   .:
-    dependencies:
-      cache-action:
-        specifier: ^1.0.0
-        version: 1.0.0
-      catched-error-message:
-        specifier: ^0.0.1
-        version: 0.0.1
-      gha-utils:
-        specifier: ^0.4.1
-        version: 0.4.1
     devDependencies:
       '@eslint/js':
         specifier: ^9.39.2
@@ -39,9 +29,18 @@ importers:
       '@vitest/coverage-v8':
         specifier: ^4.1.10
         version: 4.1.10(vitest@4.1.11)
+      cache-action:
+        specifier: ^1.0.0
+        version: 1.0.0
+      catched-error-message:
+        specifier: ^0.0.1
+        version: 0.0.1
       eslint:
         specifier: ^10.10.0
         version: 10.10.0(jiti@2.7.0)(supports-color@7.2.0)
+      gha-utils:
+        specifier: ^0.4.1
+        version: 0.4.1
       jiti:
         specifier: ^2.7.0
         version: 2.7.0
