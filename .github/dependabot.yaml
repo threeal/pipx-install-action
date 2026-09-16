@@ -10,3 +10,8 @@ updates:
     schedule:
       interval: daily
     versioning-strategy: increase
+    groups:
+      vitest:
+        patterns:
+          - vitest
+          - "@vitest/coverage-v8"
