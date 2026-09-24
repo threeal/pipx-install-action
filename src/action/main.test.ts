@@ -14,17 +14,23 @@ import {
   logInfo,
 } from "gha-utils";
 
+vi.mock("gha-utils", () => ({
+  beginLogGroup: vi.fn(),
+  endLogGroup: vi.fn(),
+  getInput: vi.fn(),
+  logError: vi.fn(),
+  logInfo: vi.fn(),
+}));
+
+vi.mock("../lib/pipx.js", () => ({
+  installPipxPackage: vi.fn(),
+  restorePipxPackageCache: vi.fn(),
+  savePipxPackageCache: vi.fn(),
+}));
+
 describe("install Python packages", () => {
   let logs: string[] = [];
   let inputs: Record<string, string | undefined> = {};
-
-  vi.mock("gha-utils", () => ({
-    beginLogGroup: vi.fn(),
-    endLogGroup: vi.fn(),
-    getInput: vi.fn(),
-    logError: vi.fn(),
-    logInfo: vi.fn(),
-  }));
 
   vi.mocked(beginLogGroup).mockImplementation((name) => {
     logs.push(`::group::${name}`);
@@ -48,12 +54,6 @@ describe("install Python packages", () => {
 
   let cachedPackages: string[] = [];
   let installedPackages: string[] = [];
-
-  vi.mock("../lib/pipx.js", () => ({
-    installPipxPackage: vi.fn(),
-    restorePipxPackageCache: vi.fn(),
-    savePipxPackageCache: vi.fn(),
-  }));
 
   beforeEach(() => {
     vi.resetModules();
