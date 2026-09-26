@@ -37,7 +37,7 @@
     "@vitest/coverage-v8": "^5.0.1",
     "cache-action": "^1.0.0",
     "catched-error-message": "^0.0.1",
-    "eslint": "^10.10.0",
+    "eslint": "^10.11.0",
     "gha-utils": "^0.4.1",
     "jiti": "^2.7.0",
     "prettier": "^3.9.6",
